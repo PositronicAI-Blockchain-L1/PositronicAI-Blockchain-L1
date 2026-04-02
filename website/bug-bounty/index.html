@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>Bug Bounty Program | Positronic Network</title>
+<meta name="description" content="Positronic Bug Bounty Program: Earn ASF rewards for finding vulnerabilities in our Layer-1 blockchain. Up to 50,000 ASF for critical findings.">
+<link rel="canonical" href="https://positronic-ai.network/bug-bounty/">
+<meta property="og:title" content="Bug Bounty Program | Positronic Network">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Positronic">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root{--bg:#060D1A;--bg-surface:#0D1B2A;--card-bg:#0A1628;--card-border:#1a3a5c;--positronic-blue:#0080FF;--positronic-cyan:#00E5FF;--positronic-silver:#B0B8C0;--positronic-dark:#0D1B2A;--positronic-darker:#060D1A;--positronic-glow:#1a3a5c;--text-primary:#e4e4f0;--text-secondary:#B0B8C0;--text-muted:#6a7a8a;--glow-cyan:rgba(0,229,255,.35);--glow-blue:rgba(0,128,255,.35);--font-heading:'Space Grotesk',sans-serif;--font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--radius:14px;--radius-sm:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+a{color:var(--positronic-cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--bg-surface);border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--positronic-cyan);box-shadow:0 0 12px var(--glow-cyan)}
+.topbar-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.topbar-title{font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+.topbar-nav{display:flex;gap:16px;flex-wrap:wrap}
+.topbar-nav a{color:var(--text-secondary);font-size:14px;padding:6px 12px;border-radius:var(--radius-sm);transition:.3s}
+.topbar-nav a:hover{color:#fff;background:rgba(255,255,255,.06);text-decoration:none}
+
+/* Hero */
+.hero{text-align:center;padding:80px 24px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,229,255,.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;background:rgba(255,59,48,.1);color:#FF3B30;border:1px solid rgba(255,59,48,.2);margin-bottom:20px;text-transform:uppercase}
+.hero h1{font-family:var(--font-heading);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:var(--text-secondary);max-width:680px;margin:0 auto 40px;line-height:1.6}
+
+/* Sections */
+.section{max-width:960px;margin:0 auto;padding:0 24px 60px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{font-size:24px}
+.section-header h2{font-family:var(--font-heading);font-size:24px;font-weight:700}
+
+/* Reward Tiers */
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:32px}
+.tier-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:28px 20px;text-align:center;position:relative;overflow:hidden;transition:all .3s}
+.tier-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.tier-card .accent{position:absolute;top:0;left:0;right:0;height:3px}
+.tier-severity{font-family:var(--font-heading);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.tier-reward{font-family:var(--font-heading);font-size:28px;font-weight:700;color:#fff;margin-bottom:6px}
+.tier-reward span{font-size:14px;color:var(--text-muted);font-weight:400}
+.tier-desc{font-size:13px;color:var(--text-secondary);line-height:1.5}
+
+/* Critical */
+.tier-critical .accent{background:linear-gradient(90deg,#FF3B30,#FF6B6B)}
+.tier-critical .tier-severity{color:#FF3B30}
+.tier-critical:hover{border-color:#FF3B30}
+
+/* High */
+.tier-high .accent{background:linear-gradient(90deg,#FF9500,#FFB800)}
+.tier-high .tier-severity{color:#FF9500}
+.tier-high:hover{border-color:#FF9500}
+
+/* Medium */
+.tier-medium .accent{background:linear-gradient(90deg,#FFD60A,#FFE066)}
+.tier-medium .tier-severity{color:#FFD60A}
+.tier-medium:hover{border-color:#FFD60A}
+
+/* Low */
+.tier-low .accent{background:linear-gradient(90deg,var(--positronic-cyan),#33ecff)}
+.tier-low .tier-severity{color:var(--positronic-cyan)}
+.tier-low:hover{border-color:var(--positronic-cyan)}
+
+/* Scope Table */
+.scope-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.scope-table th,.scope-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--card-border);font-size:14px}
+.scope-table th{background:var(--bg-surface);color:var(--positronic-cyan);font-family:var(--font-heading);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.scope-table td{color:var(--text-secondary)}
+.scope-table tr:hover td{background:rgba(0,229,255,.03)}
+.badge-in{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(52,199,89,.15);color:#34C759;border:1px solid rgba(52,199,89,.3)}
+.badge-out{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,59,48,.1);color:#FF3B30;border:1px solid rgba(255,59,48,.2)}
+
+/* Rules */
+.rule-list{list-style:none;padding:0}
+.rule-list li{padding:12px 16px;border-left:3px solid var(--card-border);margin-bottom:8px;background:var(--card-bg);border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:var(--text-secondary);font-size:14px;line-height:1.6}
+.rule-list li strong{color:#fff}
+
+/* Steps */
+.step{display:flex;gap:16px;margin-bottom:20px;padding:16px;border-radius:var(--radius-sm);background:var(--card-bg);border:1px solid var(--card-border)}
+.step-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,var(--positronic-blue),var(--positronic-cyan));display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:16px;color:#000}
+.step-content h4{font-family:var(--font-heading);font-size:16px;margin-bottom:4px}
+.step-content p{color:var(--text-secondary);font-size:14px;line-height:1.5}
+
+code{background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px;font-family:'JetBrains Mono',monospace}
+
+/* Footer */
+.footer{text-align:center;padding:32px 24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--card-border);margin-top:40px}
+
+/* Safe Harbor */
+.safe-harbor{background:linear-gradient(135deg,rgba(0,128,255,.08),rgba(0,229,255,.05));border:1px solid rgba(0,229,255,.2);border-radius:var(--radius);padding:24px;margin-top:24px}
+.safe-harbor h3{font-family:var(--font-heading);font-size:18px;margin-bottom:10px;color:var(--positronic-cyan)}
+.safe-harbor p{color:var(--text-secondary);font-size:14px;line-height:1.7}
+
+@media(max-width:640px){
+    .topbar{flex-direction:column;gap:8px;padding:10px 16px}
+    .topbar-nav{justify-content:center}
+    .tier-grid{grid-template-columns:1fr 1fr}
+    .scope-table{font-size:12px}
+    .scope-table th,.scope-table td{padding:8px 10px}
+}
+
+@media(max-width:768px){
+    table, .scope-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table th, table td { min-width: 80px; white-space: normal; font-size: 13px; }
+    .tier-grid { grid-template-columns: 1fr; }
+    .container { padding: 20px 16px; max-width: 100% !important; }
+    /* Text wrapping & overflow fixes */
+    body { overflow-x: hidden; }
+    h1, h2, h3, h4 { word-break: break-word; hyphens: auto; }
+    p, li, td, th, span, div { overflow-wrap: break-word; word-wrap: break-word; }
+    pre, code, .code-block { overflow-x: auto; max-width: 100%; white-space: pre-wrap; word-break: break-all; font-size: 12px; padding: 8px; }
+    img { max-width: 100%; height: auto; }
+    .content, main, article, section { padding: 10px !important; max-width: 100% !important; }
+}
+.section-icon svg{width:24px;height:24px;stroke:var(--positronic-cyan,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.section-icon{display:inline-flex;align-items:center;justify-content:center}
+.svg-i{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;vertical-align:middle}
+.svg-i svg{width:100%;height:100%;stroke:var(--positronic-cyan,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<nav class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <div class="topbar-logo"><img src="../logo-200.webp" alt="Positronic"></div>
+        <span class="topbar-title">POSITRONIC</span>
+    </a>
+    <div class="topbar-nav">
+        <a href="../index.html">Home</a>
+        <a href="../whitepaper.html">Whitepaper</a>
+        <a href="../critics/index.html">FAQ</a>
+        <a href="../download/index.html">Download</a>
+        <a href="../testnet/index.html">Testnet</a>
+        <a href="../faucet/index.html">Faucet</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-badge">Security Rewards Program</div>
+    <h1>Bug Bounty Program</h1>
+    <p>Help secure the Positronic blockchain. Find vulnerabilities, earn ASF rewards. We value the security community's contributions to making our network safer.</p>
+    <div style="margin-top:16px;padding:12px 24px;background:rgba(255,165,0,0.15);border:1px solid rgba(255,165,0,0.4);border-radius:10px;display:inline-block">
+        <span style="color:#FFA500;font-weight:600"><span class="svg-i"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" stroke="#FFA500"/><path d="M12 9v4" stroke="#FFA500"/><path d="M12 17h.01" stroke="#FFA500"/></svg></span> Launching with Testnet</span>
+        <span style="color:var(--text-secondary);margin-left:8px">— Bug bounty rewards will be active after testnet launch. Stay tuned!</span>
+    </div>
+</div>
+
+<!-- Reward Tiers -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 7 12 7s5-3 7.5-3a2.5 2.5 0 0 1 0 5H18"/><path d="M12 7v15"/><path d="M8 22h8"/></svg></span>
+        <h2>Reward Tiers</h2>
+    </div>
+
+    <div class="tier-grid">
+        <div class="tier-card tier-critical">
+            <div class="accent"></div>
+            <div class="tier-severity">Critical</div>
+            <div class="tier-reward">50,000 <span>ASF</span></div>
+            <div class="tier-desc">Remote code execution, consensus bypass, private key extraction, chain halt</div>
+        </div>
+        <div class="tier-card tier-high">
+            <div class="accent"></div>
+            <div class="tier-severity">High</div>
+            <div class="tier-reward">20,000 <span>ASF</span></div>
+            <div class="tier-desc">Double-spend, unauthorized fund access, validator slashing bypass, state corruption</div>
+        </div>
+        <div class="tier-card tier-medium">
+            <div class="accent"></div>
+            <div class="tier-severity">Medium</div>
+            <div class="tier-reward">5,000 <span>ASF</span></div>
+            <div class="tier-desc">DoS attacks, rate limit bypass, memory leaks, P2P message injection</div>
+        </div>
+        <div class="tier-card tier-low">
+            <div class="accent"></div>
+            <div class="tier-severity">Low</div>
+            <div class="tier-reward">1,000 <span>ASF</span></div>
+            <div class="tier-desc">Information disclosure, minor config issues, non-critical error handling gaps</div>
+        </div>
+    </div>
+</div>
+
+<!-- Scope -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+        <h2>Scope</h2>
+    </div>
+
+    <table class="scope-table">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Consensus Engine</strong></td>
+                <td>DPoS/BFT consensus, validator election, finality, slashing</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Transaction Pipeline</strong></td>
+                <td>TX validation, mempool, gas calculation, priority lanes</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Cryptography</strong></td>
+                <td>Ed25519 signatures, SHA-512 hashing, AES-256 keystore, post-quantum</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>P2P Network</strong></td>
+                <td>Peer discovery, message propagation, block sync, Kademlia DHT</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>RPC Server</strong></td>
+                <td>JSON-RPC API, authentication, rate limiting, access control</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>AI Validation</strong></td>
+                <td>ML transaction scoring, quarantine system, model integrity</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Smart Contracts</strong></td>
+                <td>PositronicVM execution, gas metering, contract storage</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Database Layer</strong></td>
+                <td>AES-256-GCM encryption at rest, WAL mode, schema migration, state integrity</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Chain Reorg Engine</strong></td>
+                <td>ForkManager, competing block storage, longest-chain rule, finality guard</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Upgrade System</strong></td>
+                <td>Feature flags, schema migration, activation/rollback lifecycle</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Compliance System</strong></td>
+                <td>Forensic reports, court reports, wallet registry</td>
+                <td><span class="badge-in">In Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Desktop App UI</strong></td>
+                <td>Visual bugs, layout issues, cosmetic defects</td>
+                <td><span class="badge-out">Out of Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Website</strong></td>
+                <td>positronic-ai.network website (informational only)</td>
+                <td><span class="badge-out">Out of Scope</span></td>
+            </tr>
+            <tr>
+                <td><strong>Third-Party Libraries</strong></td>
+                <td>Issues in upstream dependencies (report upstream)</td>
+                <td><span class="badge-out">Out of Scope</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Rules -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></span>
+        <h2>Rules &amp; Guidelines</h2>
+    </div>
+
+    <ul class="rule-list">
+        <li><strong>Test on Testnet only.</strong> Never test vulnerabilities on mainnet. Use the public testnet (Chain ID: 420420) or run a local node.</li>
+        <li><strong>One report per vulnerability.</strong> Submit each issue separately with clear reproduction steps.</li>
+        <li><strong>First reporter wins.</strong> If duplicate reports are received, the first valid submission gets the reward.</li>
+        <li><strong>No public disclosure</strong> until we confirm the fix is deployed. Coordinate with us on timeline.</li>
+        <li><strong>No social engineering</strong> or phishing attacks against team members or users.</li>
+        <li><strong>No denial-of-service</strong> attacks against production infrastructure.</li>
+        <li><strong>Provide a proof of concept.</strong> Include code, logs, screenshots, or a minimal reproduction script.</li>
+        <li><strong>Response time:</strong> We acknowledge reports within 48 hours and aim to resolve critical issues within 7 days.</li>
+        <li><strong>Rewards are paid in ASF coins</strong> to your Positronic wallet address after fix verification.</li>
+    </ul>
+</div>
+
+<!-- How to Report -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+        <h2>How to Report</h2>
+    </div>
+
+    <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+            <h4>Discover a Vulnerability</h4>
+            <p>Test on the public testnet or a local node. Clone the repository from <a href="https://github.com/PositronicAI-Blockchain-L1">GitHub</a> and run <code>python -m pytest tests/ -v</code> to understand the test coverage.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+            <h4>Write a Detailed Report</h4>
+            <p>Include: affected component, severity assessment, step-by-step reproduction, impact analysis, and suggested fix (optional). Use the template below.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+            <h4>Submit via GitHub Security Advisory</h4>
+            <p>Email <strong>security@positronic-ai.network</strong> with your report. Once our GitHub repository is public, you can also submit via GitHub Security Advisory.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+            <h4>Receive Your Reward</h4>
+            <p>After we verify and fix the issue, you'll receive ASF coins to your wallet. Critical fixes may earn additional bonus rewards at our discretion.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Report Template -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        <h2>Report Template</h2>
+    </div>
+
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-secondary);line-height:1.8;white-space:pre-wrap;overflow-x:auto"><strong style="color:#fff">Title:</strong> [Brief description of the vulnerability]
+
+<strong style="color:#fff">Severity:</strong> Critical / High / Medium / Low
+
+<strong style="color:#fff">Component:</strong> [e.g., consensus/dpos.py, rpc/server.py, crypto/keys.py]
+
+<strong style="color:#fff">Description:</strong>
+[Detailed explanation of the vulnerability and its impact]
+
+<strong style="color:#fff">Steps to Reproduce:</strong>
+1. [First step]
+2. [Second step]
+3. [Expected vs actual behavior]
+
+<strong style="color:#fff">Proof of Concept:</strong>
+[Code snippet, script, or logs demonstrating the issue]
+
+<strong style="color:#fff">Impact:</strong>
+[What can an attacker achieve? Fund theft, chain halt, data leak, etc.]
+
+<strong style="color:#fff">Suggested Fix:</strong> (Optional)
+[Your recommendation for fixing the vulnerability]
+
+<strong style="color:#fff">Environment:</strong>
+- OS: [Windows/macOS/Linux]
+- Python: [version]
+- Node version: [commit hash or release]
+- Network: [testnet/local]
+
+<strong style="color:#fff">Wallet Address:</strong> [Your Positronic address for reward payment]</div>
+</div>
+
+<!-- Security Architecture -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
+        <h2>Security Architecture</h2>
+    </div>
+    <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;margin-bottom:16px">
+        Positronic implements defense-in-depth security across all layers:
+    </p>
+    <table class="scope-table">
+        <thead>
+            <tr>
+                <th>Layer</th>
+                <th>Protection</th>
+                <th>Standard</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Signatures</strong></td><td>Ed25519 (RFC 8032)</td><td>128-bit security</td></tr>
+            <tr><td><strong>Hashing</strong></td><td>SHA-512 + Blake2b</td><td>256-bit security</td></tr>
+            <tr><td><strong>Key Storage</strong></td><td>AES-256-GCM encrypted keystore</td><td>PBKDF2 100K iterations</td></tr>
+            <tr><td><strong>Database</strong></td><td>AES-256-GCM encryption at rest</td><td>PBKDF2-SHA512</td></tr>
+            <tr><td><strong>Admin Keys</strong></td><td>Machine-bound encrypted storage</td><td>HMAC-SHA256 auth</td></tr>
+            <tr><td><strong>P2P Transport</strong></td><td>TLS 1.3 with certificate pinning</td><td>Forward secrecy</td></tr>
+            <tr><td><strong>RPC Server</strong></td><td>Multi-tier rate limiting + CORS</td><td>3 sliding windows</td></tr>
+            <tr><td><strong>Post-Quantum</strong></td><td>Dilithium lattice signatures</td><td>NIST PQC Level 2</td></tr>
+            <tr><td><strong>Consensus</strong></td><td>BFT finality + slashing</td><td>66% Byzantine fault tolerance</td></tr>
+            <tr><td><strong>AI Validation</strong></td><td>ML fraud detection pipeline</td><td>Quarantine + human review</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Safe Harbor -->
+    <div class="safe-harbor">
+        <h3><span class="svg-i"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span> Safe Harbor Statement</h3>
+        <p>
+            Positronic considers security research conducted in good faith to be authorized activity.
+            We will not pursue legal action against researchers who follow the rules outlined above,
+            test only on testnet infrastructure, make a good faith effort to avoid privacy violations
+            and data destruction, and report vulnerabilities promptly through the designated channels.
+            We ask that you give us reasonable time to address issues before public disclosure.
+        </p>
+    </div>
+</div>
+
+<!-- Internal Security Audit Results -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
+        <h2>Internal Security Audit — v0.3.0</h2>
+    </div>
+    <p style="color:var(--text-secondary);font-size:15px;line-height:1.7;margin-bottom:24px">
+        In February 2026, an internal security audit identified and fixed <strong style="color:var(--positronic-cyan)">12 vulnerabilities</strong> (3 Critical, 9 High) across the consensus, cryptographic, AI, and infrastructure layers. All fixes are backed by a <strong style="color:var(--positronic-cyan)">218-test attack simulation suite</strong> that verifies each defense from a real attacker's perspective.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px;text-align:center">
+            <div style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:#FF3B30">3</div>
+            <div style="color:var(--text-secondary);font-size:13px">Critical Fixes</div>
+        </div>
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px;text-align:center">
+            <div style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:#FF9500">9</div>
+            <div style="color:var(--text-secondary);font-size:13px">High Fixes</div>
+        </div>
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px;text-align:center">
+            <div style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--positronic-cyan)">218</div>
+            <div style="color:var(--text-secondary);font-size:13px">Attack Simulation Tests</div>
+        </div>
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px;text-align:center">
+            <div style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:#4CD964">7,799</div>
+            <div style="color:var(--text-secondary);font-size:13px">Total Tests Passing</div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    Positronic Network &copy; 2026 &mdash; Bug Bounty Program &mdash; <a href="../index.html" style="color:var(--positronic-cyan)">positronic-ai.network</a>
+</div>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+</body>
+</html>

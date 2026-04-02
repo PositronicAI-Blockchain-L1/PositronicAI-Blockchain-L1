@@ -1,0 +1,716 @@
+/**
+ * Positronic AI Assistant — Widget Styles v2.0
+ *
+ * Modern AI chatbot design with glassmorphism, animated borders,
+ * and professional message bubbles. Dark theme: cyan + blue accents.
+ *
+ * Fully self-contained: does NOT depend on page :root variables.
+ * All selectors scoped with .posi-assistant-* prefix.
+ */
+
+/* ── Scoped custom properties ───────────────────── */
+.posi-assistant-widget {
+  --pa-blue: #0080FF;
+  --pa-blue-dark: #0060CC;
+  --pa-cyan: #00E5FF;
+  --pa-cyan-dim: rgba(0, 229, 255, 0.6);
+  --pa-dark: #0B1120;
+  --pa-darker: #060A14;
+  --pa-surface: #0E1525;
+  --pa-surface-elevated: #121D30;
+  --pa-card: rgba(255, 255, 255, 0.04);
+  --pa-card-hover: rgba(255, 255, 255, 0.07);
+  --pa-border: rgba(0, 229, 255, 0.12);
+  --pa-border-strong: rgba(0, 229, 255, 0.25);
+  --pa-text: #E8ECF0;
+  --pa-text-bright: #FFFFFF;
+  --pa-text-dim: #9CA8B8;
+  --pa-text-muted: #5A6A7A;
+  --pa-input-bg: rgba(255, 255, 255, 0.05);
+  --pa-input-border: rgba(255, 255, 255, 0.1);
+  --pa-glass: rgba(14, 21, 37, 0.7);
+  --pa-glass-border: rgba(255, 255, 255, 0.08);
+  --pa-radius: 16px;
+  --pa-radius-sm: 10px;
+  --pa-radius-xs: 6px;
+  --pa-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --pa-font-heading: 'Space Grotesk', 'Inter', sans-serif;
+  --pa-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --pa-transition-fast: 0.15s ease;
+  --pa-focus: #00E5FF;
+  --pa-success: #34D399;
+  --pa-gradient-blue: linear-gradient(135deg, #0080FF 0%, #0060CC 100%);
+  --pa-gradient-cyan: linear-gradient(135deg, #00E5FF 0%, #0080FF 100%);
+  --pa-gradient-header: linear-gradient(135deg, #0E1A2E 0%, #0B1428 50%, #101830 100%);
+  --pa-gradient-border: conic-gradient(from 0deg, #0080FF, #00E5FF, #0080FF, #6C3AED, #0080FF);
+  --pa-user-bubble: linear-gradient(135deg, #0080FF 0%, #0066DD 50%, #0055CC 100%);
+  --pa-shadow-panel: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 80px rgba(0, 128, 255, 0.08), 0 0 1px rgba(0, 229, 255, 0.3);
+  --pa-shadow-trigger: 0 8px 32px rgba(0, 128, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.12);
+}
+
+/* ── Focus ring (shared) ────────────────────────── */
+.posi-assistant-widget *:focus-visible {
+  outline: 2px solid var(--pa-focus);
+  outline-offset: 2px;
+}
+
+/* ── Trigger button ─────────────────────────────── */
+.posi-assistant-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10000;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: var(--pa-dark);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--pa-shadow-trigger);
+  transition: transform var(--pa-transition), box-shadow var(--pa-transition);
+  animation: posi-trigger-glow 3s ease-in-out infinite;
+}
+/* Animated ring around trigger */
+.posi-assistant-trigger::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--pa-gradient-border);
+  z-index: -1;
+  animation: posi-ring-spin 4s linear infinite;
+}
+.posi-assistant-trigger::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  background: var(--pa-dark);
+  z-index: -1;
+}
+.posi-assistant-trigger:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 40px rgba(0, 128, 255, 0.45), 0 0 80px rgba(0, 229, 255, 0.2);
+}
+.posi-assistant-trigger img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+@keyframes posi-trigger-glow {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(0, 128, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.12);
+  }
+  50% {
+    box-shadow: 0 8px 48px rgba(0, 128, 255, 0.5), 0 0 90px rgba(0, 229, 255, 0.2);
+  }
+}
+@keyframes posi-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── "Ask Me" floating label ───────────────────── */
+.posi-assistant-ask-label {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  z-index: 10000;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: var(--pa-surface-elevated);
+  border: 1px solid var(--pa-border);
+  color: var(--pa-cyan);
+  font-family: var(--pa-font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0, 128, 255, 0.2);
+  animation: posi-ask-float 2.5s ease-in-out infinite;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+/* Tooltip arrow pointing down */
+.posi-assistant-ask-arrow {
+  position: absolute;
+  bottom: -6px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: var(--pa-surface-elevated);
+  border-right: 1px solid var(--pa-border);
+  border-bottom: 1px solid var(--pa-border);
+  transform: rotate(45deg);
+}
+.posi-assistant-ask-label.hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+@keyframes posi-ask-float {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 4px 20px rgba(0, 128, 255, 0.2);
+  }
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 128, 255, 0.35);
+  }
+}
+@media (max-width: 480px) {
+  .posi-assistant-ask-label {
+    bottom: 78px;
+    right: 16px;
+    font-size: 11px;
+    padding: 4px 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .posi-assistant-ask-label { animation: none; }
+}
+
+/* ── Panel container with animated gradient border ── */
+.posi-assistant-panel {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  z-index: 10001;
+  width: 420px;
+  max-height: 82vh;
+  border-radius: 20px;
+  padding: 2px; /* space for animated border */
+  background: var(--pa-gradient-border);
+  background-size: 200% 200%;
+  animation: posi-border-flow 4s linear infinite;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--pa-font);
+  color: var(--pa-text);
+  opacity: 0;
+  transform: translateY(20px) scale(0.92);
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--pa-shadow-panel);
+}
+.posi-assistant-panel[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+@keyframes posi-border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Inner panel (sits inside the gradient border) */
+.posi-assistant-panel-inner {
+  background: var(--pa-dark);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.posi-assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--pa-gradient-header);
+  border-bottom: 1px solid var(--pa-border);
+  flex-shrink: 0;
+  gap: 12px;
+}
+.posi-assistant-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.posi-assistant-header-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+.posi-assistant-header-avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 229, 255, 0.2);
+}
+/* Online status dot */
+.posi-assistant-header-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pa-success);
+  border: 2px solid var(--pa-dark);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+}
+.posi-assistant-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.posi-assistant-title {
+  font-family: var(--pa-font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--pa-text-bright);
+  margin: 0;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.posi-assistant-subtitle {
+  font-size: 11px;
+  color: var(--pa-text-muted);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.posi-assistant-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--pa-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--pa-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background var(--pa-transition-fast), color var(--pa-transition-fast),
+              border-color var(--pa-transition-fast);
+}
+.posi-assistant-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--pa-text-bright);
+  border-color: var(--pa-border-strong);
+}
+
+/* ── Messages area ──────────────────────────────── */
+.posi-assistant-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
+  min-height: 80px;
+  max-height: 380px;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Message bubbles ────────────────────────────── */
+.posi-assistant-msg {
+  margin-bottom: 6px;
+  animation: posi-msg-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* User message — right-aligned blue gradient bubble */
+.posi-assistant-msg-q {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 40px;
+}
+.posi-assistant-msg-q span {
+  display: inline-block;
+  background: var(--pa-user-bubble);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 18px 18px 4px 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  max-width: 82%;
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(0, 128, 255, 0.2);
+  word-wrap: break-word;
+}
+
+/* Bot message — dark card, left-aligned with avatar */
+.posi-assistant-msg-a {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding-right: 32px;
+}
+.posi-assistant-msg-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1.5px solid rgba(0, 229, 255, 0.15);
+}
+.posi-assistant-msg-body {
+  background: var(--pa-surface-elevated);
+  border: 1px solid var(--pa-border);
+  border-radius: 4px 18px 18px 18px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 85%;
+  color: var(--pa-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  word-wrap: break-word;
+}
+.posi-assistant-msg-body p { margin: 0 0 10px; }
+.posi-assistant-msg-body p:last-child { margin-bottom: 0; }
+.posi-assistant-msg-body ul,
+.posi-assistant-msg-body ol { margin: 6px 0 10px 18px; padding: 0; }
+.posi-assistant-msg-body li { margin-bottom: 4px; font-size: 13px; }
+.posi-assistant-msg-body pre {
+  background: var(--pa-darker);
+  border: 1px solid var(--pa-border);
+  border-radius: var(--pa-radius-xs);
+  padding: 10px 12px;
+  overflow-x: auto;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  margin: 8px 0;
+}
+.posi-assistant-msg-body code {
+  background: rgba(0, 229, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+.posi-assistant-msg-body pre code {
+  background: none;
+  padding: 0;
+}
+.posi-assistant-msg-body a {
+  color: var(--pa-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+  transition: border-color var(--pa-transition-fast), color var(--pa-transition-fast);
+}
+.posi-assistant-msg-body a:hover {
+  border-color: var(--pa-cyan);
+  color: var(--pa-text-bright);
+}
+.posi-assistant-msg-body strong {
+  color: var(--pa-text-bright);
+  font-weight: 600;
+}
+@keyframes posi-msg-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Typing indicator ───────────────────────────── */
+.posi-assistant-typing {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  padding-right: 32px;
+}
+.posi-assistant-dots {
+  display: flex;
+  gap: 5px;
+  padding: 14px 18px;
+  background: var(--pa-surface-elevated);
+  border: 1px solid var(--pa-border);
+  border-radius: 4px 18px 18px 18px;
+  align-items: center;
+}
+.posi-assistant-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pa-cyan-dim);
+  animation: posi-dot-pulse 1.4s ease-in-out infinite;
+}
+.posi-assistant-dot:nth-child(1) { animation-delay: 0s; }
+.posi-assistant-dot:nth-child(2) { animation-delay: 0.2s; }
+.posi-assistant-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes posi-dot-pulse {
+  0%, 100% {
+    transform: scale(0.7);
+    opacity: 0.3;
+    background: var(--pa-text-muted);
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    background: var(--pa-cyan);
+  }
+}
+
+/* ── Suggestions (accordion) ───────────────────── */
+.posi-assistant-suggestions {
+  padding: 8px 10px 6px;
+  border-top: 1px solid var(--pa-border);
+  flex-shrink: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+/* Category header — clean, no emoji dependency */
+.posi-assistant-cat-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+  margin: 2px 0;
+  border-radius: var(--pa-radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--pa-text-dim);
+  font-family: var(--pa-font-heading);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all var(--pa-transition-fast);
+}
+.posi-assistant-cat-header:hover {
+  background: rgba(0, 229, 255, 0.04);
+  color: var(--pa-cyan);
+  border-color: rgba(0, 229, 255, 0.1);
+}
+.posi-assistant-cat-header[aria-expanded="true"] {
+  color: var(--pa-cyan);
+  background: rgba(0, 229, 255, 0.06);
+  border-color: rgba(0, 229, 255, 0.15);
+}
+.posi-assistant-cat-header-label {
+  flex: 1;
+  text-align: left;
+}
+.posi-assistant-cat-count {
+  font-size: 10px;
+  font-weight: 500;
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--pa-text-muted);
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin: 0 8px 0 4px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.posi-assistant-cat-chevron {
+  font-size: 10px;
+  opacity: 0.5;
+  transition: transform var(--pa-transition);
+}
+.posi-assistant-cat-header[aria-expanded="true"] .posi-assistant-cat-chevron {
+  transform: rotate(180deg);
+  opacity: 0.8;
+}
+
+/* Chips container */
+.posi-assistant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 6px 10px 28px;
+}
+.posi-assistant-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--pa-border);
+  background: var(--pa-card);
+  color: var(--pa-text-dim);
+  font-family: var(--pa-font);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all var(--pa-transition-fast);
+  white-space: nowrap;
+}
+.posi-assistant-chip:hover {
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--pa-cyan);
+  border-color: rgba(0, 229, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 128, 255, 0.12);
+}
+
+/* ── Input area — glassmorphism style ──────────── */
+.posi-assistant-input-area {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--pa-border);
+  flex-shrink: 0;
+  background: rgba(14, 21, 37, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.posi-assistant-input {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--pa-glass-border);
+  background: var(--pa-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--pa-text);
+  font-family: var(--pa-font);
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color var(--pa-transition), box-shadow var(--pa-transition);
+}
+.posi-assistant-input::placeholder {
+  color: var(--pa-text-muted);
+}
+.posi-assistant-input:focus {
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08), 0 0 20px rgba(0, 229, 255, 0.05);
+}
+
+/* Send button — gradient with hover glow */
+.posi-assistant-send {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: none;
+  background: var(--pa-gradient-blue);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform var(--pa-transition-fast), box-shadow var(--pa-transition-fast),
+              filter var(--pa-transition-fast);
+  box-shadow: 0 4px 16px rgba(0, 128, 255, 0.25);
+}
+.posi-assistant-send:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(0, 128, 255, 0.4);
+  filter: brightness(1.1);
+}
+.posi-assistant-send:active {
+  transform: scale(0.95);
+}
+
+/* ── Welcome message ────────────────────────────── */
+.posi-assistant-welcome {
+  font-size: 13px;
+  color: var(--pa-text-dim);
+  line-height: 1.55;
+  margin-bottom: 12px;
+  padding: 2px 0;
+}
+
+/* ── Scrollbar ──────────────────────────────────── */
+.posi-assistant-messages::-webkit-scrollbar,
+.posi-assistant-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+.posi-assistant-messages::-webkit-scrollbar-track,
+.posi-assistant-suggestions::-webkit-scrollbar-track {
+  background: transparent;
+}
+.posi-assistant-messages::-webkit-scrollbar-thumb,
+.posi-assistant-suggestions::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.12);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.posi-assistant-messages::-webkit-scrollbar-thumb:hover,
+.posi-assistant-suggestions::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.25);
+}
+
+/* Firefox scrollbar */
+.posi-assistant-messages,
+.posi-assistant-suggestions {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 229, 255, 0.12) transparent;
+}
+
+/* ── Reduced motion ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .posi-assistant-trigger { animation: none; }
+  .posi-assistant-trigger::before { animation: none; }
+  .posi-assistant-panel { transition: none; animation: none; }
+  .posi-assistant-dot { animation: none; opacity: 0.6; }
+  .posi-assistant-msg { animation: none; }
+  .posi-assistant-trigger:hover { transform: none; }
+  .posi-assistant-chip:hover { transform: none; }
+  .posi-assistant-send:hover { transform: none; }
+}
+
+/* ── Mobile responsive (< 480px: near full-screen) ── */
+@media (max-width: 480px) {
+  .posi-assistant-trigger {
+    width: 52px;
+    height: 52px;
+    bottom: 16px;
+    right: 16px;
+  }
+  .posi-assistant-trigger::before {
+    inset: -2px;
+  }
+  .posi-assistant-trigger img {
+    width: 30px;
+    height: 30px;
+  }
+  .posi-assistant-panel {
+    width: calc(100vw - 12px);
+    right: 6px;
+    bottom: 6px;
+    max-height: calc(100vh - 12px);
+    border-radius: 18px;
+  }
+  .posi-assistant-panel-inner {
+    border-radius: 16px;
+  }
+  .posi-assistant-messages {
+    max-height: none;
+    flex: 1;
+    padding: 16px 12px;
+  }
+  .posi-assistant-header {
+    padding: 12px 14px;
+  }
+  .posi-assistant-input-area {
+    padding: 12px;
+  }
+  .posi-assistant-suggestions {
+    max-height: 180px;
+  }
+  .posi-assistant-chips {
+    padding-left: 20px;
+  }
+}
+
+/* ── Tablet responsive (481px - 768px) ──────────── */
+@media (min-width: 481px) and (max-width: 768px) {
+  .posi-assistant-panel {
+    width: 380px;
+    right: 16px;
+    bottom: 88px;
+    max-height: 78vh;
+  }
+}

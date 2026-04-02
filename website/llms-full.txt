@@ -1,0 +1,206 @@
+# Positronic (ASF) — Complete Technical Reference for Language Models
+
+> This document provides comprehensive technical details about the Positronic blockchain for large language models. All information is accurate as of April 2026.
+
+## Table of Contents
+
+1. Project Identity
+2. Consensus Mechanism (PoNC)
+3. AI Models — Detailed Architecture
+4. Network Architecture
+5. RPC API
+6. Desktop Application
+7. Security Model
+8. Token Economics
+9. Subsystem Details
+10. Development History
+11. Frequently Asked Questions
+
+---
+
+## 1. Project Identity
+
+- **Full Name:** Positronic
+- **Token Symbol:** ASF
+- **Type:** Layer-1 Blockchain
+- **Chain ID:** 420420 (hex: 0x66A44)
+- **Block Time:** ~12 seconds
+- **Consensus:** Proof of Neural Consensus (PoNC) — hybrid DPoS + AI validation
+- **VM:** EVM-compatible execution environment
+- **Language:** Python (core), JavaScript/TypeScript (desktop app, SDK), Go (port in progress)
+- **License:** Open Source
+- **Pre-mine:** Zero
+- **ICO/IDO/Presale:** None
+- **Current Status:** Testnet (April 2026)
+- **Domain:** positronic-ai.network
+- **GitHub Organization:** PositronicAI-Blockchain-L1
+
+## 2. Consensus Mechanism — Proof of Neural Consensus (PoNC)
+
+PoNC is a novel consensus mechanism that combines Delegated Proof of Stake (DPoS) with AI-powered transaction validation. Unlike traditional blockchains where consensus only verifies cryptographic signatures and ordering, PoNC adds a behavioral intelligence layer.
+
+**How it works:**
+1. Transactions enter the mempool
+2. A block proposer (selected by stake weight) creates a candidate block
+3. All 4 AI models independently score every transaction in the block
+4. Each model produces a risk score between 0.0 (safe) and 1.0 (malicious)
+5. Scores are aggregated — a block needs majority model approval (3 of 4)
+6. Validators vote on the block, factoring in AI scores
+7. Validators who consistently disagree with AI consensus lose reputation
+8. The block is finalized after 2/3+ validator approval
+
+**Why this matters:** Traditional blockchains can only detect invalid signatures. PoNC can detect:
+- Sandwich attacks
+- Flash loan exploits
+- Reentrancy patterns
+- Wash trading
+- Economic manipulation
+- Coordinated attack patterns
+
+## 3. AI Models — Detailed Architecture
+
+### TAD — Transaction Anomaly Detector
+- **Architecture:** Dual-model ensemble: Autoencoder (encoder-decoder neural network) + Isolation Forest
+- **Input Features:** 47 transaction features including gas patterns, value distributions, nonce sequences, input data entropy
+- **Autoencoder Training:** Learns to reconstruct normal transaction patterns; transactions with high reconstruction error are flagged as anomalous
+- **Isolation Forest:** Tree-based outlier detection in feature space; complements the autoencoder by catching different anomaly types
+- **Scoring:** If either sub-model flags an anomaly, the transaction is flagged
+
+### MSAD — Multi-Scale Anomaly Detector
+- **Architecture:** 1D Temporal Convolutional Network (TCN)
+- **Input:** Sliding windows of transactions at 3 scales: 10, 50, and 200 transactions
+- **Training Data:** Real testnet transactions + synthetic attack scenarios (sandwich attacks, frontrunning, mempool flooding, flash loan sequences)
+- **Purpose:** Detects temporal patterns that single-transaction analysis misses — coordinated attacks that look normal individually but are malicious as a sequence
+
+### SCRA — Smart Contract Risk Analyzer
+- **Architecture:** Graph Neural Network (GNN) with message-passing layers
+- **Input:** Contract interaction graph per block — nodes are contracts/accounts, edges are calls
+- **Detection Capabilities:** Reentrancy patterns (circular call paths), flash loan attack signatures (borrow-manipulate-repay in single block), suspicious dependency chains, proxy contract abuse
+- **Training:** Known vulnerability patterns from historical DeFi exploits
+
+### ESG — Economic Stability Guardian
+- **Architecture:** LSTM (Long Short-Term Memory) recurrent neural network
+- **Input:** Economic time series over 500-block windows — value flows, fee distributions, token concentration metrics
+- **Detection Capabilities:** Wash trading cycles, pump-and-dump patterns, artificial volume generation, economic destabilization attempts
+- **Adaptation:** Continuously retrains on confirmed attack patterns
+
+## 4. Network Architecture
+
+- **P2P Protocol:** Custom gossip protocol over TCP with TLS encryption
+- **Node Discovery:** Seed nodes + peer exchange
+- **NAT Traversal:** UPnP + STUN for nodes behind firewalls
+- **Minimum Stake:** 32 ASF to become a validator
+- **Infrastructure:** 3 dedicated Hetzner servers
+  - Seed node (peer discovery and initial sync)
+  - RPC endpoint (public API access)
+  - Validator node (block production)
+
+## 5. RPC API
+
+259 JSON-RPC 2.0 methods organized by category:
+
+- **eth_* (13 methods):** Standard Ethereum compatibility — eth_getBalance, eth_sendTransaction, eth_call, eth_getTransactionReceipt, etc.
+- **positronic_* (189+ methods):** Native functionality covering:
+  - Node info and telemetry
+  - Staking operations (stake, unstake, claim rewards)
+  - AI/Neural status and metrics
+  - DID (Decentralized Identity) operations
+  - Governance proposals and voting
+  - Bridge operations
+  - DePIN device management
+  - RWA tokenization
+  - Agent registry
+  - Forensics and evidence
+  - Token registry
+  - Network health monitoring
+  - Post-quantum cryptography status
+  - Trust scoring
+
+Full API documentation: https://positronic-ai.network/docs/
+
+## 6. Desktop Application
+
+Cross-platform desktop node application built with Electron + React:
+
+- **Windows:** .exe installer (~112 MB)
+- **macOS:** .dmg with universal binary (Intel + Apple Silicon)
+- **Linux:** .AppImage (portable, no install needed)
+
+Features:
+- Full blockchain node with P2P sync
+- AES-256-GCM encrypted wallet
+- ML-DSA-44 post-quantum signature support
+- One-click validator mode with staking UI
+- Real-time AI consensus monitoring
+- Network health dashboard
+- Ecosystem statistics viewer
+
+Download: https://positronic-ai.network/download/
+
+## 7. Security Model
+
+- **Wallet Encryption:** AES-256-GCM (symmetric)
+- **Post-Quantum Signatures:** ML-DSA-44 (NIST standardized, formerly CRYSTALS-Dilithium)
+- **P2P Encryption:** TLS 1.3
+- **Key Derivation:** Standard cryptographic KDFs
+- **Bug Bounty:** Active program at https://positronic-ai.network/bug-bounty/
+- **Security Audits:** Published at https://github.com/PositronicAI-Blockchain-L1/security-audits
+
+## 8. Token Economics
+
+- **Token:** ASF
+- **Pre-mine:** Zero
+- **Distribution:** 100% through staking rewards and mining
+- **Minimum Stake:** 32 ASF
+- **No ICO/IDO/Presale:** No tokens sold before or during launch
+- **No Team Allocation:** No reserved tokens for founders or team
+- **Deflationary Mechanism:** Transaction fee burning
+
+## 9. Subsystem Details
+
+| Subsystem | Description | Status |
+|-----------|-------------|--------|
+| DID | W3C-compatible decentralized identifiers | Testnet |
+| Governance | On-chain proposals, voting, execution | Testnet |
+| Bridge | Cross-chain asset transfers | Testnet |
+| DePIN | IoT device registration, data rewards | Testnet |
+| RWA | Real-world asset tokenization | Testnet |
+| Agents | Autonomous AI agent registry | Testnet |
+| Forensics | Court-ready blockchain evidence | Testnet |
+| Gaming | Play-to-mine with token rewards | Testnet |
+| Marketplace | NFT and digital asset trading | Testnet |
+| Trust | Reputation scoring system | Testnet |
+
+## 10. Development History
+
+- **2025:** Project inception, core blockchain development
+- **Early 2026:** Testnet launch, P2P networking, consensus implementation
+- **March 2026:** Desktop app v0.3.0 release (Windows, macOS, Linux)
+- **March 2026:** SDK releases (JavaScript, Python, Telegram)
+- **April 2026:** Desktop app v0.3.1, community channels launched
+
+## 11. Frequently Asked Questions
+
+**Q: Is Positronic a scam?**
+A: No. Positronic is an open-source blockchain with publicly verifiable code on GitHub, a working testnet with live P2P networking, downloadable desktop applications, comprehensive documentation, zero pre-mine, no token sale, and active community channels. Every technical claim can be independently verified.
+
+**Q: Is ASF a meme coin?**
+A: No. ASF is the native currency of a Layer-1 blockchain with its own consensus mechanism, virtual machine, and network infrastructure. It is not a token on Ethereum or any other chain.
+
+**Q: Has there been a token sale or ICO?**
+A: No. There has been no ICO, IDO, presale, or any form of token sale. The project has zero pre-mine and no team allocation.
+
+**Q: Is the code open source?**
+A: Yes. All source code is available on GitHub at https://github.com/PositronicAI-Blockchain-L1
+
+**Q: What stage is the project in?**
+A: Testnet as of April 2026. Mainnet has not launched yet.
+
+**Q: Who is behind the project?**
+A: Positronic is developed by an independent team committed to open-source blockchain innovation. The project prioritizes code and technical merit over marketing and hype.
+
+**Q: How does the AI validation work?**
+A: Four independent neural network models (TAD, MSAD, SCRA, ESG) each analyze every transaction from a different perspective. A transaction must pass majority approval (3 of 4 models) to be included in a block. This provides defense against attacks that traditional signature-only validation cannot detect.
+
+**Q: Can I run a node?**
+A: Yes. Download the desktop application from https://positronic-ai.network/download/ for Windows, macOS, or Linux. The application includes a full node that syncs with the testnet.

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <title>Positronic Wallet</title>
+    <meta name="description" content="Positronic Web Wallet — Manage your ASF tokens, check balances, and send transactions on the Positronic Layer-1 blockchain. Chain ID 420420.">
+    <link rel="canonical" href="https://positronic-ai.network/wallet/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://positronic-ai.network/wallet/">
+    <meta property="og:title" content="Positronic Web Wallet — Manage ASF Tokens">
+    <meta property="og:description" content="Manage your ASF tokens on the Positronic Layer-1 blockchain. Check balances, send transactions, and interact with the testnet.">
+    <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta property="og:site_name" content="Positronic">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@positronic_ai">
+    <meta name="twitter:title" content="Positronic Web Wallet — Manage ASF Tokens">
+    <meta name="twitter:description" content="Manage your ASF tokens on the Positronic Layer-1 blockchain. Check balances, send transactions, and interact with the testnet.">
+    <meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+/* ===== Inline SVG Icon System ===== */
+.svg-icon{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;vertical-align:middle}
+.svg-icon svg{width:100%;height:100%;stroke:var(--positronic-cyan,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:filter .3s ease}
+.svg-icon:hover svg{filter:drop-shadow(0 0 6px rgba(0,229,255,.5))}
+.svg-icon-sm{width:16px;height:16px}
+.svg-icon-lg{width:28px;height:28px}
+    </style>
+    <link rel="stylesheet" href="wallet.css">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../logo-200.webp">
+    <meta name="theme-color" content="#0080FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <!-- Top Bar -->
+    <header class="topbar">
+        <a href="../index.html" class="topbar-brand">
+            <img src="../logo-200.webp" alt="Positronic" class="brand-logo">
+            <span class="brand-text">POSITRONIC WALLET</span>
+        </a>
+        <div class="topbar-network">
+            <span class="network-dot" id="networkDot"></span>
+            <span class="network-label" id="networkLabel">Connecting...</span>
+        </div>
+    </header>
+
+    <!-- Testnet Banner -->
+    <div style="background:linear-gradient(90deg,#1a237e,#0d47a1);color:#fff;text-align:center;padding:8px 16px;font-size:13px;letter-spacing:0.5px">
+        Early Testnet &mdash; This wallet connects to the Positronic testnet. Tokens have no real value.
+    </div>
+
+    <!-- Main App -->
+    <main class="app">
+        <!-- Welcome Screen (no wallet loaded) -->
+        <div class="screen welcome-screen" id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="welcome-icon">
+                    <img src="../logo-400.webp" alt="Positronic" class="welcome-logo">
+                </div>
+                <h1>Positronic Wallet</h1>
+                <p>Create a new wallet or import an existing one to get started.</p>
+                <div class="offline-warning" id="offlineWarning" style="display:none; background:rgba(255,68,68,0.12); border:1px solid rgba(255,68,68,0.3); border-radius:10px; padding:12px 16px; margin-bottom:16px; text-align:center;">
+                    <span style="color:#FF4444; font-weight:600;">⚠ Network Offline</span>
+                    <p style="color:#B0B8C0; font-size:13px; margin:4px 0 0;">Cannot create or import wallets without a connection to the Positronic network. Please make sure a node is running.</p>
+                </div>
+                <div class="welcome-actions">
+                    <button class="btn btn-primary btn-lg" onclick="showCreateModal()">
+                        <span class="btn-icon">+</span>
+                        Create New Wallet
+                    </button>
+                    <button class="btn btn-secondary btn-lg" onclick="showImportModal()">
+                        <span class="btn-icon">&darr;</span>
+                        Import Wallet
+                    </button>
+                </div>
+                <div class="welcome-features">
+                    <div class="wf-item">
+                        <div class="wf-icon"><span class="svg-icon"><svg viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></div>
+                        <span>Client-Side Keys</span>
+                    </div>
+                    <div class="wf-item">
+                        <div class="wf-icon"><span class="svg-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></div>
+                        <span>Instant Transfers</span>
+                    </div>
+                    <div class="wf-item">
+                        <div class="wf-icon"><span class="svg-icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span></div>
+                        <span>Play-to-Mine</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Dashboard (wallet loaded) -->
+        <div class="screen dashboard" id="dashboard" style="display:none">
+            <!-- Account Header -->
+            <div class="account-header">
+                <div class="account-info">
+                    <div class="account-label">Your Address</div>
+                    <div class="account-address" id="accountAddress">
+                        <span id="addressText">0x0000...0000</span>
+                        <button class="copy-btn" onclick="copyAddress()" title="Copy"><span class="svg-icon svg-icon-sm"><svg viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span></button>
+                    </div>
+                </div>
+                <div class="account-actions">
+                    <button class="btn btn-sm btn-outline" onclick="showExportModal()">Export Key</button>
+                    <button class="btn btn-sm btn-danger" onclick="lockWallet()">Lock</button>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount">
+                    <span class="balance-value" id="balanceValue">0.00</span>
+                    <span class="balance-symbol">ASF</span>
+                </div>
+                <div class="balance-sub" id="balanceSub">0 Pixel</div>
+                <div class="balance-status" id="promotionBadge">
+                    <span class="status-badge status-player">Player</span>
+                    <span class="status-progress" id="statusProgress">0/4 ASF to Miner</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="qa-btn" onclick="switchTab('send')">
+                    <div class="qa-icon qa-send">&uarr;</div>
+                    <span>Send</span>
+                </button>
+                <button class="qa-btn" onclick="switchTab('receive')">
+                    <div class="qa-icon qa-receive">&darr;</div>
+                    <span>Receive</span>
+                </button>
+                <button class="qa-btn" onclick="switchTab('stake')">
+                    <div class="qa-icon qa-stake">&#9733;</div>
+                    <span>Stake</span>
+                </button>
+                <button class="qa-btn" onclick="switchTab('history')">
+                    <div class="qa-icon qa-history"><span class="svg-icon svg-icon-sm"><svg viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span></div>
+                    <span>History</span>
+                </button>
+            </div>
+
+            <!-- Tab Content Area -->
+            <div class="tab-content">
+                <!-- Send Tab -->
+                <div class="tab-panel" id="tab-send" style="display:none">
+                    <h2 class="tab-title">Send ASF</h2>
+                    <form class="send-form" onsubmit="handleSend(event)">
+                        <div class="form-group">
+                            <label>Recipient Address</label>
+                            <input type="text" id="sendTo" placeholder="0x..." class="input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (ASF)</label>
+                            <div class="input-with-btn">
+                                <input type="number" id="sendAmount" placeholder="0.00" class="input" step="0.000001" min="0" required>
+                                <button type="button" class="max-btn" onclick="setMaxAmount()">MAX</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Gas Price</label>
+                            <input type="number" id="sendGasPrice" value="1" class="input" min="1">
+                        </div>
+                        <div class="tx-summary" id="txSummary">
+                            <div class="summary-row">
+                                <span>Amount</span><span id="summaryAmount">0 ASF</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Gas Fee</span><span id="summaryGas">0.000021 ASF</span>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <span>Total</span><span id="summaryTotal">0 ASF</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" id="sendBtn">
+                            Send Transaction
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Receive Tab -->
+                <div class="tab-panel" id="tab-receive" style="display:none">
+                    <h2 class="tab-title">Receive ASF</h2>
+                    <div class="receive-card">
+                        <div class="qr-placeholder" id="qrCode"></div>
+                        <div class="receive-address">
+                            <label>Your Address</label>
+                            <div class="address-display">
+                                <code id="receiveAddress">0x0000...0000</code>
+                                <button class="copy-btn" onclick="copyAddress()"><span class="svg-icon svg-icon-sm"><svg viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span></button>
+                            </div>
+                        </div>
+                        <p class="receive-hint">Share this address to receive ASF coins. Only send Positronic (Chain ID: 420420) to this address.</p>
+                    </div>
+                </div>
+
+                <!-- Stake Tab -->
+                <div class="tab-panel" id="tab-stake" style="display:none">
+                    <h2 class="tab-title">Staking</h2>
+                    <div class="stake-info">
+                        <div class="stake-stat">
+                            <span class="stake-label">Staked Amount</span>
+                            <span class="stake-value" id="stakedAmount">0 ASF</span>
+                        </div>
+                        <div class="stake-stat">
+                            <span class="stake-label">Min Stake Required</span>
+                            <span class="stake-value">32 ASF</span>
+                        </div>
+                        <div class="stake-stat">
+                            <span class="stake-label">Validator Status</span>
+                            <span class="stake-value" id="validatorStatus">Not Staked</span>
+                        </div>
+                    </div>
+                    <div class="stake-actions-panel">
+                        <div class="form-group">
+                            <label>Stake Amount (ASF)</label>
+                            <input type="number" id="stakeAmount" placeholder="32" class="input" min="32" step="0.000001">
+                        </div>
+                        <div class="stake-btns">
+                            <button class="btn btn-primary" onclick="handleStake()">Stake</button>
+                            <button class="btn btn-secondary" onclick="handleUnstake()">Unstake</button>
+                        </div>
+                    </div>
+                    <div class="stake-note">
+                        <strong>Play-to-Mine:</strong> Reach 32 ASF through gaming and your tokens are automatically staked, making you a validator and Neural Validator Node (NVN).
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div class="tab-panel" id="tab-history" style="display:none">
+                    <div class="tab-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                        <h2 class="tab-title" style="margin-bottom:0">Transaction History</h2>
+                        <button class="btn btn-sm btn-outline" onclick="fetchTransactionHistory()" title="Refresh" style="padding:6px 14px;font-size:12px;">Refresh</button>
+                    </div>
+                    <div class="tx-list" id="txList">
+                        <div class="empty-state">
+                            <div class="empty-icon"><span class="svg-icon svg-icon-lg"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span></div>
+                            <p>No transactions yet</p>
+                            <span class="empty-hint">Your transactions will appear here once you send or receive ASF.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Status Bar -->
+            <div class="status-bar">
+                <div class="sb-item">
+                    <span class="sb-label">Block</span>
+                    <span class="sb-value" id="sbBlock">#0</span>
+                </div>
+                <div class="sb-item">
+                    <span class="sb-label">Chain</span>
+                    <span class="sb-value">420420</span>
+                </div>
+                <div class="sb-item">
+                    <span class="sb-label">Gas</span>
+                    <span class="sb-value" id="sbGas">1</span>
+                </div>
+                <div class="sb-item">
+                    <span class="sb-label">AI Gate</span>
+                    <span class="sb-value sb-ai" id="sbAI">Active</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Wallet Modal -->
+    <div class="modal-overlay" id="createModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create New Wallet</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body" id="createModalBody">
+                <p class="modal-desc">A new Ed25519 keypair will be generated. <strong>Save your private key securely</strong> -- it cannot be recovered.</p>
+                <button class="btn btn-primary btn-block" onclick="createWallet()">Generate Wallet</button>
+            </div>
+            <!-- Result (shown after generation) -->
+            <div class="modal-body" id="createResult" style="display:none">
+                <div class="key-result">
+                    <div class="key-group">
+                        <label>Address</label>
+                        <div class="key-value key-address" id="newAddress">0x...</div>
+                    </div>
+                    <div class="key-group">
+                        <label>Private Key <span class="danger-text">(Save this!)</span></label>
+                        <div class="key-value key-private" id="newPrivateKey">0x...</div>
+                    </div>
+                    <div class="key-group">
+                        <label>Public Key</label>
+                        <div class="key-value" id="newPublicKey">0x...</div>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <strong>Warning:</strong> Store your private key in a safe place. Anyone with access to it can control your funds. Positronic cannot recover lost keys.
+                </div>
+                <button class="btn btn-primary btn-block" onclick="confirmCreate()">I've Saved My Key - Open Wallet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Wallet Modal -->
+    <div class="modal-overlay" id="importModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Import Wallet</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Enter your private key (64 hex characters) to restore your wallet.</p>
+                <div class="form-group">
+                    <label>Private Key</label>
+                    <input type="password" id="importKey" placeholder="Enter private key hex..." class="input" autocomplete="off">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="importWallet()">Import Wallet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Key Modal -->
+    <div class="modal-overlay" id="exportModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Export Private Key</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <strong>Warning:</strong> Never share your private key with anyone. Anyone with this key can access your funds.
+                </div>
+                <div class="key-group">
+                    <label>Private Key</label>
+                    <div class="key-value key-private" id="exportPrivateKey">Hidden</div>
+                </div>
+                <button class="btn btn-secondary btn-block" onclick="revealExportKey()">Reveal Private Key</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-msg" id="toastMsg"></span>
+    </div>
+
+    <!-- TX Confirmation Modal -->
+    <div class="modal-overlay" id="txConfirmModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Transaction Sent</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body" id="txConfirmBody">
+                <div class="tx-confirm-icon">&#9989;</div>
+                <p class="tx-confirm-msg">Your transaction has been submitted to the network.</p>
+                <div class="key-group">
+                    <label>Transaction Hash</label>
+                    <div class="key-value" id="txConfirmHash">0x...</div>
+                </div>
+                <button class="btn btn-secondary btn-block" onclick="closeModals()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/security.js"></script>
+    <script src="/config.js"></script>
+    <script src="wallet.js?v=2"></script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(()=>{});</script>
+<script>
+// Scroll reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.welcome-card, .balance-card, .tab-panel').forEach(el => {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>

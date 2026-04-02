@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>ASF Dashboard — Positronic Blockchain</title>
+<meta name="description" content="Positronic Network Dashboard — Real-time blockchain statistics, AI consensus metrics, validator status, and network health for the Positronic Layer-1.">
+<link rel="canonical" href="https://positronic-ai.network/dashboard/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://positronic-ai.network/dashboard/">
+<meta property="og:title" content="Positronic Network Dashboard">
+<meta property="og:description" content="Real-time blockchain statistics, AI consensus metrics, validator status, and network health monitoring.">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta property="og:site_name" content="Positronic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<meta name="twitter:title" content="Positronic Network Dashboard">
+<meta name="twitter:description" content="Real-time blockchain statistics, AI consensus metrics, validator status, and network health monitoring.">
+<meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../logo-200.webp">
+<meta name="theme-color" content="#0080FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+/* =============================================================
+   CSS VARIABLES & RESET
+   ============================================================= */
+:root {
+    --bg: #060D1A;
+    --bg-surface: #0D1B2A;
+    --card-bg: #0A1628;
+    --card-border: #1a3a5c;
+    --positronic-blue: #0080FF;
+    --positronic-cyan: #00E5FF;
+    --positronic-silver: #B0B8C0;
+    --positronic-electric: #00BFFF;
+    --positronic-dark: #0D1B2A;
+    --positronic-darker: #060D1A;
+    --positronic-accent: #0A1628;
+    --positronic-glow: #1a3a5c;
+    --positronic-highlight: #00E5FF;
+    --text-primary: #e4e4f0;
+    --text-secondary: #B0B8C0;
+    --text-muted: #6a7a8a;
+    --glow-blue: rgba(0, 128, 255, 0.35);
+    --glow-cyan: rgba(0, 229, 255, 0.35);
+    --glow-green: rgba(76, 176, 80, 0.35);
+    --glow-purple: rgba(26, 58, 92, 0.35);
+    --font-pixel: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --transition: 0.3s ease;
+}
+
+*, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--positronic-blue); }
+
+/* =============================================================
+   TOPBAR
+   ============================================================= */
+.topbar {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 60px;
+    background: linear-gradient(135deg, var(--bg) 0%, var(--bg-surface) 100%);
+    border-bottom: 2px solid var(--positronic-blue);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 40px rgba(229,37,33,0.08);
+}
+.topbar-brand { display: flex; align-items: center; gap: 12px; }
+.topbar-logo {
+    width: 38px; height: 38px; background: #0D1B2A;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 16px var(--glow-blue);
+    position: relative; overflow: hidden;
+}
+.topbar-logo::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(transparent, rgba(255,255,255,0.12), transparent 30%);
+    animation: spin 3s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.topbar-logo span {
+    position: relative; z-index: 1; font-weight: bold; color: white;
+    font-family: var(--font-pixel); font-size: 14px;
+}
+.topbar-title {
+    font-family: var(--font-pixel); font-size: 11px;
+    color: var(--positronic-cyan); letter-spacing: 2px;
+    text-shadow: 0 0 12px var(--glow-cyan);
+}
+.topbar-nav { display: flex; align-items: center; gap: 20px; }
+.topbar-nav a {
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 13px; font-weight: 500; transition: color var(--transition);
+    position: relative;
+}
+.topbar-nav a:hover { color: var(--positronic-cyan); }
+.topbar-nav a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 2px; background: var(--positronic-cyan);
+    transition: width var(--transition);
+}
+.topbar-nav a:hover::after { width: 100%; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.connection-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+.status-dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #555;
+    transition: background var(--transition), box-shadow var(--transition);
+}
+.status-dot.connected {
+    background: var(--positronic-electric);
+    box-shadow: 0 0 10px var(--glow-green);
+    animation: pulse-dot 2s infinite;
+}
+.status-dot.warning { background: var(--positronic-cyan); box-shadow: 0 0 10px rgba(255,214,0,0.4); }
+.status-dot.disconnected { background: var(--positronic-blue); box-shadow: 0 0 10px var(--glow-blue); }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.height-badge {
+    font-family: var(--font-pixel); font-size: 9px;
+    color: var(--positronic-cyan); background: rgba(255,184,0,0.08);
+    border: 1px solid rgba(255,184,0,0.2); padding: 4px 10px; border-radius: 6px;
+}
+.refresh-badge {
+    font-size: 11px; color: var(--text-muted);
+    cursor: pointer; user-select: none;
+}
+.refresh-badge:hover { color: var(--positronic-cyan); }
+
+/* =============================================================
+   RPC STATUS BAR
+   ============================================================= */
+.rpc-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 24px; background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 12px;
+}
+.rpc-bar .rpc-status { color: var(--text-muted); margin-left: auto; }
+
+/* =============================================================
+   MAIN CONTAINER
+   ============================================================= */
+.dashboard { max-width: 1440px; margin: 0 auto; padding: 20px 24px 40px; }
+
+/* =============================================================
+   SECTION HEADERS
+   ============================================================= */
+.section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin: 28px 0 14px; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.section-header:first-child { margin-top: 0; }
+.section-header h2 {
+    font-family: var(--font-pixel); font-size: 11px;
+    color: var(--positronic-cyan); letter-spacing: 1px; text-transform: uppercase;
+}
+.section-header .section-icon { font-size: 16px; }
+.section-header .section-badge {
+    margin-left: auto; font-size: 11px; color: var(--text-muted);
+}
+
+/* =============================================================
+   GRID SYSTEM
+   ============================================================= */
+.grid { display: grid; gap: 16px; margin-bottom: 16px; }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-1 { grid-template-columns: 1fr; }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-full { grid-column: 1 / -1; }
+
+/* =============================================================
+   CARD
+   ============================================================= */
+.card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 18px 20px;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    position: relative; overflow: hidden;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+}
+.card-glow-red { border-color: rgba(229,37,33,0.2); }
+.card-glow-red:hover { box-shadow: 0 0 30px rgba(229,37,33,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-gold { border-color: rgba(255,184,0,0.2); }
+.card-glow-gold:hover { box-shadow: 0 0 30px rgba(255,184,0,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-green { border-color: rgba(76,176,80,0.2); }
+.card-glow-green:hover { box-shadow: 0 0 30px rgba(76,176,80,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-blue { border-color: rgba(33,150,243,0.2); }
+.card-glow-blue:hover { box-shadow: 0 0 30px rgba(33,150,243,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-purple { border-color: rgba(156,39,176,0.2); }
+.card-glow-purple:hover { box-shadow: 0 0 30px rgba(156,39,176,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-cyan { border-color: rgba(0,188,212,0.2); }
+.card-glow-cyan:hover { box-shadow: 0 0 30px rgba(0,188,212,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-orange { border-color: rgba(255,152,0,0.2); }
+.card-glow-orange:hover { box-shadow: 0 0 30px rgba(255,152,0,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+.card-glow-pink { border-color: rgba(233,30,99,0.2); }
+.card-glow-pink:hover { box-shadow: 0 0 30px rgba(233,30,99,0.08), 0 8px 40px rgba(0,0,0,0.35); }
+
+.card-top-accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.accent-red { background: linear-gradient(90deg, var(--positronic-blue), #ff6b68); }
+.accent-gold { background: linear-gradient(90deg, var(--positronic-cyan), #ffe066); }
+.accent-green { background: linear-gradient(90deg, var(--positronic-electric), #81c784); }
+.accent-blue { background: linear-gradient(90deg, var(--positronic-electric), #64b5f6); }
+.accent-purple { background: linear-gradient(90deg, var(--positronic-glow), #ce93d8); }
+.accent-cyan { background: linear-gradient(90deg, var(--positronic-electric), #4dd0e1); }
+.accent-orange { background: linear-gradient(90deg, var(--positronic-cyan), #ffb74d); }
+.accent-pink { background: linear-gradient(90deg, var(--positronic-highlight), #f48fb1); }
+.accent-teal { background: linear-gradient(90deg, var(--positronic-glow), #4db6ac); }
+.accent-indigo { background: linear-gradient(90deg, var(--positronic-blue), #7986cb); }
+
+.card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+}
+.card-label {
+    font-family: var(--font-pixel); font-size: 9px;
+    color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;
+}
+.card-icon {
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.card-icon svg { width: 18px; height: 18px; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.section-icon svg { width: 18px; height: 18px; stroke: var(--positronic-cyan, #00E5FF); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.section-icon { display: inline-flex; align-items: center; justify-content: center; }
+.stat-row-label svg { width: 14px; height: 14px; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px; }
+
+/* =============================================================
+   STAT VALUE
+   ============================================================= */
+.stat-val {
+    font-family: var(--font-pixel); font-size: 20px; color: #fff;
+    margin-bottom: 4px; line-height: 1.5; word-break: break-all;
+}
+.stat-val.small { font-size: 14px; }
+.stat-sub { font-size: 12px; color: var(--text-muted); }
+.stat-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-row-label { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+.stat-row-value { font-family: var(--font-pixel); font-size: 12px; color: #fff; }
+
+/* =============================================================
+   ALERT LEVEL INDICATOR
+   ============================================================= */
+.alert-indicator {
+    display: inline-block; padding: 5px 14px; border-radius: 8px;
+    font-family: var(--font-pixel); font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+}
+.alert-GREEN {
+    background: rgba(76,176,80,0.15); color: var(--positronic-electric);
+    border: 1px solid rgba(76,176,80,0.3); text-shadow: 0 0 8px rgba(76,176,80,0.4);
+}
+.alert-YELLOW {
+    background: rgba(255,214,0,0.15); color: var(--positronic-cyan);
+    border: 1px solid rgba(255,214,0,0.3); text-shadow: 0 0 8px rgba(255,214,0,0.4);
+}
+.alert-ORANGE {
+    background: rgba(255,152,0,0.15); color: var(--positronic-cyan);
+    border: 1px solid rgba(255,152,0,0.3); text-shadow: 0 0 8px rgba(255,152,0,0.4);
+}
+.alert-RED {
+    background: rgba(229,37,33,0.15); color: var(--positronic-blue);
+    border: 1px solid rgba(229,37,33,0.3); text-shadow: 0 0 8px rgba(229,37,33,0.4);
+    animation: alert-pulse 1.5s infinite;
+}
+@keyframes alert-pulse {
+    0%,100%{ box-shadow: 0 0 5px rgba(229,37,33,0.2); }
+    50%{ box-shadow: 0 0 20px rgba(229,37,33,0.5); }
+}
+
+/* =============================================================
+   PROGRESS BARS
+   ============================================================= */
+.progress-track {
+    height: 10px; background: rgba(0,0,0,0.4); border-radius: 5px;
+    overflow: hidden; position: relative;
+}
+.progress-fill {
+    height: 100%; border-radius: 5px; transition: width 1s ease;
+    position: relative;
+}
+.progress-fill::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.progress-fill.fill-red { background: linear-gradient(90deg, var(--positronic-blue), #ff6b68); }
+.progress-fill.fill-gold { background: linear-gradient(90deg, var(--positronic-cyan), #ffe066); }
+.progress-fill.fill-green { background: linear-gradient(90deg, var(--positronic-electric), #81c784); }
+.progress-fill.fill-blue { background: linear-gradient(90deg, var(--positronic-electric), #64b5f6); }
+.progress-fill.fill-purple { background: linear-gradient(90deg, var(--positronic-glow), #ce93d8); }
+.progress-fill.fill-cyan { background: linear-gradient(90deg, var(--positronic-electric), #4dd0e1); }
+.progress-fill.fill-orange { background: linear-gradient(90deg, var(--positronic-cyan), #ffb74d); }
+.progress-label {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px; font-size: 12px;
+}
+.progress-label span:first-child { color: var(--text-secondary); }
+.progress-label span:last-child { font-family: var(--font-pixel); font-size: 11px; color: #fff; }
+
+/* =============================================================
+   BAR CHART (CSS only)
+   ============================================================= */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label {
+    font-family: var(--font-pixel); font-size: 9px;
+    color: var(--text-secondary); min-width: 90px; text-align: right;
+}
+.bar-track {
+    flex: 1; height: 24px; background: rgba(0,0,0,0.3);
+    border-radius: 5px; overflow: hidden; position: relative;
+}
+.bar-fill {
+    height: 100%; border-radius: 5px;
+    display: flex; align-items: center; padding: 0 10px;
+    font-size: 11px; font-weight: 600; color: #fff;
+    transition: width 1s ease; position: relative; min-width: fit-content;
+}
+.bar-fill::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: shimmer 3s infinite;
+}
+.bar-count { font-size: 11px; color: var(--text-muted); min-width: 50px; text-align: left; }
+
+/* Bar fill colors */
+.bar-newcomer  { background: linear-gradient(90deg, #607D8B, #90A4AE); }
+.bar-bronze    { background: linear-gradient(90deg, #8D6E63, #A1887F); }
+.bar-silver    { background: linear-gradient(90deg, #9E9E9E, #BDBDBD); }
+.bar-gold      { background: linear-gradient(90deg, #00E5FF, #FFC107); }
+.bar-platinum  { background: linear-gradient(90deg, #00BCD4, #4DD0E1); }
+.bar-legend    { background: linear-gradient(90deg, #0080FF, #FF5722); }
+
+/* Node rank bar fills */
+.rank-probe       { background: linear-gradient(90deg, #8BC34A, #689F38); }
+.rank-sentinel    { background: linear-gradient(90deg, #00BFFF, #0080FF); }
+.rank-circuit     { background: linear-gradient(90deg, #FF9800, #F57C00); }
+.rank-relay       { background: linear-gradient(90deg, #9C27B0, #7B1FA2); }
+.rank-cortex      { background: linear-gradient(90deg, #00E5FF, #00B8D4); }
+.rank-nexus       { background: linear-gradient(90deg, #2196F3, #1565C0); }
+.rank-positronic  { background: linear-gradient(90deg, #B0B8C0, #78909C); }
+.rank-star        { background: linear-gradient(90deg, #00E5FF, #FFC107); }
+.rank-superstar   { background: linear-gradient(90deg, #0080FF, #C62828); }
+.rank-default     { background: linear-gradient(90deg, #607D8B, #455A64); }
+
+/* =============================================================
+   LEADERBOARD TABLE
+   ============================================================= */
+.leaderboard { width: 100%; }
+.lb-row {
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    background: rgba(0,0,0,0.12); border-radius: var(--radius-sm);
+    margin-bottom: 6px; transition: background var(--transition);
+}
+.lb-row:hover { background: rgba(0,0,0,0.25); }
+.lb-rank {
+    font-family: var(--font-pixel); font-size: 11px; color: var(--positronic-cyan);
+    min-width: 28px; text-align: center;
+}
+.lb-rank.r1 { color: #00E5FF; text-shadow: 0 0 6px rgba(0,229,255,0.5); }
+.lb-rank.r2 { color: #C0C0C0; }
+.lb-rank.r3 { color: #CD7F32; }
+.lb-addr {
+    flex: 1; font-family: 'Courier New', monospace; font-size: 12px;
+    color: var(--positronic-electric); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lb-score { font-family: var(--font-pixel); font-size: 11px; color: #fff; }
+.lb-uptime { font-size: 11px; color: var(--positronic-electric); }
+
+/* =============================================================
+   MINI STAT CARD (for new features grid)
+   ============================================================= */
+.mini-card {
+    background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 10px; padding: 14px 16px;
+    transition: border-color var(--transition), background var(--transition);
+}
+.mini-card:hover { border-color: rgba(255,184,0,0.15); background: rgba(0,0,0,0.3); }
+.mini-card-head {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.mini-card-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.mini-card-title {
+    font-family: var(--font-pixel); font-size: 8px; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 1px;
+}
+.mini-stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 0; font-size: 12px;
+}
+.mini-stat-row .label { color: var(--text-muted); }
+.mini-stat-row .value { font-family: var(--font-pixel); font-size: 11px; color: #fff; }
+
+/* =============================================================
+   LOADING SKELETON
+   ============================================================= */
+.skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%; animation: skel 1.5s infinite; border-radius: 4px;
+}
+@keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* =============================================================
+   FOOTER
+   ============================================================= */
+.dashboard-footer {
+    text-align: center; padding: 24px; margin-top: 20px;
+    font-size: 11px; color: var(--text-muted);
+    border-top: 1px solid var(--card-border);
+}
+.dashboard-footer span { color: var(--positronic-blue); }
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+@media (max-width: 1200px) {
+    .grid-5 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+    .grid-5, .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .span-2, .span-3 { grid-column: span 1; }
+    .topbar { padding: 0 12px; height: auto; flex-wrap: wrap; gap: 6px; padding: 8px 12px; }
+    .topbar-title { font-size: 9px; }
+    .topbar-nav { gap: 10px; }
+    .rpc-bar { flex-wrap: wrap; }
+    .dashboard { padding: 12px; }
+}
+        @media(max-width:768px){body{overflow-x:hidden}*{max-width:100vw;box-sizing:border-box}h1,h2,h3{word-break:break-word}pre,code{overflow-x:auto;max-width:100%;white-space:pre-wrap;font-size:12px}table{display:block;overflow-x:auto}img{max-width:100%;height:auto}}
+@media (max-width: 600px) {
+    .grid-5, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .span-2, .span-3 { grid-column: span 1; }
+    .topbar-nav a:nth-child(n+3) { display: none; }
+    .stat-val { font-size: 16px; }
+    .bar-label { min-width: 60px; font-size: 7px; }
+    .height-badge { font-size: 8px; padding: 3px 6px; }
+    .section-header h2 { font-size: 9px; }
+}
+
+/* Scroll reveal animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- ===================== TOPBAR ===================== -->
+<header class="topbar">
+    <div class="topbar-brand">
+        <div class="topbar-logo"><img src="../logo-200.webp" alt="ASF" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:relative;z-index:1;"></div>
+        <div class="topbar-title">ASF DASHBOARD</div>
+    </div>
+    <nav class="topbar-nav">
+        <a href="../index.html">Home</a>
+        <a href="../explorer/index.html">Explorer</a>
+        <a href="../wallet/index.html">Wallet</a>
+        <a href="../panel/index.html">Panel</a>
+        <a href="../evidence/index.html">Evidence</a>
+        <a href="../download/index.html" style="color:var(--positronic-cyan);">&#x2B07; Node</a>
+    </nav>
+    <div class="topbar-right">
+        <div class="connection-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Connecting...</span>
+        </div>
+        <div class="height-badge" id="topbarHeight">BLOCK #--</div>
+        <div class="refresh-badge" id="refreshBtn" title="Force refresh">&#x21BB;</div>
+    </div>
+</header>
+
+<!-- ===================== RPC STATUS ===================== -->
+<div class="rpc-bar">
+    <span class="rpc-status" id="rpcStatus">Chain ID: --</span>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<main class="dashboard">
+
+    <!-- ===== SECTION 1: NETWORK OVERVIEW ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>
+        <h2>Network Overview</h2>
+        <span class="section-badge" id="lastUpdate">Last update: --</span>
+    </div>
+    <div class="grid grid-5">
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Chain Height</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);"><svg viewBox="0 0 24 24" stroke="var(--positronic-electric)"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+            </div>
+            <div class="stat-val" id="statHeight">--</div>
+            <div class="stat-sub">Current block number</div>
+        </div>
+        <div class="card card-glow-purple">
+            <div class="card-top-accent accent-purple"></div>
+            <div class="card-head">
+                <span class="card-label">Total Accounts</span>
+                <div class="card-icon" style="background:rgba(156,39,176,0.12);"><svg viewBox="0 0 24 24" stroke="var(--positronic-glow)"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            </div>
+            <div class="stat-val" id="statAccounts">--</div>
+            <div class="stat-sub">On-chain addresses</div>
+        </div>
+        <div class="card card-glow-green">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">Block Time</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);"><svg viewBox="0 0 24 24" stroke="var(--positronic-electric)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            </div>
+            <div class="stat-val small" id="statBlockTime">12s</div>
+            <div class="stat-sub">Target interval</div>
+        </div>
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Chain ID</span>
+                <div class="card-icon" style="background:rgba(255,184,0,0.12);"><svg viewBox="0 0 24 24" stroke="var(--positronic-cyan)"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+            </div>
+            <div class="stat-val small" id="statChainId">--</div>
+            <div class="stat-sub">Network identifier</div>
+        </div>
+        <div class="card card-glow-red">
+            <div class="card-top-accent accent-red"></div>
+            <div class="card-head">
+                <span class="card-label">Total TX</span>
+                <div class="card-icon" style="background:rgba(229,37,33,0.12);"><svg viewBox="0 0 24 24" stroke="var(--positronic-blue)"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+            </div>
+            <div class="stat-val" id="statTotalTx">--</div>
+            <div class="stat-sub">Transactions processed</div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 2: AI VALIDATION ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></span>
+        <h2>AI Validation Stats</h2>
+        <span class="section-badge" id="aiModelVer">Model: --</span>
+    </div>
+    <div class="grid grid-4">
+        <div class="card card-glow-cyan">
+            <div class="card-top-accent accent-cyan"></div>
+            <div class="card-head">
+                <span class="card-label">Total Validated</span>
+                <div class="card-icon" style="background:rgba(0,188,212,0.12);color:var(--positronic-electric);">&#x2705;</div>
+            </div>
+            <div class="stat-val" id="aiTotalScored">--</div>
+            <div class="stat-sub">Transactions scored by AI</div>
+        </div>
+        <div class="card card-glow-green">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">Accepted Rate</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:var(--positronic-electric);">&#x1F44D;</div>
+            </div>
+            <div class="stat-val" id="aiAcceptRate">--%</div>
+            <div class="stat-sub">
+                <span id="aiAccepted">--</span> accepted / <span id="aiRejected">--</span> rejected
+            </div>
+        </div>
+        <div class="card card-glow-orange">
+            <div class="card-top-accent accent-orange"></div>
+            <div class="card-head">
+                <span class="card-label">Quarantined</span>
+                <div class="card-icon" style="background:rgba(255,152,0,0.12);color:var(--positronic-cyan);">&#x26A0;</div>
+            </div>
+            <div class="stat-val" id="aiQuarantined">--</div>
+            <div class="stat-sub">In quarantine pool</div>
+        </div>
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">AI Model Version</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);color:var(--positronic-electric);">&#x1F916;</div>
+            </div>
+            <div class="stat-val small" id="aiVersion">--</div>
+            <div class="stat-sub">AI Enabled: <span id="aiEnabled">--</span></div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 3: TRUST SYSTEM ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+        <h2>TRUST System</h2>
+        <span class="section-badge">Soulbound Reputation</span>
+    </div>
+    <div class="grid grid-2">
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">TRUST Overview</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label"><svg viewBox="0 0 24 24" stroke="var(--positronic-cyan)"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Total Profiles</span>
+                <span class="stat-row-value" id="trustTotal">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label"><svg viewBox="0 0 24 24" stroke="var(--positronic-cyan)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Average Score</span>
+                <span class="stat-row-value" id="trustAvg">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label"><svg viewBox="0 0 24 24" stroke="var(--positronic-cyan)"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 7 12 7s5-3 7.5-3a2.5 2.5 0 0 1 0 5H18"/><path d="M12 7v15"/><path d="M8 22h8"/></svg> Score Awarded</span>
+                <span class="stat-row-value" id="trustAwarded">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-row-label"><svg viewBox="0 0 24 24" stroke="#ff6b6b"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> Total Penalties</span>
+                <span class="stat-row-value" id="trustPenalties">--</span>
+            </div>
+        </div>
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Level Distribution</span>
+            </div>
+            <div class="bar-chart" id="trustBars">
+                <div style="text-align:center; color:var(--text-muted); font-size:12px; padding:20px;">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 4: TOKEN & NFT ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/></svg></span>
+        <h2>Token & NFT Stats</h2>
+    </div>
+    <div class="grid grid-4">
+        <div class="card card-glow-pink">
+            <div class="card-top-accent accent-pink"></div>
+            <div class="card-head">
+                <span class="card-label">PRC-20 Tokens</span>
+                <div class="card-icon" style="background:rgba(233,30,99,0.12);color:var(--positronic-highlight);">&#x1FA99;</div>
+            </div>
+            <div class="stat-val" id="tokenCount">--</div>
+            <div class="stat-sub">Created tokens</div>
+        </div>
+        <div class="card card-glow-purple">
+            <div class="card-top-accent accent-purple"></div>
+            <div class="card-head">
+                <span class="card-label">NFT Collections</span>
+                <div class="card-icon" style="background:rgba(156,39,176,0.12);color:var(--positronic-glow);">&#x1F5BC;</div>
+            </div>
+            <div class="stat-val" id="nftCollections">--</div>
+            <div class="stat-sub">PRC-721 collections</div>
+        </div>
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Active Assets</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);color:var(--positronic-electric);">&#x1F4E6;</div>
+            </div>
+            <div class="stat-val" id="activeTokens">--</div>
+            <div class="stat-sub"><span id="activeCollections">--</span> active collections</div>
+        </div>
+        <div class="card card-glow-green">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">Fees Collected</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:var(--positronic-electric);">&#x1F4B0;</div>
+            </div>
+            <div class="stat-val small" id="tokenFees">-- ASF</div>
+            <div class="stat-sub">From token creation</div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 5: MINING STATS ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg></span>
+        <h2>Mining Stats</h2>
+        <span class="section-badge">550M ASF Cap</span>
+    </div>
+    <div class="grid grid-4">
+        <div class="card card-glow-gold span-2">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Mining Progress</span>
+            </div>
+            <div class="progress-label">
+                <span>Mined: <strong id="minedSma">--</strong> ASF</span>
+                <span id="miningPct">--%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-gold" id="miningBar" style="width:0%;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text-muted);">
+                <span>Remaining: <span id="remainingSma">--</span> ASF</span>
+                <span>Cap: 550,000,000 ASF</span>
+            </div>
+        </div>
+        <div class="card card-glow-red">
+            <div class="card-top-accent accent-red"></div>
+            <div class="card-head">
+                <span class="card-label">Block Reward</span>
+                <div class="card-icon" style="background:rgba(229,37,33,0.12);color:var(--positronic-blue);">&#x1F381;</div>
+            </div>
+            <div class="stat-val small" id="blockReward">-- ASF</div>
+            <div class="stat-sub">Current per block</div>
+        </div>
+        <div class="card card-glow-orange">
+            <div class="card-top-accent accent-orange"></div>
+            <div class="card-head">
+                <span class="card-label">Halving</span>
+                <div class="card-icon" style="background:rgba(255,152,0,0.12);color:var(--positronic-cyan);">&#x23F3;</div>
+            </div>
+            <div class="stat-val small" id="halvingCountdown">-- blocks</div>
+            <div class="stat-sub">Until next halving</div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 6: NODE RANKING ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 7 12 7s5-3 7.5-3a2.5 2.5 0 0 1 0 5H18"/><path d="M12 7v15"/><path d="M8 22h8"/></svg></span>
+        <h2>Node Ranking</h2>
+        <span class="section-badge" id="totalNodesLabel">Nodes: --</span>
+    </div>
+    <div class="grid grid-2">
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Top Validators</span>
+            </div>
+            <div class="leaderboard" id="nodeLeaderboard">
+                <div style="text-align:center; color:var(--text-muted); font-size:12px; padding:20px;">Loading leaderboard...</div>
+            </div>
+        </div>
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Rank Distribution</span>
+            </div>
+            <div class="bar-chart" id="rankBars">
+                <div style="text-align:center; color:var(--text-muted); font-size:12px; padding:20px;">Loading ranks...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 7: IMMUNE SYSTEM ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
+        <h2>Immune System</h2>
+    </div>
+    <div class="grid grid-4">
+        <div class="card card-glow-green" id="immuneAlertCard">
+            <div class="card-top-accent accent-green" id="immuneAccent"></div>
+            <div class="card-head">
+                <span class="card-label">Threat Level</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:var(--positronic-electric);" id="immuneIcon">&#x1F6E1;</div>
+            </div>
+            <div class="stat-val">
+                <span class="alert-indicator alert-GREEN" id="immuneLevel">--</span>
+            </div>
+        </div>
+        <div class="card card-glow-orange">
+            <div class="card-top-accent accent-orange"></div>
+            <div class="card-head">
+                <span class="card-label">Threats Detected</span>
+                <div class="card-icon" style="background:rgba(255,152,0,0.12);color:var(--positronic-cyan);">&#x26A0;</div>
+            </div>
+            <div class="stat-val" id="immuneThreats">--</div>
+            <div class="stat-sub">Total threats recorded</div>
+        </div>
+        <div class="card card-glow-red">
+            <div class="card-top-accent accent-red"></div>
+            <div class="card-head">
+                <span class="card-label">Blocked Addresses</span>
+                <div class="card-icon" style="background:rgba(229,37,33,0.12);color:var(--positronic-blue);">&#x1F6AB;</div>
+            </div>
+            <div class="stat-val" id="immuneBlocked">--</div>
+            <div class="stat-sub">Banned from network</div>
+        </div>
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Quarantine Pool</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);color:var(--positronic-electric);">&#x1F50D;</div>
+            </div>
+            <div class="stat-val" id="quarantineSize">--</div>
+            <div class="stat-sub">Pending review</div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 8: GAME ENGINE ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span>
+        <h2>Game Engine</h2>
+    </div>
+    <div class="grid grid-4">
+        <div class="card card-glow-red">
+            <div class="card-top-accent accent-red"></div>
+            <div class="card-head">
+                <span class="card-label">Active Players</span>
+                <div class="card-icon" style="background:rgba(229,37,33,0.12);color:var(--positronic-blue);">&#x1F3AE;</div>
+            </div>
+            <div class="stat-val" id="gamePlayers">--</div>
+            <div class="stat-sub">Registered players</div>
+        </div>
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Total Games</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);color:var(--positronic-electric);">&#x1F579;</div>
+            </div>
+            <div class="stat-val" id="gameTotal">--</div>
+            <div class="stat-sub">Games played</div>
+        </div>
+        <div class="card card-glow-gold">
+            <div class="card-top-accent accent-gold"></div>
+            <div class="card-head">
+                <span class="card-label">Rewards Distributed</span>
+                <div class="card-icon" style="background:rgba(255,184,0,0.12);color:var(--positronic-cyan);">&#x1F4B0;</div>
+            </div>
+            <div class="stat-val small" id="gameRewards">-- ASF</div>
+            <div class="stat-sub">Play-to-earn payouts</div>
+        </div>
+        <div class="card card-glow-green">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">Game Sessions</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:var(--positronic-electric);">&#x1F3C1;</div>
+            </div>
+            <div class="stat-val" id="onchainGames">--</div>
+            <div class="stat-sub">Active: <span id="onchainActive">--</span></div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 9: NEW FEATURES ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+        <h2>Extended Features</h2>
+    </div>
+    <div class="grid grid-4">
+        <!-- Paymaster -->
+        <div class="card card-glow-cyan">
+            <div class="card-top-accent accent-cyan"></div>
+            <div class="card-head">
+                <span class="card-label">Paymaster</span>
+                <div class="card-icon" style="background:rgba(0,188,212,0.12);color:var(--positronic-electric);">&#x26FD;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Active Paymasters</span>
+                <span class="value" id="pmActive">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Gas Sponsored</span>
+                <span class="value" id="pmGas">--</span>
+            </div>
+        </div>
+
+        <!-- Smart Wallets -->
+        <div class="card card-glow-indigo" style="border-color:rgba(63,81,181,0.2);">
+            <div class="card-top-accent accent-indigo"></div>
+            <div class="card-head">
+                <span class="card-label">Smart Wallets</span>
+                <div class="card-icon" style="background:rgba(63,81,181,0.12);color:var(--positronic-blue);">&#x1F4F1;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Wallets</span>
+                <span class="value" id="swTotal">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Locked</span>
+                <span class="value" id="swLocked">--</span>
+            </div>
+        </div>
+
+        <!-- AI Agents (Phase 23) -->
+        <div class="card card-glow-purple">
+            <div class="card-top-accent accent-purple"></div>
+            <div class="card-head">
+                <span class="card-label">AI Agents</span>
+                <div class="card-icon" style="background:rgba(156,39,176,0.12);color:var(--positronic-glow);">&#x1F916;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Agents</span>
+                <span class="value" id="agentTotal">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Active</span>
+                <span class="value" id="agentActive">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Actions</span>
+                <span class="value" id="agentActions">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Autonomous Eligible</span>
+                <span class="value" id="agentAutonomous">--</span>
+            </div>
+            <div id="agentTypesList" style="margin-top:6px;"></div>
+        </div>
+
+        <!-- AI Explainability (Phase 21 — XAI) -->
+        <div class="card" style="border-color:rgba(0,200,200,0.2);">
+            <div class="card-top-accent accent-cyan"></div>
+            <div class="card-head">
+                <span class="card-label">AI Explainability</span>
+                <div class="card-icon" style="background:rgba(0,200,200,0.12);color:var(--positronic-cyan);">&#x1F9E0;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Avg Risk Score</span>
+                <span class="value" id="xaiAvgScore">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">False Positive Rate</span>
+                <span class="value" id="xaiFPR">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Model Version</span>
+                <span class="value" id="xaiModelVer">--</span>
+            </div>
+        </div>
+
+        <!-- ZK Privacy (Phase 24) -->
+        <div class="card card-glow-green">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">ZK Privacy</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:var(--positronic-electric);">&#x1F510;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Proofs</span>
+                <span class="value" id="zkProofs">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Verified</span>
+                <span class="value" id="zkVerified">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Failed</span>
+                <span class="value" id="zkFailed">--</span>
+            </div>
+        </div>
+
+        <!-- Cross-Chain Bridge (Phase 1 + Phase 20) -->
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Cross-Chain Bridge</span>
+                <div class="card-icon" style="background:rgba(33,150,243,0.12);color:var(--positronic-electric);">&#x1F309;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Anchored</span>
+                <span class="value" id="bridgeAnchored">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Verified Proofs</span>
+                <span class="value" id="bridgeVerified">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Locked</span>
+                <span class="value" id="bridgeLocked">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Minted</span>
+                <span class="value" id="bridgeMinted">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Active Locks</span>
+                <span class="value" id="bridgeActiveLocks">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Relayers</span>
+                <span class="value" id="bridgeRelayers">--</span>
+            </div>
+        </div>
+
+        <!-- DePIN (Phase 22) -->
+        <div class="card card-glow-orange">
+            <div class="card-top-accent accent-orange"></div>
+            <div class="card-head">
+                <span class="card-label">DePIN</span>
+                <div class="card-icon" style="background:rgba(255,152,0,0.12);color:var(--positronic-cyan);">&#x1F4E1;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Devices</span>
+                <span class="value" id="depinTotal">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Active Devices</span>
+                <span class="value" id="depinActive">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Rewards</span>
+                <span class="value" id="depinRewards">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Pending Rewards</span>
+                <span class="value" id="depinPending">--</span>
+            </div>
+        </div>
+
+        <!-- Post-Quantum (Phase 19) -->
+        <div class="card card-glow-pink">
+            <div class="card-top-accent accent-pink"></div>
+            <div class="card-head">
+                <span class="card-label">Post-Quantum</span>
+                <div class="card-icon" style="background:rgba(233,30,99,0.12);color:var(--positronic-highlight);">&#x1F512;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">PQ Keys</span>
+                <span class="value" id="pqKeys">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">PQ Signatures</span>
+                <span class="value" id="pqSigs">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Algorithm</span>
+                <span class="value" id="pqAlgorithm">--</span>
+            </div>
+        </div>
+
+        <!-- DID -->
+        <div class="card" style="border-color:rgba(0,150,136,0.2);">
+            <div class="card-top-accent accent-teal"></div>
+            <div class="card-head">
+                <span class="card-label">DID (Identity)</span>
+                <div class="card-icon" style="background:rgba(0,150,136,0.12);color:var(--positronic-glow);">&#x1FAAA;</div>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Total Identities</span>
+                <span class="value" id="didTotal">--</span>
+            </div>
+            <div class="mini-stat-row">
+                <span class="label">Credentials Issued</span>
+                <span class="value" id="didCreds">--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 10: NODE SOFTWARE ===== -->
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+        <h2>Node Software</h2>
+    </div>
+
+    <!-- Node overview banner -->
+    <div class="card" style="border-color:rgba(0,229,255,0.25); margin-bottom:20px; position:relative; overflow:hidden;">
+        <div class="card-top-accent accent-cyan"></div>
+        <div style="position:absolute;top:0;right:0;width:200px;height:100%;opacity:0.04;
+                    background:radial-gradient(circle at 80% 50%, var(--positronic-cyan), transparent 70%);
+                    pointer-events:none;"></div>
+        <div style="padding:8px 0 4px;">
+            <h3 style="font-family:var(--font-pixel);font-size:18px;color:var(--positronic-cyan);margin-bottom:8px;">
+                Run Your Own Positronic Validator
+            </h3>
+            <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;max-width:720px;">
+                The Positronic Desktop Node is a full validator client that syncs the blockchain, runs the
+                AI validation engine, and earns ASF rewards. By running a node you help secure the network,
+                validate transactions with AI-powered threat detection, and participate in governance.
+            </p>
+        </div>
+    </div>
+
+    <!-- What the node does -->
+    <div class="grid grid-4" style="margin-bottom:20px;">
+        <div class="card card-glow-blue">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">Full Sync</span>
+                <div class="card-icon" style="background:rgba(0,128,255,0.12);color:var(--positronic-blue);">&#x1F310;</div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:12px;line-height:1.6;">
+                Syncs the full blockchain ledger, validates every block, and maintains a complete state database
+                on your local machine.
+            </p>
+        </div>
+
+        <div class="card card-glow-cyan">
+            <div class="card-top-accent accent-cyan"></div>
+            <div class="card-head">
+                <span class="card-label">AI Engine</span>
+                <div class="card-icon" style="background:rgba(0,229,255,0.12);color:var(--positronic-cyan);">&#x1F9E0;</div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:12px;line-height:1.6;">
+                Every transaction is validated by a neural threat-detection model running locally.
+                Malicious patterns are flagged and rejected before inclusion.
+            </p>
+        </div>
+
+        <div class="card card-glow-green" style="border-color:rgba(76,176,80,0.2);">
+            <div class="card-top-accent accent-green"></div>
+            <div class="card-head">
+                <span class="card-label">Earn Rewards</span>
+                <div class="card-icon" style="background:rgba(76,176,80,0.12);color:#81c784;">&#x1F4B0;</div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:12px;line-height:1.6;">
+                Stake 32+ ASF to become a validator. Earn block rewards and transaction fees proportional
+                to your stake. Current APR depends on active validators.
+            </p>
+        </div>
+
+        <div class="card card-glow-purple">
+            <div class="card-top-accent accent-purple"></div>
+            <div class="card-head">
+                <span class="card-label">Code Protection</span>
+                <div class="card-icon" style="background:rgba(156,39,176,0.12);color:#ce93d8;">&#x1F6E1;</div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:12px;line-height:1.6;">
+                The binary is packaged with AES-encrypted bytecode and UPX compression. Your validator
+                keys and wallet data are stored in encrypted keystores.
+            </p>
+        </div>
+    </div>
+
+    <!-- How to become a validator -->
+    <div class="card" style="border-color:rgba(0,128,255,0.2); margin-bottom:20px;">
+        <div class="card-top-accent accent-blue"></div>
+        <div style="padding:8px 0 4px;">
+            <h3 style="font-family:var(--font-pixel);font-size:15px;color:var(--positronic-blue);margin-bottom:12px;">
+                How to Become a Validator
+            </h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:16px;">
+                <div style="text-align:center;padding:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:rgba(0,128,255,0.12);
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 8px;
+                                font-size:18px;font-weight:700;color:var(--positronic-blue);
+                                border:1px solid rgba(0,128,255,0.3);">1</div>
+                    <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Download</div>
+                    <p style="font-size:11px;color:var(--text-muted);">Get the node software for your OS</p>
+                </div>
+                <div style="text-align:center;padding:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:rgba(0,229,255,0.12);
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 8px;
+                                font-size:18px;font-weight:700;color:var(--positronic-cyan);
+                                border:1px solid rgba(0,229,255,0.3);">2</div>
+                    <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Create Wallet</div>
+                    <p style="font-size:11px;color:var(--text-muted);">Set up a new wallet or import an existing one</p>
+                </div>
+                <div style="text-align:center;padding:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:rgba(0,128,255,0.12);
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 8px;
+                                font-size:18px;font-weight:700;color:var(--positronic-blue);
+                                border:1px solid rgba(0,128,255,0.3);">3</div>
+                    <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Fund &amp; Stake</div>
+                    <p style="font-size:11px;color:var(--text-muted);">Get 32+ ASF coins and stake them</p>
+                </div>
+                <div style="text-align:center;padding:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:rgba(0,229,255,0.12);
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 8px;
+                                font-size:18px;font-weight:700;color:var(--positronic-cyan);
+                                border:1px solid rgba(0,229,255,0.3);">4</div>
+                    <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Validate</div>
+                    <p style="font-size:11px;color:var(--text-muted);">Your node activates at the next epoch boundary</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download cards per platform + requirements -->
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:16px;">
+        <!-- Download buttons -->
+        <div class="card" style="border-color:rgba(0,229,255,0.2);">
+            <div class="card-top-accent accent-cyan"></div>
+            <div class="card-head">
+                <span class="card-label">Download Node</span>
+                <div class="card-icon" style="background:rgba(0,229,255,0.12);color:var(--positronic-cyan);">&#x2B07;</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+                <a href="https://dl.positronic-ai.network/Positronic-v0.3.0-windows.exe" style="display:flex;align-items:center;gap:12px;padding:12px 16px;
+                   background:linear-gradient(135deg,rgba(0,128,255,0.15),rgba(0,229,255,0.08));
+                   border:1px solid rgba(0,128,255,0.3);border-radius:var(--radius-sm);
+                   text-decoration:none;color:var(--text-primary);transition:var(--transition);">
+                    <span style="font-size:22px;">&#x1F5A5;</span>
+                    <div>
+                        <div style="font-family:var(--font-pixel);font-size:12px;color:var(--positronic-cyan);">Windows</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Positronic.exe &mdash; 51 MB</div>
+                    </div>
+                    <span style="margin-left:auto;font-size:11px;padding:4px 10px;border-radius:4px;
+                           background:rgba(0,229,255,0.12);color:var(--positronic-cyan);font-weight:600;">Download</span>
+                </a>
+                <a href="https://dl.positronic-ai.network/Positronic-v0.3.0-macos" style="display:flex;align-items:center;gap:12px;padding:12px 16px;
+                   background:rgba(0,128,255,0.06);
+                   border:1px solid rgba(0,128,255,0.3);border-radius:var(--radius-sm);
+                   text-decoration:none;color:var(--text-primary);transition:var(--transition);">
+                    <span style="font-size:22px;">&#x1F34E;</span>
+                    <div>
+                        <div style="font-family:var(--font-pixel);font-size:12px;color:var(--positronic-blue);">macOS</div>
+                        <div style="font-size:11px;color:var(--text-muted);">One-click installer</div>
+                    </div>
+                    <span style="margin-left:auto;font-size:11px;padding:4px 10px;border-radius:4px;
+                           background:rgba(0,128,255,0.12);color:var(--positronic-blue);font-weight:600;">Download</span>
+                </a>
+                <a href="https://dl.positronic-ai.network/Positronic-v0.3.0-linux" style="display:flex;align-items:center;gap:12px;padding:12px 16px;
+                   background:rgba(124,58,237,0.06);
+                   border:1px solid rgba(124,58,237,0.3);border-radius:var(--radius-sm);
+                   text-decoration:none;color:var(--text-primary);transition:var(--transition);">
+                    <span style="font-size:22px;">&#x1F427;</span>
+                    <div>
+                        <div style="font-family:var(--font-pixel);font-size:12px;color:#a855f7;">Linux</div>
+                        <div style="font-size:11px;color:var(--text-muted);">One-click installer</div>
+                    </div>
+                    <span style="margin-left:auto;font-size:11px;padding:4px 10px;border-radius:4px;
+                           background:rgba(124,58,237,0.12);color:#a855f7;font-weight:600;">Download</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- System requirements -->
+        <div class="card" style="border-color:rgba(0,128,255,0.2);">
+            <div class="card-top-accent accent-blue"></div>
+            <div class="card-head">
+                <span class="card-label">System Requirements</span>
+                <div class="card-icon" style="background:rgba(0,128,255,0.12);color:var(--positronic-blue);">&#x2699;</div>
+            </div>
+            <div style="margin-top:8px;">
+                <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin-bottom:6px;">
+                    Minimum
+                </div>
+                <div class="mini-stat-row"><span class="label">CPU</span><span class="value">2 cores</span></div>
+                <div class="mini-stat-row"><span class="label">RAM</span><span class="value">4 GB</span></div>
+                <div class="mini-stat-row"><span class="label">Disk</span><span class="value">2 GB free</span></div>
+                <div class="mini-stat-row"><span class="label">OS</span><span class="value">Win 10 / macOS 12 / Ubuntu 20+</span></div>
+                <div style="font-family:var(--font-pixel);font-size:11px;color:var(--positronic-cyan);margin:12px 0 6px;">
+                    Recommended
+                </div>
+                <div class="mini-stat-row"><span class="label">CPU</span><span class="value">4+ cores</span></div>
+                <div class="mini-stat-row"><span class="label">RAM</span><span class="value">8 GB</span></div>
+                <div class="mini-stat-row"><span class="label">Network</span><span class="value">25+ Mbps</span></div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="dashboard-footer">
+    Positronic Blockchain &mdash; Network Dashboard &mdash; Auto-refreshing every <span>10s</span>
+</footer>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script src="/security.js"></script>
+<script src="/config.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    // ---- Configuration ----
+    const RPC_URL = 'https://rpc.positronic-ai.network';
+    const REFRESH_MS = 10000;
+    const HALVING_INTERVAL = 5256000;
+    const TAIL_EMISSION = 0.5;
+
+    // ---- DOM shorthand ----
+    const $ = id => document.getElementById(id);
+
+    // ---- RPC Client ----
+    let rpcIdCounter = 1;
+    async function rpc(method, params = []) {
+        const res = await fetch(RPC_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', method, params, id: rpcIdCounter++ }),
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+        return data.result;
+    }
+
+    // ---- Helpers ----
+    function fmt(n) {
+        if (n == null || n === '--') return '--';
+        const num = typeof n === 'string' ? (n.startsWith('0x') ? parseInt(n, 16) : parseFloat(n)) : n;
+        if (isNaN(num)) return '--';
+        return num.toLocaleString();
+    }
+
+    function fmtDec(n, decimals = 2) {
+        if (n == null || n === '--') return '--';
+        const num = typeof n === 'number' ? n : parseFloat(n);
+        if (isNaN(num)) return '--';
+        return num.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+    }
+
+    function hexInt(v) {
+        if (typeof v === 'number') return v;
+        if (typeof v === 'string' && v.startsWith('0x')) return parseInt(v, 16);
+        return parseInt(v, 10) || 0;
+    }
+
+    function shortAddr(addr) {
+        if (!addr) return '--';
+        if (addr.length > 12) return addr.slice(0, 8) + '...' + addr.slice(-4);
+        return addr;
+    }
+
+    function setConn(state) {
+        const dot = $('statusDot');
+        dot.className = 'status-dot ' + (state ? 'connected' : 'disconnected');
+        $('statusText').textContent = state ? 'Connected' : 'Offline';
+    }
+
+    // ---- Rank color mapping ----
+    const rankColorMap = {
+        probe: 'rank-probe', sentinel: 'rank-sentinel',
+        circuit: 'rank-circuit', relay: 'rank-relay',
+        cortex: 'rank-cortex', nexus: 'rank-nexus',
+        positronic: 'rank-positronic', star_positronic: 'rank-star',
+    };
+    function getRankClass(name) {
+        const key = name.toLowerCase().replace(/[\s-]+/g, '_');
+        return rankColorMap[key] || 'rank-default';
+    }
+    function prettyRank(name) {
+        return name.replace(/[_-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    // TRUST level colors
+    const trustColors = {
+        NEWCOMER: 'bar-newcomer', BRONZE: 'bar-bronze', SILVER: 'bar-silver',
+        GOLD: 'bar-gold', PLATINUM: 'bar-platinum', LEGEND: 'bar-legend',
+    };
+
+    // ---- Fetch all data ----
+    async function refresh() {
+        const t0 = performance.now();
+        try {
+            // Fetch both main RPC calls in parallel
+            const [nodeInfo, healthData] = await Promise.all([
+                rpc('positronic_nodeInfo').catch(() => null),
+                rpc('positronic_getNetworkHealth').catch(() => null),
+            ]);
+
+            // Only show connected if we actually got data back
+            const isConnected = nodeInfo !== null || healthData !== null;
+            setConn(isConnected);
+
+            if (nodeInfo) updateFromNodeInfo(nodeInfo);
+            if (healthData) updateFromHealth(healthData);
+
+            // Fetch supplementary data in parallel
+            await Promise.allSettled([
+                fetchLeaderboard(),
+                fetchMiningProgress(nodeInfo ? nodeInfo.height : 0),
+            ]);
+
+            $('lastUpdate').textContent = 'Last update: ' + new Date().toLocaleTimeString();
+
+        } catch (e) {
+            setConn(false);
+            console.warn('[Dashboard] Refresh failed:', e.message);
+        }
+        const elapsed = Math.round(performance.now() - t0);
+        console.log('[Dashboard] Refresh took ' + elapsed + 'ms');
+    }
+
+    // ---- Update from positronic_nodeInfo ----
+    function updateFromNodeInfo(info) {
+        // Chain basics
+        const height = info.height ?? 0;
+        $('statHeight').textContent = fmt(height);
+        $('topbarHeight').textContent = 'BLOCK #' + fmt(height);
+        $('statChainId').textContent = fmt(info.chain_id ?? info.chainId);
+
+        // State
+        const state = info.state || {};
+        $('statAccounts').textContent = fmt(state.account_count ?? state.accountCount);
+        const totalSupply = state.total_supply ?? state.totalSupply ?? 0;
+        $('statTotalTx').textContent = fmt(state.tx_count ?? state.txCount ?? state.totalTxs ?? '--');
+
+        // AI gate
+        const ai = info.ai || {};
+        const totalScored = ai.total_scored ?? ai.totalScored ?? 0;
+        const accepted = ai.accepted ?? 0;
+        const rejected = ai.rejected ?? 0;
+        const quarantined = ai.quarantined ?? 0;
+        $('aiTotalScored').textContent = fmt(totalScored);
+        $('aiAccepted').textContent = fmt(accepted);
+        $('aiRejected').textContent = fmt(rejected);
+        $('aiQuarantined').textContent = fmt(quarantined);
+        const rate = totalScored > 0 ? ((accepted / totalScored) * 100).toFixed(1) : '--';
+        $('aiAcceptRate').textContent = rate + '%';
+        $('aiVersion').textContent = ai.model_version ?? ai.modelVersion ?? '--';
+        $('aiModelVer').textContent = 'Model: v' + (ai.model_version ?? ai.modelVersion ?? '?');
+        $('aiEnabled').textContent = (ai.ai_enabled ?? ai.aiEnabled) ? 'Yes' : 'No';
+
+        // Quarantine pool
+        const qp = info.quarantine || {};
+        $('quarantineSize').textContent = fmt(qp.pool_size ?? qp.poolSize);
+
+        // Trust
+        const trust = info.trust || {};
+        $('trustTotal').textContent = fmt(trust.total_profiles ?? trust.totalProfiles);
+        $('trustAvg').textContent = fmtDec(trust.average_score ?? trust.averageScore);
+        $('trustAwarded').textContent = fmt(trust.total_score_awarded ?? trust.totalScoreAwarded);
+        $('trustPenalties').textContent = fmt(trust.total_penalties ?? trust.totalPenalties);
+        renderTrustBars(trust.level_distribution ?? trust.levelDistribution ?? {});
+
+        // Tokens
+        const tokens = info.tokens || {};
+        $('tokenCount').textContent = fmt(tokens.total_tokens ?? tokens.totalTokens);
+        $('nftCollections').textContent = fmt(tokens.total_collections ?? tokens.totalCollections);
+        $('activeTokens').textContent = fmt(tokens.active_tokens ?? tokens.activeTokens);
+        $('activeCollections').textContent = fmt(tokens.active_collections ?? tokens.activeCollections);
+        const fees = tokens.total_fees_sma ?? tokens.totalFeesSma;
+        $('tokenFees').textContent = fees != null ? fmtDec(fees) + ' ASF' : '-- ASF';
+
+        // Immune system
+        const immune = info.immune_system || info.immuneSystem || {};
+        updateImmuneUI(immune);
+
+        // Node ranking
+        const nodeRank = info.node_ranking || info.nodeRanking || {};
+        const totalNodes = nodeRank.total_nodes ?? nodeRank.totalNodes ?? 0;
+        $('totalNodesLabel').textContent = 'Nodes: ' + fmt(totalNodes);
+        renderRankBars(nodeRank.rank_distribution ?? nodeRank.rankDistribution ?? {}, totalNodes);
+
+        // Game engine
+        const game = info.game || {};
+        $('gamePlayers').textContent = fmt(game.total_players ?? game.totalPlayers);
+        $('gameTotal').textContent = fmt(game.total_games_played ?? game.totalGamesPlayed);
+        const distributed = game.total_distributed ?? game.totalDistributed ?? 0;
+        $('gameRewards').textContent = fmt(distributed) + ' ASF';
+
+        // Game sessions (via Game Bridge)
+        const ocg = info.onchain_game ?? info.onchainGame ?? {};
+        $('onchainGames').textContent = fmt(ocg.completed_games ?? ocg.completedGames);
+        $('onchainActive').textContent = fmt(ocg.active_games ?? ocg.activeGames);
+
+        // Governance
+        const gov = info.governance || {};
+
+        // Paymaster
+        const pm = info.paymaster || {};
+        $('pmActive').textContent = fmt(pm.active_paymasters ?? pm.activePaymasters);
+        $('pmGas').textContent = fmt(pm.total_gas_sponsored ?? pm.totalGasSponsored);
+
+        // Smart Wallets
+        const sw = info.smart_wallets ?? info.smartWallets ?? {};
+        $('swTotal').textContent = fmt(sw.total_wallets ?? sw.totalWallets);
+        $('swLocked').textContent = fmt(sw.locked_wallets ?? sw.lockedWallets);
+
+        // AI Agents (Phase 23)
+        const agents = info.ai_agents ?? info.aiAgents ?? {};
+        $('agentTotal').textContent = fmt(agents.total_agents ?? agents.totalAgents);
+        $('agentActive').textContent = fmt(agents.active_agents ?? agents.activeAgents);
+        $('agentActions').textContent = fmt(agents.total_actions ?? agents.totalActions);
+        $('agentAutonomous').textContent = fmt(agents.autonomous_eligible ?? agents.autonomousEligible);
+        renderAgentTypes(agents.agent_types ?? agents.agentTypes ?? {});
+
+        // AI Explainability (Phase 21 — XAI, from AI gate stats)
+        const ai2 = info.ai || {};
+        $('xaiAvgScore').textContent = fmtDec(ai2.avg_score ?? ai2.avgScore, 4);
+        const fpr = ai2.false_positive_rate ?? ai2.falsePositiveRate;
+        $('xaiFPR').textContent = fpr != null ? (fpr * 100).toFixed(2) + '%' : '--';
+        $('xaiModelVer').textContent = 'v' + (ai2.model_version ?? ai2.modelVersion ?? '?');
+
+        // ZK Privacy (Phase 24)
+        const zk = info.zk_privacy ?? info.zkPrivacy ?? {};
+        $('zkProofs').textContent = fmt(zk.total_proofs ?? zk.totalProofs);
+        $('zkVerified').textContent = fmt(zk.verified ?? 0);
+        $('zkFailed').textContent = fmt(zk.failed ?? 0);
+
+        // Bridge Phase 1 (anchoring)
+        const bridge = info.bridge || {};
+        $('bridgeAnchored').textContent = fmt(bridge.total_anchored ?? bridge.totalAnchored);
+        $('bridgeVerified').textContent = fmt(bridge.total_verified ?? bridge.totalVerified);
+
+        // Bridge Phase 2 (Lock/Mint)
+        const bridgeV2 = info.bridge_v2 ?? info.bridgeV2 ?? {};
+        $('bridgeLocked').textContent = fmt(bridgeV2.total_locked ?? bridgeV2.totalLocked);
+        $('bridgeMinted').textContent = fmt(bridgeV2.total_minted ?? bridgeV2.totalMinted);
+        $('bridgeActiveLocks').textContent = fmt(bridgeV2.active_locks ?? bridgeV2.activeLocks);
+        $('bridgeRelayers').textContent = fmt(bridgeV2.relayer_count ?? bridgeV2.relayerCount);
+
+        // DePIN (Phase 22)
+        const depin = info.depin || {};
+        $('depinTotal').textContent = fmt(depin.total_devices ?? depin.totalDevices);
+        $('depinActive').textContent = fmt(depin.active_devices ?? depin.activeDevices);
+        $('depinRewards').textContent = fmt(depin.total_rewards ?? depin.totalRewards);
+        $('depinPending').textContent = fmt(depin.pending_rewards ?? depin.pendingRewards);
+
+        // Post-Quantum (Phase 19)
+        const pq = info.post_quantum ?? info.postQuantum ?? {};
+        $('pqKeys').textContent = fmt(pq.registered_pq_keys ?? pq.registeredPqKeys);
+        $('pqSigs').textContent = fmt(pq.total_pq_signatures ?? pq.totalPqSignatures);
+        $('pqAlgorithm').textContent = pq.algorithm ?? 'DILITHIUM2';
+
+        // DID
+        const did = info.did || {};
+        $('didTotal').textContent = fmt(did.total_identities ?? did.totalIdentities);
+        $('didCreds').textContent = fmt(did.total_credentials ?? did.totalCredentials);
+    }
+
+    // ---- Update from positronic_getNetworkHealth (fills in anything nodeInfo missed) ----
+    function updateFromHealth(health) {
+        // Use health data as fallback for sections not covered by nodeInfo
+        if (health.immune_status) {
+            const immune = health.immune_status;
+            if ($('immuneLevel').textContent === '--') updateImmuneUI(immune);
+        }
+    }
+
+    // ---- Immune System UI ----
+    function updateImmuneUI(immune) {
+        const level = (immune.alert_level ?? immune.alertLevel ?? '--').toUpperCase();
+        const el = $('immuneLevel');
+        el.textContent = level;
+        el.className = 'alert-indicator alert-' + level;
+        $('immuneThreats').textContent = fmt(immune.total_threats ?? immune.totalThreats);
+        $('immuneBlocked').textContent = fmt(immune.blocked_addresses ?? immune.blockedAddresses);
+    }
+
+    // ---- TRUST level distribution bar chart ----
+    function renderTrustBars(dist) {
+        const entries = Object.entries(dist);
+        if (entries.length === 0) {
+            $('trustBars').innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:16px;">No trust data</div>';
+            return;
+        }
+        const maxVal = Math.max(...entries.map(([, v]) => v), 1);
+        const total = entries.reduce((s, [, v]) => s + v, 0) || 1;
+        $('trustBars').innerHTML = entries.map(([level, count]) => {
+            const pct = Math.max((count / maxVal) * 100, 3);
+            const cls = trustColors[level.toUpperCase()] || 'bar-newcomer';
+            return '<div class="bar-row">' +
+                '<div class="bar-label">' + escapeHtml(level).replace(/_/g, ' ') + '</div>' +
+                '<div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + pct + '%">' + count + '</div></div>' +
+                '<div class="bar-count">' + ((count / total) * 100).toFixed(1) + '%</div>' +
+                '</div>';
+        }).join('');
+    }
+
+    // ---- Node rank distribution bar chart ----
+    function renderRankBars(dist, totalNodes) {
+        const entries = Object.entries(dist);
+        if (entries.length === 0) {
+            $('rankBars').innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:16px;">No rank data</div>';
+            return;
+        }
+        const maxVal = Math.max(...entries.map(([, v]) => v), 1);
+        const total = totalNodes || entries.reduce((s, [, v]) => s + v, 0) || 1;
+        $('rankBars').innerHTML = entries.map(([rank, count]) => {
+            const pct = Math.max((count / maxVal) * 100, 3);
+            const cls = getRankClass(rank);
+            return '<div class="bar-row">' +
+                '<div class="bar-label">' + escapeHtml(prettyRank(rank)) + '</div>' +
+                '<div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + pct + '%">' + count + '</div></div>' +
+                '<div class="bar-count">' + ((count / total) * 100).toFixed(1) + '%</div>' +
+                '</div>';
+        }).join('');
+    }
+
+    // ---- Agent types list ----
+    function renderAgentTypes(types) {
+        const el = $('agentTypesList');
+        const entries = Object.entries(types).filter(([, v]) => v > 0);
+        if (entries.length === 0) { el.innerHTML = ''; return; }
+        el.innerHTML = entries.map(([type, count]) =>
+            '<div class="mini-stat-row"><span class="label" style="font-size:11px;">' +
+            escapeHtml(type).replace(/_/g, ' ') +
+            '</span><span class="value" style="font-size:10px;">' + count + '</span></div>'
+        ).join('');
+    }
+
+    // ---- Fetch node leaderboard ----
+    async function fetchLeaderboard() {
+        try {
+            const leaders = await rpc('positronic_getNodeLeaderboard', [10]);
+            if (!leaders || leaders.length === 0) {
+                $('nodeLeaderboard').innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:16px;">No validators yet</div>';
+                return;
+            }
+            $('nodeLeaderboard').innerHTML = leaders.map((node, i) => {
+                const rankCls = i === 0 ? ' r1' : i === 1 ? ' r2' : i === 2 ? ' r3' : '';
+                const addr = node.address ?? node.node_id ?? '--';
+                const score = node.score ?? node.trust_score ?? 0;
+                const uptime = node.uptime != null ? (node.uptime * 100).toFixed(1) + '%' : '--';
+                return '<div class="lb-row">' +
+                    '<div class="lb-rank' + rankCls + '">#' + (i + 1) + '</div>' +
+                    '<div class="lb-addr">' + shortAddr(escapeHtml(addr)) + '</div>' +
+                    '<div class="lb-score">' + fmt(score) + '</div>' +
+                    '<div class="lb-uptime">' + uptime + '</div>' +
+                    '</div>';
+            }).join('');
+        } catch (e) {
+            $('nodeLeaderboard').innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:16px;">Leaderboard unavailable</div>';
+        }
+    }
+
+    // ---- Fetch mining progress ----
+    async function fetchMiningProgress(height) {
+        try {
+            // We calculate client-side based on known constants
+            // since positronic_nodeInfo has the height and we know the constants
+            const blockHeight = height || 0;
+            const halvingInterval = HALVING_INTERVAL;
+            const initialReward = 24;
+            const capSma = 500000000;
+
+            // Calculate current era and reward
+            const era = Math.floor(blockHeight / halvingInterval);
+            const currentReward = Math.max(initialReward / Math.pow(2, era), TAIL_EMISSION);
+            const blocksUntilHalving = halvingInterval - (blockHeight % halvingInterval);
+
+            // Estimate total mined (simplified)
+            let mined = 0;
+            let reward = initialReward;
+            for (let e = 0; e < era; e++) {
+                mined += reward * halvingInterval;
+                reward /= 2;
+            }
+            const blocksInCurrentEra = blockHeight % halvingInterval;
+            mined += currentReward * blocksInCurrentEra;
+            mined = Math.min(mined, capSma);
+
+            const pct = ((mined / capSma) * 100).toFixed(2);
+
+            $('minedSma').textContent = fmtDec(mined, 0);
+            $('miningPct').textContent = pct + '%';
+            $('miningBar').style.width = pct + '%';
+            $('remainingSma').textContent = fmtDec(capSma - mined, 0);
+            $('blockReward').textContent = fmtDec(currentReward) + ' ASF';
+            $('halvingCountdown').textContent = fmt(blocksUntilHalving) + ' blocks';
+
+        } catch (e) {
+            console.warn('[Dashboard] Mining progress calc failed:', e.message);
+        }
+    }
+
+    // ---- Block time display (static 12s) ----
+    $('statBlockTime').textContent = '12s';
+
+    // ---- Chain ID fetch ----
+    async function fetchChainId() {
+        try {
+            const cid = await rpc('eth_chainId');
+            const num = hexInt(cid);
+            $('statChainId').textContent = fmt(num);
+            $('rpcStatus').textContent = 'Chain ID: ' + num;
+        } catch (e) {
+            $('rpcStatus').textContent = 'Chain ID: --';
+        }
+    }
+
+    // ---- Manual refresh ----
+    $('refreshBtn').addEventListener('click', function () {
+        this.style.transform = 'rotate(360deg)';
+        setTimeout(() => this.style.transform = '', 500);
+        refresh();
+    });
+
+    // ---- Initialize ----
+    fetchChainId();
+    refresh();
+    setInterval(refresh, REFRESH_MS);
+
+    console.log('[ASF Dashboard] Started. Polling ' + RPC_URL + ' every ' + (REFRESH_MS / 1000) + 's');
+})();
+</script>
+
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(()=>{});</script>
+<script>
+// Scroll reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.card, .section-header').forEach(el => {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>

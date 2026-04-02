@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>Testnet Guide | Positronic Network</title>
+<meta name="description" content="Positronic Testnet Guide: Set up a testnet node, connect MetaMask, get test ASF from the faucet, and start validating on the Positronic blockchain testnet.">
+<link rel="canonical" href="https://positronic-ai.network/testnet/">
+<meta property="og:title" content="Testnet Guide | Positronic Network">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Positronic">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root{--bg:#060D1A;--bg-surface:#0D1B2A;--card-bg:#0A1628;--card-border:#1a3a5c;--positronic-blue:#0080FF;--positronic-cyan:#00E5FF;--positronic-silver:#B0B8C0;--positronic-dark:#0D1B2A;--positronic-darker:#060D1A;--positronic-glow:#1a3a5c;--text-primary:#e4e4f0;--text-secondary:#B0B8C0;--text-muted:#6a7a8a;--glow-cyan:rgba(0,229,255,.35);--glow-blue:rgba(0,128,255,.35);--font-heading:'Space Grotesk',sans-serif;--font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--radius:14px;--radius-sm:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+a{color:var(--positronic-cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--bg-surface);border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--positronic-cyan);box-shadow:0 0 12px var(--glow-cyan)}
+.topbar-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.topbar-title{font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+.topbar-nav{display:flex;gap:16px;flex-wrap:wrap}
+.topbar-nav a{color:var(--text-secondary);font-size:14px;padding:6px 12px;border-radius:var(--radius-sm);transition:.3s}
+.topbar-nav a:hover{color:#fff;background:rgba(255,255,255,.06);text-decoration:none}
+
+/* Hero */
+.hero{text-align:center;padding:80px 24px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,229,255,.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;background:rgba(0,229,255,.1);color:var(--positronic-cyan);border:1px solid rgba(0,229,255,.2);margin-bottom:20px;text-transform:uppercase}
+.hero h1{font-family:var(--font-heading);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:var(--text-secondary);max-width:680px;margin:0 auto 40px;line-height:1.6}
+
+/* Sections */
+.section{max-width:960px;margin:0 auto;padding:0 24px 60px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{font-size:24px}
+.section-header h2{font-family:var(--font-heading);font-size:24px;font-weight:700}
+
+/* Network Info Grid */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.info-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
+.info-card:hover{border-color:rgba(0,229,255,.3);box-shadow:0 4px 20px rgba(0,229,255,.1)}
+.info-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.info-value{font-family:'JetBrains Mono',monospace;font-size:16px;color:#fff;font-weight:600;word-break:break-all}
+.info-value.small{font-size:13px}
+
+/* Steps */
+.step{display:flex;gap:16px;margin-bottom:20px;padding:20px;border-radius:var(--radius-sm);background:var(--card-bg);border:1px solid var(--card-border)}
+.step-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,var(--positronic-blue),var(--positronic-cyan));display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:16px;color:#000}
+.step-content{flex:1}
+.step-content h4{font-family:var(--font-heading);font-size:16px;margin-bottom:6px}
+.step-content p{color:var(--text-secondary);font-size:14px;line-height:1.6}
+
+/* Code Blocks */
+code{background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px;font-family:'JetBrains Mono',monospace}
+.code-block{background:#0a0e1a;border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px 20px;margin:12px 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:var(--positronic-cyan);overflow-x:auto;position:relative;white-space:pre}
+.code-block .comment{color:var(--text-muted)}
+.code-block .cmd{color:#fff}
+
+/* Config */
+.config-block{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px;margin:16px 0}
+.config-block h4{font-family:var(--font-heading);font-size:15px;margin-bottom:10px;color:var(--positronic-cyan)}
+
+/* MetaMask */
+.metamask-table{width:100%;border-collapse:collapse;margin:16px 0}
+.metamask-table td{padding:10px 16px;border-bottom:1px solid var(--card-border);font-size:14px}
+.metamask-table td:first-child{color:var(--text-muted);font-weight:500;width:180px}
+.metamask-table td:last-child{color:#fff;font-family:'JetBrains Mono',monospace;font-size:13px}
+
+/* FAQ */
+.faq-item{margin-bottom:16px;padding:16px 20px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)}
+.faq-item h4{font-family:var(--font-heading);font-size:15px;margin-bottom:6px;color:#fff}
+.faq-item p{color:var(--text-secondary);font-size:14px;line-height:1.6}
+
+/* Tabs */
+.tab-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:8px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-secondary);transition:all .3s;font-family:var(--font-body)}
+.tab-btn:hover{border-color:var(--positronic-cyan);color:#fff}
+.tab-btn.active{background:rgba(0,229,255,.1);border-color:var(--positronic-cyan);color:var(--positronic-cyan)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Footer */
+.footer{text-align:center;padding:32px 24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--card-border);margin-top:40px}
+
+@media(max-width:640px){
+    .topbar{flex-direction:column;gap:8px;padding:10px 16px}
+    .topbar-nav{justify-content:center}
+    .info-grid{grid-template-columns:1fr 1fr}
+    .metamask-table td:first-child{width:120px}
+}
+
+@media(max-width:768px){
+    table, .metamask-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table th, table td { min-width: 80px; white-space: normal; font-size: 13px; padding: 8px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .container { padding: 20px 16px; max-width: 100% !important; }
+    /* Text wrapping & overflow fixes */
+    body { overflow-x: hidden; }
+    h1, h2, h3, h4 { word-break: break-word; hyphens: auto; }
+    p, li, td, th, span, div { overflow-wrap: break-word; word-wrap: break-word; }
+    pre, code, .code-block { overflow-x: auto; max-width: 100%; white-space: pre-wrap; word-break: break-all; font-size: 12px; padding: 8px; }
+    img { max-width: 100%; height: auto; }
+    .content, main, article, section { padding: 10px !important; max-width: 100% !important; }
+}
+.section-icon svg{width:24px;height:24px;stroke:var(--positronic-cyan,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.section-icon{display:inline-flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<nav class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <div class="topbar-logo"><img src="../logo-200.webp" alt="Positronic"></div>
+        <span class="topbar-title">POSITRONIC</span>
+    </a>
+    <div class="topbar-nav">
+        <a href="../index.html">Home</a>
+        <a href="../whitepaper.html">Whitepaper</a>
+        <a href="../critics/index.html">FAQ</a>
+        <a href="../download/index.html">Download</a>
+        <a href="../bug-bounty/index.html">Bug Bounty</a>
+        <a href="../faucet/index.html">Faucet</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-badge">Developer Network</div>
+    <h1>Testnet Guide</h1>
+    <p>Set up a Positronic testnet node in minutes. Build, test, and validate on our Layer-1 blockchain before mainnet launch.</p>
+</div>
+
+<!-- Network Info -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>
+        <h2>Testnet Parameters</h2>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="info-label">Chain ID</div>
+            <div class="info-value">420420</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Network Name</div>
+            <div class="info-value small">Positronic Testnet</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">RPC URL</div>
+            <div class="info-value small">https://rpc.positronic-ai.network</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Block Time</div>
+            <div class="info-value">12s</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Currency</div>
+            <div class="info-value">ASF</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">P2P Port</div>
+            <div class="info-value">9000</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Min Stake</div>
+            <div class="info-value">32 ASF</div>
+        </div>
+        <div class="info-card">
+            <div class="info-label">Consensus</div>
+            <div class="info-value small">DPoS + BFT</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Start -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon">&#x26A1;</span>
+        <h2>Quick Start</h2>
+    </div>
+
+    <div class="tab-row">
+        <button class="tab-btn active" onclick="showTab('desktop')">Desktop App</button>
+        <button class="tab-btn" onclick="showTab('source')">From Source</button>
+        <button class="tab-btn" onclick="showTab('docker')">Docker</button>
+    </div>
+
+    <!-- Desktop App -->
+    <div id="tab-desktop" class="tab-panel active">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>Download the App</h4>
+                <p>Get the latest release from the <a href="../download/index.html">Download page</a>. Available for Windows, macOS, and Linux. No installation required on Windows &mdash; just run the executable.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>Launch &amp; Create Wallet</h4>
+                <p>Open the app. Go to the <strong>Wallet</strong> tab and click <strong>Create</strong>. Your private keys are encrypted with AES-256-GCM and stored locally.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h4>Get Test ASF</h4>
+                <p>Copy your wallet address and visit the <a href="../faucet/index.html">Faucet</a> to claim 50 ASF (one-time per IP). Stake 32 ASF to become a validator!</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h4>Start Validating</h4>
+                <p>Go to the <strong>Validator</strong> tab. Stake at least 32 ASF and your validator activates at the next epoch (~6 minutes). You'll earn block rewards automatically.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- From Source -->
+    <div id="tab-source" class="tab-panel">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>Clone the Repository</h4>
+                <div class="code-block"><span class="cmd">git clone https://github.com/PositronicAI-Blockchain-L1/positronic.git</span>
+<span class="cmd">cd Positronic-AI</span>
+<span class="cmd">pip install -r requirements.txt</span></div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>Run as Founder Node</h4>
+                <p>The founder node creates the genesis block and starts producing blocks immediately:</p>
+                <div class="code-block"><span class="cmd">python -m positronic --founder --p2p-port 9000 --rpc-port 8545</span></div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h4>Run Additional Validator Nodes</h4>
+                <p>Connect to the public testnet seed node, or run locally:</p>
+                <div class="code-block"><span class="comment"># Connect to public testnet seed node</span>
+<span class="cmd">python -m positronic --network-type testnet --bootstrap testnet-seed1.positronic-ai.network:9000</span>
+
+<span class="comment"># Or run locally for development</span>
+<span class="cmd">python -m positronic --p2p-port 9001 --rpc-port 8546 --bootstrap 127.0.0.1:9000</span></div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h4>Run the Test Suite</h4>
+                <p>Verify everything works:</p>
+                <div class="code-block"><span class="comment"># Run all 7,799 tests (201 test files)</span>
+<span class="cmd">python -m pytest tests/ -v --timeout=300</span>
+
+<span class="comment"># Run specific test category</span>
+<span class="cmd">python -m pytest tests/test_fuzz.py -v</span>
+<span class="cmd">python -m pytest tests/test_security_encryption.py -v</span>
+
+<span class="comment"># Production hardening test suites</span>
+<span class="cmd">python -m pytest tests/test_property_invariants.py -v</span>
+<span class="cmd">python -m pytest tests/test_db_resilience.py -v</span>
+<span class="cmd">python -m pytest tests/test_memory_leaks.py -v</span>
+<span class="cmd">python -m pytest tests/test_chain_reorg.py -v</span>
+<span class="cmd">python -m pytest tests/test_upgrade_migration.py -v</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Docker -->
+    <div id="tab-docker" class="tab-panel">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>Pull &amp; Run with Docker</h4>
+                <div class="code-block"><span class="comment"># Build from Dockerfile</span>
+<span class="cmd">docker build -t positronic .</span>
+
+<span class="comment"># Run founder node</span>
+<span class="cmd">docker run -d --name positronic-node \
+  -p 8545:8545 -p 9000:9000 \
+  -v positronic-data:/data \
+  positronic --founder</span></div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>Multi-Node with Docker Compose</h4>
+                <div class="code-block"><span class="comment"># docker-compose.yml (example)</span>
+<span class="cmd">version: '3.8'
+services:
+  founder:
+    build: .
+    command: --founder --p2p-port 9000 --rpc-port 8545
+    ports:
+      - "8545:8545"
+      - "9000:9000"
+  validator-1:
+    build: .
+    command: --p2p-port 9001 --rpc-port 8546 --bootstrap founder:9000
+    depends_on:
+      - founder
+  validator-2:
+    build: .
+    command: --p2p-port 9002 --rpc-port 8547 --bootstrap founder:9000
+    depends_on:
+      - founder</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MetaMask Setup -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span>
+        <h2>Connect MetaMask / Trust Wallet</h2>
+    </div>
+    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;line-height:1.6">
+        Positronic exposes a full Ethereum-compatible JSON-RPC API. Any EVM wallet (MetaMask, Trust Wallet, Coinbase Wallet) can connect to the testnet.
+    </p>
+
+    <table class="metamask-table">
+        <tr><td>Network Name</td><td>Positronic Testnet</td></tr>
+        <tr><td>RPC URL</td><td>https://rpc.positronic-ai.network</td></tr>
+        <tr><td>Chain ID</td><td>420420</td></tr>
+        <tr><td>Currency Symbol</td><td>ASF</td></tr>
+        <tr><td>Block Explorer</td><td>https://positronic-ai.network/explorer/</td></tr>
+    </table>
+
+    <div class="config-block">
+        <h4>Add Network via RPC Call</h4>
+        <div class="code-block"><span class="comment">// Add Positronic testnet to MetaMask programmatically</span>
+<span class="cmd">await window.ethereum.request({
+  method: 'wallet_addEthereumChain',
+  params: [{
+    chainId: '0x66A44',
+    chainName: 'Positronic Testnet',
+    rpcUrls: ['https://rpc.positronic-ai.network'],
+    nativeCurrency: {
+      name: 'Positronic',
+      symbol: 'ASF',
+      decimals: 18
+    }
+  }]
+});</span></div>
+    </div>
+</div>
+
+<!-- HTTP Endpoints -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
+        <h2>HTTP Endpoints</h2>
+    </div>
+    <table class="metamask-table">
+        <tr><td><code>POST /</code></td><td>JSON-RPC 2.0 API (all 259 methods)</td></tr>
+        <tr><td><code>GET /health</code></td><td>Health check (Docker HEALTHCHECK compatible)</td></tr>
+        <tr><td><code>GET /metrics</code></td><td>Prometheus metrics (text exposition format)</td></tr>
+    </table>
+    <div class="config-block">
+        <h4>Prometheus Scrape Config</h4>
+        <div class="code-block"><span class="comment"># prometheus.yml</span>
+<span class="cmd">scrape_configs:
+  - job_name: 'positronic'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['rpc.positronic-ai.network:443']</span></div>
+    </div>
+</div>
+
+<!-- RPC API Reference -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg></span>
+        <h2>Key RPC Methods</h2>
+    </div>
+
+    <div class="config-block">
+        <h4>Ethereum-Compatible Methods</h4>
+        <div class="code-block"><span class="comment"># Get current block number</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'</span>
+
+<span class="comment"># Get account balance</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xYOUR_ADDRESS","latest"],"id":2}'</span>
+
+<span class="comment"># Send raw transaction</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["0xSIGNED_TX"],"id":3}'</span></div>
+    </div>
+
+    <div class="config-block">
+        <h4>Positronic-Specific Methods</h4>
+        <div class="code-block"><span class="comment"># Get faucet drip (testnet only)</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"positronic_faucetDrip","params":["0xYOUR_ADDRESS"],"id":1}'</span>
+
+<span class="comment"># Get network info</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"positronic_getNetworkInfo","params":[],"id":2}'</span>
+
+<span class="comment"># Submit game result (authenticated)</span>
+<span class="cmd">curl -X POST https://rpc.positronic-ai.network \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"positronic_submitGameResult","params":["0xADDR",{"score":100}],"id":3}'</span></div>
+    </div>
+</div>
+
+<!-- Configuration -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon">&#x2699;</span>
+        <h2>Node Configuration</h2>
+    </div>
+
+    <div class="config-block">
+        <h4>Command Line Flags</h4>
+        <div class="code-block"><span class="cmd">python -m positronic [OPTIONS]</span>
+
+<span class="comment">  --founder           Start as founder node (creates genesis block)</span>
+<span class="comment">  --p2p-port PORT     P2P listening port (default: 9000)</span>
+<span class="comment">  --rpc-port PORT     JSON-RPC server port (default: 8545)</span>
+<span class="comment">  --bootstrap HOST    Bootstrap peer address (host:port)</span>
+<span class="comment">  --data-dir PATH     Data directory for blockchain storage</span>
+<span class="comment">  --max-peers N       Maximum number of connected peers (default: 50)</span>
+<span class="comment">  --log-level LEVEL   Logging level: DEBUG, INFO, WARNING (default: INFO)</span></div>
+    </div>
+
+    <div class="config-block">
+        <h4>Data Directories</h4>
+        <div class="code-block"><span class="comment"># Windows</span>
+<span class="cmd">%APPDATA%\Positronic\</span>
+
+<span class="comment"># macOS</span>
+<span class="cmd">~/Library/Application Support/Positronic/</span>
+
+<span class="comment"># Linux</span>
+<span class="cmd">~/.positronic/</span>
+
+<span class="comment"># Contents</span>
+<span class="cmd">  blockchain.db      # Encrypted SQLite database (blocks, txs, accounts)
+  wallets/           # AES-256-GCM encrypted keystores
+  admin.key          # Encrypted admin API key
+  peers.json         # Known peer list
+  logs/              # Node log files</span></div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon">&#x2753;</span>
+        <h2>Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-item">
+        <h4>What is the difference between testnet and mainnet?</h4>
+        <p>Testnet ASF coins have no real value. The testnet is for development, testing, and experimentation. All data may be reset before mainnet launch. Use the <a href="../faucet/index.html">faucet</a> to get free test coins.</p>
+    </div>
+    <div class="faq-item">
+        <h4>How many validators are needed?</h4>
+        <p>The network can run with a single founder node. For consensus testing, 3+ validators are recommended. BFT finality requires at least 4 validators with 66%+ stake attesting.</p>
+    </div>
+    <div class="faq-item">
+        <h4>What are the system requirements?</h4>
+        <p><strong>Minimum:</strong> 2 CPU cores, 4 GB RAM, 10 GB disk, Python 3.10+. <strong>Recommended:</strong> 4+ cores, 8 GB RAM, 50 GB SSD, dedicated machine or VPS.</p>
+    </div>
+    <div class="faq-item">
+        <h4>Can I connect multiple nodes on one machine?</h4>
+        <p>Yes! Just use different ports for each node. Example: Node 1 on ports 9000/8545, Node 2 on 9001/8546, Node 3 on 9002/8547. Connect them with the <code>--bootstrap</code> flag.</p>
+    </div>
+    <div class="faq-item">
+        <h4>How do I report bugs?</h4>
+        <p>Check our <a href="../bug-bounty/index.html">Bug Bounty Program</a> for rewards on security vulnerabilities. For general bugs, open an issue on <a href="https://github.com/PositronicAI-Blockchain-L1/positronic/issues">GitHub Issues</a>.</p>
+    </div>
+    <div class="faq-item">
+        <h4>Is the database encrypted?</h4>
+        <p>Yes. Positronic supports AES-256-GCM encryption at rest for the SQLite database. The admin API key is also encrypted with a machine-bound key. All wallet keystores use AES-256 with PBKDF2 (100K iterations).</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    Positronic Network &copy; 2026 &mdash; Testnet Guide &mdash; <a href="../index.html" style="color:var(--positronic-cyan)">positronic-ai.network</a>
+</div>
+
+<script>
+function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+</body>
+</html>

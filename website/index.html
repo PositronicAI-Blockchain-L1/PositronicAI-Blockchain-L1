@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <title>Positronic - Next-Gen Layer-1 Blockchain</title>
+    <meta name="description" content="Positronic (ASF): Next-generation Layer-1 blockchain with AI-validated transactions, post-quantum security, gasless transactions, and play-to-mine economics. 7,799 tests, 249 modules, 12s blocks.">
+    <meta name="keywords" content="positronic, ASF, blockchain, AI, layer-1, post-quantum, play-to-mine, DPoS, proof of neural consensus, cryptocurrency, open source">
+    <meta name="author" content="Positronic">
+    <link rel="canonical" href="https://positronic-ai.network/">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://positronic-ai.network/">
+    <meta property="og:title" content="Positronic — Next-Gen AI-Validated Layer-1 Blockchain">
+    <meta property="og:description" content="The first blockchain where 4 AI models validate every transaction. Post-quantum security, gasless transactions, and Play-to-Mine gaming.">
+    <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta property="og:image:width" content="400">
+    <meta property="og:image:height" content="400">
+    <meta property="og:site_name" content="Positronic">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@positronic_ai">
+    <meta name="twitter:title" content="Positronic — Next-Gen AI-Validated Layer-1 Blockchain">
+    <meta name="twitter:description" content="The first blockchain where 4 AI models validate every transaction. 7,799 tests, 249 modules, zero pre-mine.">
+    <meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+    <!-- JSON-LD Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Positronic",
+      "alternateName": "Positronic AI Blockchain",
+      "url": "https://positronic-ai.network",
+      "logo": "https://positronic-ai.network/logo-400.webp",
+      "description": "Open-source Layer-1 blockchain with AI-validated consensus (Proof of Neural Consensus). 4 neural models validate every transaction. Zero pre-mine, post-quantum security.",
+      "foundingDate": "2025",
+      "sameAs": [
+        "https://github.com/PositronicAI-Blockchain-L1",
+        "https://x.com/positronic_ai",
+        "https://t.me/positronic_ai",
+        "https://discord.gg/DRyKBkbahu"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "technical support",
+        "url": "https://github.com/PositronicAI-Blockchain-L1/community/issues"
+      }
+    }
+    </script>
+    <!-- JSON-LD Structured Data: WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Positronic",
+      "alternateName": "Positronic AI Blockchain",
+      "url": "https://positronic-ai.network",
+      "description": "Official website for the Positronic Layer-1 blockchain with AI-validated consensus, post-quantum cryptography, and desktop node applications.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Positronic",
+        "url": "https://positronic-ai.network"
+      }
+    }
+    </script>
+    <!-- JSON-LD Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Positronic Desktop Node",
+      "alternateName": "Positronic Blockchain Node",
+      "url": "https://positronic-ai.network",
+      "description": "Full blockchain node, wallet, validator, and AI consensus monitor for the Positronic Layer-1 network. Runs a complete node with P2P sync, AES-256-GCM encrypted wallet, and ML-DSA-44 post-quantum signatures.",
+      "applicationCategory": "Blockchain",
+      "applicationSubCategory": "Cryptocurrency Wallet",
+      "operatingSystem": "Windows, macOS, Linux",
+      "downloadUrl": "https://positronic-ai.network/download/",
+      "softwareVersion": "0.3.1",
+      "releaseNotes": "Cross-platform desktop node with full P2P sync, validator mode, and AI consensus monitoring.",
+      "author": {
+        "@type": "Organization",
+        "name": "Positronic",
+        "url": "https://positronic-ai.network"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": "Full blockchain node, AES-256-GCM encrypted wallet, ML-DSA-44 post-quantum signatures, One-click validator mode, AI consensus monitoring, Network health dashboard, P2P peer discovery, NAT traversal"
+    }
+    </script>
+    <!-- LLMs.txt reference -->
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt - AI-readable project information">
+    <!-- Preload critical fonts (above-the-fold only) -->
+    <link rel="preload" as="font" href="/fonts/inter-400.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/inter-700.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/spacegrotesk-700.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="image" href="logo-400.webp" type="image/webp" fetchpriority="high">
+    <!-- Self-hosted fonts — no render-blocking Google Fonts request -->
+    <style>
+    @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+    @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+    @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+    @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+    </style>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="200x200" href="/logo-200.webp">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
+    <meta name="google-site-verification" content="2ViHyEuhVkG6ZuaRDAWjfCKyCDGTUE45gBpikyk05kU">
+    <meta name="theme-color" content="#0080FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Critical CSS (above-the-fold only) — rest loaded async via style.css -->
+    <style>
+        :root{--positronic-blue:#0080FF;--positronic-cyan:#00E5FF;--positronic-silver:#B0B8C0;--positronic-electric:#00BFFF;--positronic-dark:#0D1B2A;--positronic-darker:#060D1A;--positronic-accent:#0A1628;--positronic-glow:#1a3a5c;--positronic-highlight:#00E5FF;--bg-primary:#060D1A;--bg-secondary:#0D1B2A;--bg-card:#0A1628;--bg-card-hover:#122240;--text-primary:#ffffff;--text-secondary:#B0B8C0;--text-muted:#6a7a8a;--border-color:#1a3a5c;--glow-blue:rgba(0,128,255,0.3);--glow-cyan:rgba(0,229,255,0.3);--font-heading:'Space Grotesk',sans-serif;--font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--radius:12px;--radius-lg:20px}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        a{color:inherit;text-decoration:none}
+        img{max-width:100%;height:auto}
+        .container{max-width:1200px;margin:0 auto;padding:0 24px}
+        .section{padding:100px 0;position:relative}
+        .section-title{font-family:var(--font-heading);font-size:clamp(18px,3vw,28px);text-align:center;margin-bottom:12px;background:linear-gradient(135deg,var(--positronic-blue),var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .section-subtitle{text-align:center;color:var(--text-secondary);font-size:16px;margin-bottom:60px;max-width:600px;margin-left:auto;margin-right:auto}
+        .about-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+        .about-card{padding:24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);display:flex;flex-direction:column;gap:8px}
+        .about-icon{font-size:28px}
+        .about-title{font-family:var(--font-heading);font-size:18px;background:linear-gradient(135deg,var(--positronic-blue),var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .about-text{color:var(--text-secondary);font-size:14px;line-height:1.7;margin:0}
+        @media(max-width:640px){#about{padding:40px 0 30px !important}#about .section-subtitle{margin-bottom:24px;font-size:14px}.about-grid{grid-template-columns:1fr;gap:10px;max-width:100%}.about-card{padding:14px 16px;flex-direction:row;align-items:flex-start;gap:12px}.about-icon{font-size:22px;flex-shrink:0;line-height:1.4}.about-title{font-size:15px;margin:0}.about-text{font-size:13px;line-height:1.5}}
+        .floating-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+        .floating-particle{position:absolute;bottom:-20px;background:radial-gradient(circle at 35% 35%,var(--positronic-cyan),var(--positronic-blue));border-radius:50%;opacity:.06;animation:floatUp ease-in-out infinite}
+        @keyframes floatUp{0%{transform:translateY(0) rotate(0deg);opacity:0}10%{opacity:.06}90%{opacity:.06}100%{transform:translateY(-110vh) rotate(720deg);opacity:0}}
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;transition:all .3s ease;background:transparent}
+        .navbar.scrolled{background:rgba(10,10,26,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 0;border-bottom:1px solid var(--border-color)}
+        .nav-container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+        .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-size:12px;color:var(--positronic-cyan)}
+        .logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--positronic-dark)}
+        .nav-links{display:flex;align-items:center;gap:24px}
+        .nav-links a{font-size:14px;font-weight:500;color:var(--text-secondary);transition:color .2s;white-space:nowrap}
+        .nav-links a:hover{color:var(--positronic-cyan)}
+        .nav-dropdown{position:relative}
+        .nav-dropdown-btn{background:none;border:none;color:var(--text-secondary);font-size:14px;font-weight:500;font-family:var(--font-body);cursor:pointer;transition:color .2s;padding:4px 0}
+        .nav-dropdown-btn:hover{color:var(--positronic-cyan)}
+        .nav-dropdown-menu{position:absolute;top:100%;right:0;margin-top:8px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:8px;min-width:180px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .2s ease;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+        .nav-dropdown.open .nav-dropdown-menu,.nav-dropdown:hover .nav-dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+        .nav-dropdown-menu a{display:block;padding:10px 14px;font-size:13px;border-radius:8px;transition:background .15s}
+        .nav-dropdown-menu a:hover{background:rgba(0,229,255,.1)}
+        .nav-btn{padding:8px 16px!important;border-radius:8px!important;font-weight:600!important;font-size:13px!important;transition:all .2s!important}
+        .nav-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+        .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+        .nav-toggle span{width:24px;height:2px;background:var(--text-primary);transition:all .3s;border-radius:2px}
+
+        /* ===== HERO — Premium Redesign ===== */
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:120px 24px 80px;overflow:hidden}
+        /* Mesh gradient background — layered radials for depth */
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(0,128,255,.22) 0%,transparent 60%),radial-gradient(ellipse 70% 50% at 80% 30%,rgba(0,229,255,.18) 0%,transparent 55%),radial-gradient(ellipse 90% 70% at 50% 80%,rgba(0,80,200,.15) 0%,transparent 50%),radial-gradient(circle at 60% 20%,rgba(0,229,255,.12) 0%,transparent 35%);animation:meshDrift 12s ease-in-out infinite alternate;z-index:0}
+        @keyframes meshDrift{0%{opacity:.45;transform:scale(1) translate(0,0)}100%{opacity:.55;transform:scale(1.05) translate(-15px,10px)}}
+        /* Grid with subtle cross-dot pattern */
+        .hero-grid-bg{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,rgba(0,229,255,.06) 1px,transparent 1px);background-size:48px 48px;z-index:0}
+        /* Floating orbs */
+        .hero-orb{position:absolute;border-radius:50%;pointer-events:none;z-index:1;filter:blur(1px)}
+        .hero-orb-1{width:6px;height:6px;background:var(--positronic-cyan);top:18%;left:12%;animation:orbFloat1 7s ease-in-out infinite;opacity:.5}
+        .hero-orb-2{width:4px;height:4px;background:var(--positronic-blue);top:30%;right:15%;animation:orbFloat2 9s ease-in-out infinite;opacity:.4}
+        .hero-orb-3{width:8px;height:8px;background:rgba(0,229,255,.4);bottom:25%;left:20%;animation:orbFloat3 11s ease-in-out infinite;opacity:.35}
+        .hero-orb-4{width:5px;height:5px;background:var(--positronic-cyan);top:60%;right:10%;animation:orbFloat1 8s ease-in-out infinite reverse;opacity:.3}
+        .hero-orb-5{width:3px;height:3px;background:#fff;top:15%;right:30%;animation:orbFloat2 6s ease-in-out infinite;opacity:.25}
+        .hero-orb-6{width:7px;height:7px;background:rgba(0,128,255,.5);bottom:35%;right:25%;animation:orbFloat3 10s ease-in-out infinite reverse;opacity:.3}
+        @keyframes orbFloat1{0%,100%{transform:translate(0,0)}25%{transform:translate(15px,-25px)}50%{transform:translate(-10px,-40px)}75%{transform:translate(20px,-15px)}}
+        @keyframes orbFloat2{0%,100%{transform:translate(0,0)}33%{transform:translate(-20px,15px)}66%{transform:translate(10px,-30px)}}
+        @keyframes orbFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(25px,-20px) scale(1.3)}}
+        /* Neural network lines (CSS pseudo-element) */
+        .hero-neural{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0;overflow:hidden;opacity:.08}
+        .hero-neural::before,.hero-neural::after{content:'';position:absolute;border:1px solid var(--positronic-cyan);border-radius:50%}
+        .hero-neural::before{width:600px;height:600px;top:-200px;right:-100px;animation:neuralSpin 30s linear infinite}
+        .hero-neural::after{width:400px;height:400px;bottom:-150px;left:-80px;animation:neuralSpin 25s linear infinite reverse}
+        @keyframes neuralSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        /* Animated conic gradient mesh */
+        .hero::after{content:'';position:absolute;top:-50%;left:-50%;right:-50%;bottom:-50%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(0,229,255,.03) 60deg,transparent 120deg,rgba(0,128,255,.03) 180deg,transparent 240deg,rgba(0,229,255,.03) 300deg,transparent 360deg);animation:meshSpin 30s linear infinite;z-index:0;pointer-events:none}
+        @keyframes meshSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        /* Scan line effect */
+        .hero-grid-bg::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.3),transparent);animation:scanLine 4s linear infinite}
+        @keyframes scanLine{from{top:0}to{top:100%}}
+
+        .hero-content{position:relative;z-index:2;text-align:center;max-width:900px}
+        /* Logo — bigger, double ring glow, orbiting ring */
+        .hero-logo{width:180px;height:180px;border-radius:50%;overflow:visible;margin:0 auto 32px;position:relative;display:flex;align-items:center;justify-content:center}
+        .hero-logo-inner{width:160px;height:160px;border-radius:50%;overflow:hidden;background:#0D1B2A;box-shadow:0 0 40px rgba(0,229,255,.3),0 0 80px rgba(0,128,255,.2),inset 0 0 30px rgba(0,229,255,.1);animation:logoGlowPulse 4s ease-in-out infinite;position:relative;z-index:2}
+        .hero-logo-img{width:100%;height:100%;object-fit:cover;display:block}
+        /* Orbiting ring */
+        .hero-logo-ring{position:absolute;top:-10px;left:-10px;width:200px;height:200px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--positronic-cyan);border-right-color:rgba(0,128,255,.4);animation:orbitRing 4s linear infinite;z-index:3;filter:drop-shadow(0 0 6px rgba(0,229,255,.5))}
+        .hero-logo-ring2{position:absolute;top:-18px;left:-18px;width:216px;height:216px;border-radius:50%;border:1px solid transparent;border-bottom-color:rgba(0,128,255,.25);border-left-color:rgba(0,229,255,.15);animation:orbitRing 7s linear infinite reverse;z-index:1}
+        @keyframes orbitRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes logoGlowPulse{0%,100%{box-shadow:0 0 40px rgba(0,229,255,.3),0 0 80px rgba(0,128,255,.15),inset 0 0 30px rgba(0,229,255,.05)}50%{box-shadow:0 0 60px rgba(0,229,255,.5),0 0 120px rgba(0,128,255,.25),inset 0 0 40px rgba(0,229,255,.1)}}
+
+        /* Badge — animated rotating gradient border */
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 24px;background:rgba(6,13,26,.8);border-radius:100px;font-size:12px;font-weight:600;color:var(--positronic-cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;position:relative;border:1px solid rgba(0,229,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:badgeGlow 3s ease-in-out infinite}
+        .hero-badge::before{display:none}
+        .hero-badge-dot{width:6px;height:6px;background:var(--positronic-cyan);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;box-shadow:0 0 8px var(--positronic-cyan)}
+        @keyframes borderSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes badgeGlow{0%,100%{box-shadow:0 0 15px rgba(0,229,255,.1)}50%{box-shadow:0 0 25px rgba(0,229,255,.2),0 0 50px rgba(0,128,255,.1)}}
+        @keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+
+        /* Title — bold, tracked, glowing AI */
+        .hero-title{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:clamp(42px,7vw,86px);font-weight:200;line-height:1.15;margin-bottom:24px;letter-spacing:4px;font-style:italic}
+        .title-positronic{display:inline;background:linear-gradient(135deg,#ffffff 0%,rgba(200,220,240,0.9) 50%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:6px}
+        .title-ai{display:inline;background:linear-gradient(90deg,var(--positronic-cyan),#88ddff,var(--positronic-cyan));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:aiGlow 3s ease-in-out infinite,aiBreathe 4s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(0,229,255,.4));font-size:clamp(52px,9vw,110px);letter-spacing:12px;font-weight:100;font-style:normal}
+        @keyframes aiGlow{0%,100%{background-position:0% center}50%{background-position:100% center}}
+        @keyframes aiBreathe{0%,100%{filter:drop-shadow(0 0 20px rgba(0,229,255,.3))}50%{filter:drop-shadow(0 0 40px rgba(0,229,255,.6)) drop-shadow(0 0 80px rgba(0,128,255,.3))}}
+
+        /* Subtitle — gradient underlines on keywords */
+        .hero-subtitle{font-size:clamp(17px,2.5vw,21px);color:var(--text-secondary);max-width:680px;margin:0 auto 44px;line-height:1.8;letter-spacing:.2px}
+        .hero-subtitle strong{color:#fff;font-weight:600;background:linear-gradient(90deg,var(--positronic-cyan),var(--positronic-blue)) no-repeat bottom/100% 2px;padding-bottom:2px}
+
+        /* Stats — frosted glass cards */
+        .hero-stats{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:52px}
+        .stat{text-align:center;padding:20px 28px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;min-width:140px;transition:all .4s cubic-bezier(.175,.885,.32,1.275);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;overflow:hidden}
+        .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.3),transparent)}
+        .stat:hover{border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.08);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.3),0 0 30px rgba(0,229,255,.1)}
+        .stat-icon{display:none}
+        .stat-svg{width:28px;height:28px;margin-bottom:8px;filter:drop-shadow(0 0 8px rgba(0,229,255,0.4));animation:statIconFloat 3s ease-in-out infinite}
+        .stat:nth-child(2) .stat-svg{animation-delay:0.5s}
+        .stat:nth-child(3) .stat-svg{animation-delay:1s}
+        .stat:nth-child(4) .stat-svg{animation-delay:1.5s}
+        @keyframes statIconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+        .stat-value{display:block;font-family:var(--font-heading);font-size:clamp(22px,3.5vw,30px);font-weight:700;color:#fff;margin-bottom:4px;background:linear-gradient(135deg,#fff,var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .stat-label{display:block;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;font-weight:500}
+
+        /* Buttons — premium with shine sweep */
+        .hero-buttons{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:var(--radius);font-weight:600;font-size:15px;font-family:var(--font-body);cursor:pointer;transition:all .3s cubic-bezier(.175,.885,.32,1.275);border:none;text-decoration:none;position:relative;overflow:hidden}
+        .btn-primary{background:linear-gradient(135deg,var(--positronic-blue),#0060dd);color:white;box-shadow:0 4px 20px var(--glow-blue)}
+        .btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:shineSweep 4s ease-in-out infinite}
+        .btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 35px rgba(0,128,255,.4),0 0 20px rgba(0,128,255,.2)}
+        .btn-secondary{background:rgba(255,255,255,.05);color:var(--text-primary);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+        .btn-secondary:hover{background:rgba(255,255,255,.1);border-color:rgba(0,229,255,.4);transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+        .btn-gold{background:linear-gradient(135deg,var(--positronic-cyan),#00b8d4);color:#000;font-weight:700}
+        .btn-gold:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 30px rgba(0,229,255,.35)}
+        @keyframes shineSweep{0%,100%{left:-100%}50%{left:250%}}
+        /* Pulse glow on primary CTA */
+        .btn-primary{animation:ctaPulse 3s ease-in-out infinite}
+        @keyframes ctaPulse{0%,100%{box-shadow:0 4px 20px var(--glow-blue)}50%{box-shadow:0 4px 20px var(--glow-blue),0 0 40px rgba(0,128,255,.15)}}
+
+        .scroll-indicator{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2}
+        .scroll-arrow{width:24px;height:24px;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg);animation:scrollBounce 2s infinite}
+        @keyframes scrollBounce{0%,100%{transform:rotate(45deg) translateY(0);opacity:.3}50%{transform:rotate(45deg) translateY(8px);opacity:.8}}
+
+        /* Hero mobile responsive */
+        @media(max-width:768px){
+            .hero{padding:100px 16px 60px;min-height:auto}
+            .hero-logo{width:140px;height:140px;margin-bottom:24px}
+            .hero-logo-inner{width:120px;height:120px}
+            .hero-logo-ring{width:160px;height:160px;top:-10px;left:-10px}
+            .hero-logo-ring2{width:172px;height:172px;top:-16px;left:-16px}
+            .hero-stats{gap:10px}
+            .stat{min-width:110px;padding:14px 16px}
+            .stat-value{font-size:20px!important}
+            .stat-label{font-size:10px}
+            .hero-orb{display:none}
+            .hero-neural{display:none}
+            .hero-badge{font-size:10px;padding:6px 16px;letter-spacing:1.5px}
+            .hero-subtitle{font-size:15px!important;line-height:1.7}
+            .hero-buttons{gap:10px}
+            .btn{padding:12px 24px;font-size:14px}
+        }
+        @media(max-width:480px){
+            .hero-stats{gap:8px}
+            .stat{min-width:calc(50% - 8px);padding:12px 10px}
+            .hero-buttons{flex-direction:column;align-items:center}
+            .btn{width:100%;max-width:280px;justify-content:center}
+        }
+
+        /* ===== Inline SVG Icon System ===== */
+        .icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex-shrink:0;vertical-align:middle}
+        .icon svg{width:100%;height:100%;stroke:var(--positronic-cyan);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:filter .3s ease,transform .3s ease}
+        .icon:hover svg{filter:drop-shadow(0 0 8px rgba(0,229,255,.6));transform:scale(1.1)}
+
+        /* Icon sizes */
+        .icon-sm{width:18px;height:18px}
+        .icon-md{width:24px;height:24px}
+        .icon-lg{width:32px;height:32px}
+        .icon-xl{width:40px;height:40px}
+
+        /* About section icons */
+        .about-icon .icon{width:28px;height:28px}
+        .about-icon .icon svg{stroke:var(--positronic-cyan)}
+
+        /* Feature card icons */
+        .feature-icon .icon{width:28px;height:28px}
+        .feature-icon .icon svg{stroke-width:1.8}
+        .feature-icon-red .icon svg{stroke:var(--positronic-blue)}
+        .feature-icon-gold .icon svg{stroke:var(--positronic-cyan)}
+        .feature-icon-blue .icon svg{stroke:#4dc9f6}
+        .feature-icon-green .icon svg{stroke:#4ddb8a}
+        .feature-icon-purple .icon svg{stroke:#b088ff}
+
+        /* Whitepaper icon */
+        .wp-icon .icon{width:48px;height:48px}
+        .wp-icon .icon svg{stroke:var(--positronic-cyan)}
+
+        /* Contact icons */
+        .contact-icon .icon{width:28px;height:28px}
+
+        /* Nav dropdown icons */
+        .nav-dropdown-menu .icon{width:16px;height:16px;margin-right:6px}
+        .nav-dropdown-menu .icon svg{stroke:var(--positronic-cyan)}
+        .nav-btn .icon{width:16px;height:16px;margin-right:4px}
+        .nav-btn .icon svg{stroke:currentColor}
+
+        /* Float animation for feature cards */
+        .feature-card .icon svg{animation:iconFloat 3s ease-in-out infinite}
+        @keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+        /* Pulse animation for about icons */
+        .about-icon .icon svg{animation:iconPulse 2.5s ease-in-out infinite}
+        @keyframes iconPulse{0%,100%{opacity:1}50%{opacity:.7;filter:drop-shadow(0 0 10px rgba(0,229,255,.7))}}
+        @media(max-width:640px){.about-icon .icon{width:22px;height:22px}}
+    </style>
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="preload" href="/style.css?v=20260329" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/style.css?v=20260329"></noscript>
+</head>
+<body>
+    <!-- Floating Coins Background -->
+    <div class="floating-particles" id="floatingCoins"></div>
+
+    <!-- Mobile nav overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="logo-200.webp" alt="Positronic" class="logo-img" width="40" height="40">
+                <span class="logo-text" id="logoText">ASF</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#features">Features</a>
+                <a href="#comparison">Compare</a>
+                <a href="#tokenomics">Tokenomics</a>
+                <a href="#roadmap">Roadmap</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Tools &#9662;</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="explorer/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span> Explorer</a>
+                        <a href="evidence/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span> Evidence</a>
+                        <a href="docs/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span> API Docs</a>
+                        <a href="docs/index.html#group-game-bridge"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg></span> Game SDK</a>
+                        <a href="telegram/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span> Telegram SDK</a>
+                        <a href="faucet/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span> Faucet</a>
+                        <a href="community/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span> Community</a>
+                        <a href="download/index.html"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Download Node</a>
+                    </div>
+                </div>
+                <a href="download/index.html" class="nav-btn" style="background:linear-gradient(135deg,#00E5FF,#0080FF)!important;color:#000!important;font-weight:700!important;"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Node</a>
+                <a href="panel/index.html" class="nav-btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7)!important;color:#fff!important;"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><rect width="10" height="10" x="2" y="2" rx="2"/><rect width="10" height="10" x="12" y="2" rx="2"/><rect width="10" height="10" x="2" y="12" rx="2"/><rect width="10" height="10" x="12" y="12" rx="2"/></svg></span> Panel</a>
+                <a href="wallet/index.html" class="nav-btn" style="background:var(--positronic-cyan)!important;color:#000!important;"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span> Wallet</a>
+                <a href="#whitepaper" class="nav-btn" style="border:1px solid var(--border-color)!important;background:rgba(255,255,255,0.05)!important;">Whitepaper</a>
+                <a href="critics/index.html" class="nav-btn" style="border:1px solid rgba(0,229,255,0.3)!important;background:rgba(0,229,255,0.08)!important;color:#00E5FF!important;"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span> FAQ</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="100%" stop-color="#0080ff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="hero-grid-bg"></div>
+        <!-- neural lines removed -->
+        <!-- Floating orbs for depth -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-orb hero-orb-4"></div>
+        <div class="hero-orb hero-orb-5"></div>
+        <div class="hero-orb hero-orb-6"></div>
+        <div class="hero-content">
+            <div class="hero-logo">
+                <div class="hero-logo-ring"></div>
+                <div class="hero-logo-ring2"></div>
+                <div class="hero-logo-inner">
+                    <img src="logo-400.webp" alt="Positronic" class="hero-logo-img" width="200" height="200" fetchpriority="high">
+                </div>
+            </div>
+            <div class="hero-badge"><span class="hero-badge-dot"></span> NEXT-GEN AI-VALIDATED LAYER-1 BLOCKCHAIN</div>
+            <h1 class="hero-title">
+                <span class="title-positronic">Positronic </span><span class="title-ai">AI</span>
+            </h1>
+            <p class="hero-subtitle">
+                The first blockchain where <strong>4 AI models validate every transaction</strong>.
+                Post-quantum security, gasless transactions, and Play-to-Mine gaming.
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <svg class="stat-svg" viewBox="0 0 24 24" fill="none" stroke="url(#iconGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    <span class="stat-value" data-count="7,799">7,799</span>
+                    <span class="stat-label">Tests Passing</span>
+                </div>
+                <div class="stat">
+                    <svg class="stat-svg" viewBox="0 0 24 24" fill="none" stroke="url(#iconGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    <span class="stat-value">242</span>
+                    <span class="stat-label">Source Modules</span>
+                </div>
+                <div class="stat">
+                    <svg class="stat-svg" viewBox="0 0 24 24" fill="none" stroke="url(#iconGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span class="stat-value">12s</span>
+                    <span class="stat-label">Block Time</span>
+                </div>
+                <div class="stat">
+                    <svg class="stat-svg" viewBox="0 0 24 24" fill="none" stroke="url(#iconGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">AI Models</span>
+                </div>
+            </div>
+            <div class="hero-buttons">
+                <a href="download/index.html" class="btn btn-primary">Run a Node</a>
+                <a href="#how-it-works" class="btn btn-secondary">How It Works</a>
+                <a href="whitepaper.html" class="btn btn-secondary">Whitepaper</a>
+                <a href="panel/index.html" class="btn btn-gold">Play &amp; Earn</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about" style="padding:80px 0 60px">
+        <div class="container">
+            <h2 class="section-title">About Positronic</h2>
+            <p class="section-subtitle">The vision, the builder, the mission</p>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <span class="about-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 3.6 3.4 6.2 5 7.8A17.3 17.3 0 0 1 12 22a17.3 17.3 0 0 1 4-3.2c1.6-1.6 5-4.2 5-7.8a9 9 0 0 0-9-9Z"/><path d="M12 12V8"/><path d="m8 14 4-2 4 2"/></svg></span></span>
+                    <h3 class="about-title">The Vision</h3>
+                    <p class="about-text">A Layer-1 where 4 neural models form the immune system, validating every transaction before finality.</p>
+                </div>
+                <div class="about-card">
+                    <span class="about-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg></span></span>
+                    <h3 class="about-title">The Builder</h3>
+                    <p class="about-text">Built from scratch. 33 phases, 7,799 tests, 249 modules. Every line written to build something no one can break.</p>
+                </div>
+                <div class="about-card">
+                    <span class="about-icon"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span></span>
+                    <h3 class="about-title">The Mission</h3>
+                    <p class="about-text">Zero pre-mine. Zero VC. The founder gets no coins at genesis — just like Bitcoin. Truly trustless.</p>
+                </div>
+                <div class="about-card">
+                    <span class="about-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span></span>
+                    <h3 class="about-title">The Proof</h3>
+                    <p class="about-text">259 RPC methods. Post-quantum crypto. 8-phase audit. Every claim verifiable on GitHub.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section - All 13 Features -->
+    <section class="section features" id="features">
+        <div class="container">
+            <h2 class="section-title">33 Phases. All Shipped.</h2>
+            <p class="section-subtitle">Every feature is built, tested, and production-ready. No roadmap promises -- real code.</p>
+            <div class="features-grid">
+
+                <!-- 1. AI Validation -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-red"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></span></div>
+                    <h3>AI Validation</h3>
+                    <p>4 neural models analyze every transaction before it enters a block. Detects fraud, MEV attacks, and exploits in real-time.</p>
+                    <div class="feature-tags">
+                        <span class="tag">TAD (VAE)</span>
+                        <span class="tag">MSAD (TCN)</span>
+                        <span class="tag">SCRA (GNN)</span>
+                        <span class="tag">ESG (LSTM)</span>
+                    </div>
+                </div>
+
+                <!-- 2. TRUST Reputation -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-gold"><span class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span></div>
+                    <h3>TRUST Reputation</h3>
+                    <p>Soulbound reputation token with 5 levels: NEWCOMER (0.5x) → APPRENTICE (0.75x) → TRUSTED (1.0x) → VETERAN (1.5x) → LEGEND (2.0x). Trust multiplier affects block producer selection weight — LEGEND validators earn 4× more blocks than NEWCOMERs with equal stake.</p>
+                    <div class="feature-tags">
+                        <span class="tag">Soulbound</span>
+                        <span class="tag">5 Levels</span>
+                        <span class="tag">2x Multiplier</span>
+                    </div>
+                </div>
+
+                <!-- 3. PRC-20 + PRC-721 -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></span></div>
+                    <h3>PRC-20 + PRC-721</h3>
+                    <p>Full token and NFT creation platform. Deploy fungible tokens and unique collectibles on ASF with a familiar standard interface.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-blue">Tokens</span>
+                        <span class="tag tag-blue">NFTs</span>
+                        <span class="tag tag-blue">Metadata</span>
+                    </div>
+                </div>
+
+                <!-- 4. Gasless TX -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-green"><span class="icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></div>
+                    <h3>Gasless Transactions</h3>
+                    <p>Paymaster system sponsors gas fees so users pay zero. Frictionless onboarding for new users with no wallet funding required.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-green">Paymaster</span>
+                        <span class="tag tag-green">Zero Gas</span>
+                        <span class="tag tag-green">Sponsored</span>
+                    </div>
+                </div>
+
+                <!-- 5. Smart Wallet -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-purple"><span class="icon"><svg viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span></div>
+                    <h3>Smart Wallet</h3>
+                    <p>Account abstraction with session keys for seamless dApp use, social recovery to restore wallets, and batched transactions.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-purple">Session Keys</span>
+                        <span class="tag tag-purple">Social Recovery</span>
+                    </div>
+                </div>
+
+                <!-- 6. Game Bridge Platform -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-red"><span class="icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span></div>
+                    <h3>Game Bridge Platform</h3>
+                    <p>External games connect to ASF via our Game Bridge SDK. Players earn ASF coins, games create custom tokens and mint NFTs for in-game items, with AI anti-cheat verification ensuring fairness.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-red">SDK Ready</span>
+                        <span class="tag tag-red">AI Anti-Cheat</span>
+                        <span class="tag tag-red">Game Tokens</span>
+                    </div>
+                </div>
+
+                <!-- 7. Play-to-Mine -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-gold"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 7 12 7s5-3 7.5-3a2.5 2.5 0 0 1 0 5H18"/><path d="m12 7 1.2 5.2"/><path d="M7 16.3c2.2 0 4-1.8 5-4.3 1 2.5 2.8 4.3 5 4.3"/><path d="M12 22v-5.7"/></svg></span></div>
+                    <h3>Play-to-Mine</h3>
+                    <p>200M ASF (20% of supply) allocated to gaming rewards. Play games, earn coins, and automatically become a validator node.</p>
+                    <div class="feature-tags">
+                        <span class="tag">200M Pool</span>
+                        <span class="tag">Auto-Stake</span>
+                        <span class="tag">NVN</span>
+                    </div>
+                </div>
+
+                <!-- 8. AI Agents -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span></div>
+                    <h3>AI Agents</h3>
+                    <p>Autonomous on-chain agents with verifiable identity. Deploy AI that can hold assets, execute strategies, and interact with smart contracts.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-blue">Autonomous</span>
+                        <span class="tag tag-blue">Identity</span>
+                        <span class="tag tag-blue">On-Chain</span>
+                    </div>
+                </div>
+
+                <!-- 9. Hash Commitment Privacy -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-purple"><span class="icon"><svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+                    <h3>Hash Commitment Privacy</h3>
+                    <p>Hash commitment scheme for private verification. Prove statements about your data without revealing the underlying information.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-purple">Commitments</span>
+                        <span class="tag tag-purple">Private</span>
+                    </div>
+                </div>
+
+                <!-- 10. Cross-Chain Bridge -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-green"><span class="icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span></div>
+                    <h3>Cross-Chain Bridge</h3>
+                    <p>Hash anchoring interface for Ethereum and Bitcoin cross-chain verification. Interface complete &mdash; external relayers in deployment (post-mainnet).</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-green">Ethereum</span>
+                        <span class="tag tag-green">Bitcoin</span>
+                        <span class="tag tag-green">Anchoring</span>
+                    </div>
+                </div>
+
+                <!-- 11. DePIN -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-red"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg></span></div>
+                    <h3>DePIN Infrastructure</h3>
+                    <p>Physical device registration for mining. Connect real-world hardware to the Positronic network and earn rewards for providing infrastructure.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-red">Device Registry</span>
+                        <span class="tag tag-red">Hardware Mining</span>
+                    </div>
+                </div>
+
+                <!-- 12. Post-Quantum -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-gold"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></span></div>
+                    <h3>Post-Quantum Security</h3>
+                    <p>ML-DSA-44 (CRYSTALS-Dilithium2) dual signatures alongside SHA-512 hashing. Built for the post-quantum era with NIST-approved lattice cryptography.</p>
+                    <div class="feature-tags">
+                        <span class="tag">ML-DSA-44</span>
+                        <span class="tag">SHA-512</span>
+                        <span class="tag">Dual-Sig</span>
+                    </div>
+                </div>
+
+                <!-- 13. DID -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue"><span class="icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span></div>
+                    <h3>Decentralized Identity</h3>
+                    <p>W3C-compatible decentralized identity system. Users control their own identity with verifiable credentials anchored on-chain.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-blue">W3C DID</span>
+                        <span class="tag tag-blue">Verifiable</span>
+                        <span class="tag tag-blue">Self-Sovereign</span>
+                    </div>
+                </div>
+
+
+                <!-- 15. Security Hardening -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-red"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span></div>
+                    <h3>Security Hardening</h3>
+                    <p>Graduated AI kill-switch, fallback heuristic validator, SCRA v2 deep bytecode analysis, cross-model veto consensus, validator censorship detection, AES-256-GCM database encryption at rest, and RPC rate limiting.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-red">Kill Switch</span>
+                        <span class="tag tag-red">SCRA v2</span>
+                        <span class="tag tag-red">Veto</span>
+                        <span class="tag tag-red">DB Encryption</span>
+                    </div>
+                </div>
+
+                <!-- 16. Evidence Portal -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-purple"><span class="icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span></div>
+                    <h3>Evidence Portal</h3>
+                    <p>Court-ready forensic evidence system with 6 report types, Ed25519-signed reports, SHA-512 tamper detection, immutable chain of custody, and hash-committed confidential evidence. Five-stage pipeline: Collect, Verify, Anchor, Cross-Anchor, Report.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-purple">Forensic</span>
+                        <span class="tag tag-purple">Court-Ready</span>
+                        <span class="tag tag-purple">Ed25519</span>
+                        <span class="tag tag-purple">Chain of Custody</span>
+                    </div>
+                </div>
+
+                <!-- 17. GOD CHAIN -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-gold"><span class="icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></div>
+                    <h3>GOD CHAIN</h3>
+                    <p>EIP-1559 adaptive gas oracle, 4-lane TX pipeline, compact block relay, HD wallet with mnemonic recovery, VM v2 precompiles, and network partition detection.</p>
+                    <div class="feature-tags">
+                        <span class="tag">EIP-1559</span>
+                        <span class="tag">HD Wallet</span>
+                        <span class="tag">Compact Blocks</span>
+                    </div>
+                </div>
+
+                <!-- 18. Production Hardening -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-green"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></span></div>
+                    <h3>Production Hardening</h3>
+                    <p>Chain reorganization engine (ForkManager), schema v2 migration system, property-based testing with hypothesis, and 76 production hardening tests across 5 dedicated test suites.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-green">Fork Manager</span>
+                        <span class="tag tag-green">Schema Migration</span>
+                        <span class="tag tag-green">76 Tests</span>
+                    </div>
+                </div>
+
+                <!-- 19. Mainnet Readiness -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue"><span class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01"/><path d="M10 12h.01"/><path d="M14 12h.01"/><path d="M18 12h.01"/><path d="M6 8h.01"/><path d="M10 8h.01"/><path d="M14 8h.01"/><path d="M18 8h.01"/><path d="M6 16h.01"/><path d="M10 16h.01"/><path d="M14 16h.01"/><path d="M18 16h.01"/></svg></span></div>
+                    <h3>Mainnet Readiness</h3>
+                    <p>Merkle Patricia Trie for O(1) state roots and light client proofs. Fork reorg execution with state rollback. BFT finality via P2P attestation broadcasting. NAT traversal for residential validators.</p>
+                    <div class="feature-tags">
+                        <span class="tag tag-blue">MPT</span>
+                        <span class="tag tag-blue">Reorg</span>
+                        <span class="tag tag-blue">BFT Finality</span>
+                        <span class="tag tag-blue">NAT</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Built Different: Comparison Section -->
+    <section class="section comparison" id="comparison">
+        <div class="container">
+            <h2 class="section-title">Built Different</h2>
+            <p class="section-subtitle">How ASF compares to Bitcoin and Ethereum</p>
+            <div class="comparison-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Bitcoin</th>
+                            <th>Ethereum</th>
+                            <th class="asf-col">ASF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Block Time</td>
+                            <td>10 min</td>
+                            <td>12 sec</td>
+                            <td class="asf-col">12 sec</td>
+                        </tr>
+                        <tr>
+                            <td>AI Validation</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; 4 Models</td>
+                        </tr>
+                        <tr>
+                            <td>Hashing</td>
+                            <td>SHA-256</td>
+                            <td>Keccak-256</td>
+                            <td class="asf-col">SHA-512</td>
+                        </tr>
+                        <tr>
+                            <td>Post-Quantum</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; ML-DSA-44</td>
+                        </tr>
+                        <tr>
+                            <td>Gas Fees</td>
+                            <td>Variable</td>
+                            <td>Variable</td>
+                            <td class="asf-col check-yes">&#10003; Near-Zero</td>
+                        </tr>
+                        <tr>
+                            <td>Smart Contracts</td>
+                            <td class="check-no">Limited</td>
+                            <td class="check-yes">&#10003; EVM</td>
+                            <td class="asf-col check-yes">&#10003; PositronicVM</td>
+                        </tr>
+                        <tr>
+                            <td>Play-to-Mine</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; 200M Pool</td>
+                        </tr>
+                        <tr>
+                            <td>Game Bridge SDK</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; JS + Python</td>
+                        </tr>
+                        <tr>
+                            <td>Hash Commitment Privacy</td>
+                            <td class="check-no">&#10007;</td>
+                            <td>Partial</td>
+                            <td class="asf-col check-yes">&#10003; Native</td>
+                        </tr>
+                        <tr>
+                            <td>Account Abstraction</td>
+                            <td class="check-no">&#10007;</td>
+                            <td>ERC-4337</td>
+                            <td class="asf-col check-yes">&#10003; Native</td>
+                        </tr>
+                        <tr>
+                            <td>Reputation System</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; TRUST</td>
+                        </tr>
+                        <tr>
+                            <td>DePIN</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; Native</td>
+                        </tr>
+                        <tr>
+                            <td>Fee Burn</td>
+                            <td class="check-no">&#10007;</td>
+                            <td>EIP-1559</td>
+                            <td class="asf-col check-yes">&#10003; 20% Burn</td>
+                        </tr>
+                        <tr>
+                            <td>EIP-1559 Gas</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-yes">&#10003;</td>
+                            <td class="asf-col check-yes">&#10003; Adaptive</td>
+                        </tr>
+                        <tr>
+                            <td>HD Wallet</td>
+                            <td class="check-yes">&#10003; BIP-32</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; BIP-32/44</td>
+                        </tr>
+                        <tr>
+                            <td>Compact Blocks</td>
+                            <td class="check-yes">&#10003; BIP-152</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="asf-col check-yes">&#10003; Native</td>
+                        </tr>
+                        <tr>
+                            <td>State Proofs</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-yes">&#10003; MPT</td>
+                            <td class="asf-col check-yes">&#10003; MPT + SHA-512</td>
+                        </tr>
+                        <tr>
+                            <td>BFT Finality</td>
+                            <td class="check-no">&#10007;</td>
+                            <td class="check-yes">&#10003; Casper</td>
+                            <td class="asf-col check-yes">&#10003; 2/3 Attestation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">From player to validator in 4 steps</p>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num step-num-1">1</div>
+                    <h3>Play</h3>
+                    <p>Play any game connected to the Positronic gaming platform. Every action is recorded on the blockchain with AI anti-cheat verification.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num step-num-2">2</div>
+                    <h3>Earn</h3>
+                    <p>Earn ASF coins from the 200M play-to-mine pool. TRUST reputation multiplies your rewards up to 2x.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num step-num-3">3</div>
+                    <h3>Validate</h3>
+                    <p>Auto-stake your coins and become a validator node. Help secure the network with AI-powered consensus.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num step-num-4">4</div>
+                    <h3>Govern</h3>
+                    <p>As a Neural Validator Node, run AI models, validate transactions, and earn a share of network fees.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section class="section tokenomics" id="tokenomics">
+        <div class="container">
+            <h2 class="section-title">Tokenomics</h2>
+            <p class="section-subtitle">1 Billion ASF Coins -- Fixed Supply, Bitcoin-Style Halving, Deflationary</p>
+
+            <div class="tokenomics-layout">
+                <!-- Pie Chart -->
+                <div class="pie-chart-container">
+                    <div class="pie-chart"></div>
+                </div>
+
+                <!-- Legend -->
+                <div class="token-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--positronic-blue);"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Validators &amp; Mining</div>
+                                <div class="legend-detail">550,000,000 ASF</div>
+                            </div>
+                            <span class="legend-pct">55%</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--positronic-cyan);"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Play-to-Mine</div>
+                                <div class="legend-detail">200,000,000 ASF</div>
+                            </div>
+                            <span class="legend-pct">20%</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--positronic-electric);"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Treasury</div>
+                                <div class="legend-detail">100,000,000 ASF</div>
+                            </div>
+                            <span class="legend-pct">10%</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #4ddb8a;"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Community</div>
+                                <div class="legend-detail">100,000,000 ASF</div>
+                            </div>
+                            <span class="legend-pct">10%</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #b088ff;"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Team</div>
+                                <div class="legend-detail">30M ASF - 3yr cliff + 8yr vest</div>
+                            </div>
+                            <span class="legend-pct">3%</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ff6b6b;"></div>
+                        <div class="legend-info">
+                            <div>
+                                <div class="legend-label">Security Fund</div>
+                                <div class="legend-detail">20,000,000 ASF</div>
+                            </div>
+                            <span class="legend-pct">2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align:center;color:var(--positronic-cyan);font-size:14px;margin-top:24px;margin-bottom:0;">Founder = normal validator with equal share. No special mining rewards.<br>85% of supply goes to the community through mining, gaming, and grants.</p>
+
+            <!-- Fee Burn Mechanism -->
+            <div class="burn-card">
+                <h3>Deflationary Fee Burn</h3>
+                <div class="burn-pct">20%</div>
+                <p>Of every transaction fee is permanently burned (remainder after rounding), continuously reducing total supply and increasing scarcity over time.</p>
+            </div>
+
+            <!-- Token Info -->
+            <div class="token-info-row">
+                <div class="info-box">
+                    <span class="info-value">24 ASF</span>
+                    <span class="info-label">Block Reward</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-value">~5.2M</span>
+                    <span class="info-label">Halving Interval (~2 years)</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-value">SHA-512</span>
+                    <span class="info-label">Hash Algorithm</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-value">12 sec</span>
+                    <span class="info-label">Block Time</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-value">246</span>
+                    <span class="info-label">RPC Methods</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-value">420420</span>
+                    <span class="info-label">Chain ID</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="section roadmap" id="roadmap">
+        <div class="container">
+            <h2 class="section-title">Roadmap</h2>
+            <p class="section-subtitle">33 phases completed, building toward mainnet</p>
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 1-2: Foundation &amp; AI</h3>
+                    <p>DPoS consensus, SHA-512, state management, PositronicVM, P2P networking. Neural engine with 4 AI models (VAE, LSTM, TCN, GNN) and the AI Validation Gate.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 3-4: Gaming &amp; Tokens</h3>
+                    <p>Play-to-Mine system, Game Bridge SDK for external games, AI anti-cheat. PRC-20 fungible tokens and PRC-721 NFT standards deployed.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 5-6: UX &amp; Wallets</h3>
+                    <p>Gasless transactions via Paymaster. Smart Wallet with account abstraction, session keys, and social recovery.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 7-8: TRUST &amp; AI Agents</h3>
+                    <p>Soulbound TRUST reputation (5 levels, 2x multiplier). Autonomous AI agents with on-chain identity and asset management.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 9-10: Privacy &amp; Bridge</h3>
+                    <p>Hash commitment privacy scheme. Cross-chain abstraction layer with hash anchoring interface.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 11-13: DePIN, PQ &amp; DID</h3>
+                    <p>DePIN physical device registration. Post-quantum ML-DSA-44 (CRYSTALS-Dilithium2) dual signatures. W3C-compatible decentralized identity.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 14: Game Bridge</h3>
+                    <p>External game integration via SDK. Any game can connect to the blockchain — players mine ASF, games create custom tokens and NFTs. 24 RPC methods, AI anti-cheat, 4-layer emission control, game-to-token bridge.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 15: Security Hardening</h3>
+                    <p>Pre-mainnet audit fixes: graduated AI kill-switch (4 levels), fallback heuristic validator, SCRA v2 deep bytecode analysis, cross-model veto consensus, validator censorship detection, AES-256-GCM database encryption, and RPC rate limiting.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 16: Evidence &amp; Compliance</h3>
+                    <p>AI-verified WalletRegistry (6 states, 4 trust tiers), ForensicReporter with 6 report types and Ed25519 signatures, 5-stage court evidence pipeline, chain of custody tracking, hash-committed confidential evidence, and 5 dedicated forensic RPC endpoints.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 17: GOD CHAIN</h3>
+                    <p>EIP-1559 adaptive gas oracle, 4-lane TX pipeline, parallel validation, compact block relay, multi-dimensional peer scoring, network partition detection, VM v2 precompiles (Base64, JSON, Batch Verify), HD wallet (BIP-32/44), address book, TX history. Three-Layer Consensus v2 with unlimited validators (10K soft cap) and 21 weighted-random producers. 7,799 tests, 249 source modules.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phases 18-24: Advanced Protocol</h3>
+                    <p>Telegram Mini App SDK, real HMAC-based post-quantum cryptography, Lock/Mint cross-chain bridge with relayer quorum, AI explainability (XAI) for every validation, DePIN economic layer with tiered scoring, autonomous AI agents with enforced permissions and spending caps, enhanced hash commitment privacy with Schnorr-like sigma protocol. 7,799 tests across 201 test files.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 25: Emergency Control</h3>
+                    <p>Protocol-level EmergencyController with 5 network states (NORMAL → RESTRICTED → DEGRADED → EMERGENCY → SHUTDOWN). Multi-signature authorization for critical actions, hard fork scheduling with rollback, UpgradeManager for protocol upgrades. Integrated with HealthMonitor for automatic state escalation.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 26: Production Hardening</h3>
+                    <p>ForkManager for chain reorganization with longest-chain rule and finality guard. AES-256-GCM database encryption at rest with PBKDF2 key derivation. Schema v2 migration system. 76 new production hardening tests: property-based invariants (hypothesis), database resilience, memory leak detection, chain reorg, and upgrade/migration testing.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-dot"></div>
+                    <h3>Phase 27: Mainnet Readiness</h3>
+                    <p>Merkle Patricia Trie (O(1) state roots, light client proofs), fork reorg execution with state rollback, BFT finality via P2P attestation broadcasting, NAT traversal (UPnP/STUN) for residential validators. 150 new tests, 7,799 total. v0.3.0 release. Risk mitigation: structured logging, database pruning, MPT persistence, Prometheus monitoring, BIP-39 wallet, honest module naming. 7,799 tests across 201 test files.</p>
+                    <span class="timeline-status">Completed</span>
+                </div>
+                <div class="timeline-item active">
+                    <div class="timeline-dot"></div>
+                    <h3>Next: Testnet Launch &mdash; Q1 2026</h3>
+                    <p>Public testnet with seed nodes, faucet, explorer. Community validators onboarding, SDK testing, and bug bounty program.</p>
+                    <span class="timeline-status">In Progress</span>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3>Mainnet Launch &mdash; Q4 2026</h3>
+                    <p>Mainnet genesis block, exchange listings, cross-chain liquidity, mobile wallet, and expanded gaming ecosystem.</p>
+                    <span class="timeline-status">Planned</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Whitepaper Section -->
+    <section class="section whitepaper-section" id="whitepaper">
+        <div class="container">
+            <div class="wp-card">
+                <div class="wp-icon"><span class="icon icon-xl"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span></div>
+                <h2>Explore Positronic</h2>
+                <p>Learn about the world's first AI-validated blockchain &mdash; Proof of Neural Consensus, Play-to-Mine, Bitcoin-style tokenomics, post-quantum security, and all 33 protocol phases including GOD CHAIN.</p>
+                <div class="wp-stats">
+                    <span>33 Phases</span>
+                    <span>7,799 Tests</span>
+                    <span>Zero Pre-Mine</span>
+                </div>
+                <a href="litepaper.html" class="btn btn-primary">Read Lite Paper</a>
+                <a href="whitepaper.html" class="btn btn-primary" style="margin-left:10px;">Full Whitepaper</a>
+                <a href="critics/index.html" class="btn btn-primary" style="margin-left:10px;background:linear-gradient(135deg,#00E5FF,#0080FF);">FAQ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact" style="padding:60px 0;">
+        <div class="container" style="max-width:900px;margin:0 auto;text-align:center;">
+            <h2 style="font-family:var(--font-heading);font-size:32px;margin-bottom:12px;color:#fff;">Contact Us</h2>
+            <p style="color:var(--text-dim);font-size:16px;margin-bottom:32px;">Get in touch with the Positronic team</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:800px;margin:0 auto;">
+                <a href="mailto:support@positronic-ai.network" style="display:block;padding:20px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.15);border-radius:12px;text-decoration:none;transition:all .3s;">
+                    <div style="margin-bottom:8px;"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span></div>
+                    <div style="font-family:var(--font-heading);font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Support</div>
+                    <div style="font-size:13px;color:var(--positronic-cyan);">support@positronic-ai.network</div>
+                </a>
+                <a href="mailto:security@positronic-ai.network" style="display:block;padding:20px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.15);border-radius:12px;text-decoration:none;transition:all .3s;">
+                    <div style="margin-bottom:8px;"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span></div>
+                    <div style="font-family:var(--font-heading);font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Security</div>
+                    <div style="font-size:13px;color:var(--positronic-cyan);">security@positronic-ai.network</div>
+                </a>
+                <!-- admin email removed for security -->
+                <a href="mailto:info@positronic-ai.network" style="display:block;padding:20px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.15);border-radius:12px;text-decoration:none;transition:all .3s;">
+                    <div style="margin-bottom:8px;"><span class="icon icon-lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+                    <div style="font-family:var(--font-heading);font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">General Info</div>
+                    <div style="font-size:13px;color:var(--positronic-cyan);">info@positronic-ai.network</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">Positronic</span>
+                    <p>The first blockchain where AI validates every transaction.</p>
+                    <p style="font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6">Built from scratch. 7,799 tests. 249 modules. 259 RPC methods.<br>Zero pre-mine. Zero VC. Code-driven, not hype-driven.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#about">About</a>
+                    <a href="explorer/index.html">Explorer</a>
+                    <a href="wallet/index.html">Wallet</a>
+                    <a href="panel/index.html">Panel</a>
+                    <a href="docs/index.html">API Docs</a>
+                    <a href="faucet/index.html">Faucet</a>
+                    <a href="whitepaper.html">Whitepaper</a>
+                    <a href="litepaper.html">Litepaper</a>
+                    <a href="critics/index.html">FAQ</a>
+                    <a href="download/index.html">Download</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-links" style="margin-top:12px;">
+                    <a href="https://github.com/PositronicAI-Blockchain-L1" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://t.me/PositronicAI" target="_blank" rel="noopener">Telegram</a>
+                    <a href="https://x.com/PositronicAI" target="_blank" rel="noopener">X / Twitter</a>
+                    <a href="https://discord.gg/8Q6Cyy6gv" target="_blank" rel="noopener">Discord</a>
+                    <a href="mailto:support@positronic-ai.network">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Positronic. All rights reserved. Chain ID: 420420 | <a href="https://github.com/PositronicAI-Blockchain-L1" style="color:var(--positronic-cyan);">Open Source</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Faucet Banner -->
+    <div id="faucet-banner" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(0,128,255,0.15));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(0,229,255,0.3);border-radius:12px;padding:12px 24px;display:flex;align-items:center;gap:12px;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:600px;width:90%;">
+        <div style="font-size:24px;">&#127873;</div>
+        <div>
+            <div style="color:#00e5ff;font-weight:700;font-size:14px;">Get 50 Free ASF &mdash; Become a Validator!</div>
+            <div style="color:#b0b8c0;font-size:12px;">Claim once from the faucet, stake 32 ASF, and start earning rewards.</div>
+        </div>
+        <a href="faucet/" style="background:var(--positronic-cyan,#00E5FF);color:#000;padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;">Claim Now</a>
+        <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;color:#6a7a8a;font-size:18px;cursor:pointer;padding:0 4px;">&times;</button>
+    </div>
+    <style>
+    @media(max-width:480px){
+        #faucet-banner{padding:10px 14px;gap:8px;bottom:12px;flex-wrap:wrap}
+        #faucet-banner>div:first-child{display:none}
+    }
+    </style>
+
+    <script src="/main.js?v=20260329" defer></script>
+    <link rel="stylesheet" href="/assistant.css?v=20260401" media="print" onload="this.media='all'">
+    <script src="/assistant-data.js?v=20260401" defer></script>
+    <script src="/assistant.js?v=20260401" defer></script>
+    <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+</body>
+</html>

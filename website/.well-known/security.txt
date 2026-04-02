@@ -1,0 +1,6 @@
+Contact: https://github.com/PositronicAI-Blockchain-L1/security-audits/issues
+Contact: https://positronic-ai.network/bug-bounty/
+Expires: 2027-04-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://positronic-ai.network/.well-known/security.txt
+Policy: https://positronic-ai.network/bug-bounty/

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <title>Telegram SDK - Positronic Blockchain</title>
+    <meta name="description" content="Integrate your Telegram Mini App with Positronic blockchain. Let players earn ASF coins by playing your game.">
+    <link rel="canonical" href="https://positronic-ai.network/telegram/">
+    <meta property="og:title" content="Telegram SDK - Positronic Blockchain">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Positronic">
+    <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@positronic_ai">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+    </style>
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../logo-200.webp">
+    <meta name="theme-color" content="#0080FF">
+    <style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --blue: #0080FF;
+    --cyan: #00E5FF;
+    --dark: #0D1B2A;
+    --darker: #060D1A;
+    --accent: #0A1628;
+    --text-1: #ffffff;
+    --text-2: #B0B8C0;
+    --text-3: #6a7a8a;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --green: #00c853;
+    --code-bg: #060D1A;
+}
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--darker);
+    color: var(--text-1);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+a { color: var(--cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Nav */
+.topbar {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+    background: rgba(6,13,26,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+}
+.topbar-brand { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: var(--cyan); }
+.topbar-brand img { height: 32px; }
+.topbar-nav { display: flex; gap: 20px; }
+.topbar-nav a { color: var(--text-2); font-size: 14px; font-weight: 500; }
+.topbar-nav a:hover { color: var(--cyan); text-decoration: none; }
+
+/* Container */
+.container { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* Hero */
+.hero {
+    text-align: center; padding: 60px 0 40px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,128,255,0.08) 0%, transparent 60%);
+}
+.hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; margin-bottom: 16px; }
+.hero h1 span { color: var(--cyan); }
+.hero p { color: var(--text-2); font-size: 18px; max-width: 600px; margin: 0 auto 24px; }
+.hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.badge { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.2); color: var(--cyan); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+/* Section */
+.section { margin-top: 48px; }
+.section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; margin-bottom: 16px; color: var(--text-1); border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.section h3 { font-size: 20px; margin-top: 28px; margin-bottom: 12px; color: var(--cyan); }
+.section p, .section li { color: var(--text-2); font-size: 15px; }
+.section ul { margin: 12px 0; padding-left: 24px; }
+.section li { margin-bottom: 8px; }
+
+/* Code blocks */
+pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6;
+}
+code { font-family: 'JetBrains Mono', monospace; }
+p code, li code { background: rgba(0,229,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: var(--cyan); }
+
+/* Steps */
+.steps { counter-reset: step; margin: 20px 0; }
+.step {
+    counter-increment: step;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; margin-bottom: 16px; position: relative; padding-left: 64px;
+}
+.step::before {
+    content: counter(step);
+    position: absolute; left: 20px; top: 24px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--blue); color: white; font-weight: 700; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+}
+.step h4 { margin-bottom: 8px; font-size: 16px; }
+.step p { margin: 0; }
+
+/* Flow */
+.flow {
+    display: grid; grid-template-columns: 1fr; gap: 12px; margin: 20px 0;
+}
+.flow-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 12px;
+}
+.flow-num { background: var(--blue); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.flow-arrow { text-align: center; color: var(--text-3); font-size: 20px; }
+
+/* Methods table */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+th { text-align: left; padding: 10px 12px; background: var(--accent); color: var(--cyan); font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); }
+td code { font-size: 12px; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(0,229,255,0.3); }
+.card h4 { color: var(--cyan); margin-bottom: 8px; }
+.card p { color: var(--text-2); font-size: 14px; }
+.card .icon { font-size: 28px; margin-bottom: 12px; }
+
+/* Footer */
+.footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); margin-top: 60px; color: var(--text-3); font-size: 13px; }
+
+@media (max-width: 768px) {
+    body { overflow-x: hidden; }
+    h1, h2, h3, h4 { word-break: break-word; hyphens: auto; }
+    p, li, td, th, span, div { overflow-wrap: break-word; word-wrap: break-word; }
+    pre, code, .code-block { overflow-x: auto; max-width: 100%; white-space: pre-wrap; word-break: break-all; font-size: 12px; padding: 8px; }
+    img { max-width: 100%; height: auto; }
+    .container, .content, main, article, section { padding: 10px !important; max-width: 100% !important; }
+    table { display: block; overflow-x: auto; max-width: 100%; font-size: 12px; }
+    .card-grid, .feature-grid { grid-template-columns: 1fr !important; }
+    .topbar-nav { gap: 8px; }
+    .topbar-nav a { font-size: 11px; }
+}
+@media (max-width: 640px) {
+    .hero h1 { font-size: 28px; }
+    .container { padding: 24px 16px 60px; }
+    .step { padding-left: 52px; }
+}
+.icon svg,.card .icon svg{width:100%;height:100%;stroke:var(--accent,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:filter .3s}
+.card:hover .icon svg{filter:drop-shadow(0 0 6px rgba(0,229,255,.5))}
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <img src="../logo-200.webp" alt="ASF">
+        Positronic
+    </a>
+    <nav class="topbar-nav">
+        <a href="../index.html">Home</a>
+        <a href="../docs/index.html">API Docs</a>
+        <a href="../panel/index.html">Panel</a>
+        <a href="../wallet/index.html">Wallet</a>
+        <a href="../critics/index.html">FAQ</a>
+    </nav>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+    <h1>Telegram <span>Game SDK</span></h1>
+    <p>Connect your Telegram Mini App to the Positronic blockchain. Your players earn ASF coins by playing.</p>
+    <div class="hero-badges">
+        <span class="badge">Play-to-Mine</span>
+        <span class="badge">No Wallet Setup</span>
+        <span class="badge">AI Anti-Cheat</span>
+        <span class="badge">JavaScript SDK</span>
+    </div>
+</div>
+
+<div class="container">
+
+<!-- How It Works -->
+<div class="section">
+    <h2>How It Works</h2>
+    <p>Your Telegram Mini App game connects to Positronic via a simple JavaScript SDK. Players automatically get a blockchain wallet when they first play. Game events are validated by AI, and legitimate play earns ASF coins.</p>
+
+    <div class="flow">
+        <div class="flow-item"><div class="flow-num">1</div> Player opens your Mini App in Telegram</div>
+        <div class="flow-item"><div class="flow-num">2</div> SDK auto-detects Telegram user &amp; creates wallet</div>
+        <div class="flow-item"><div class="flow-num">3</div> Player plays your game, events are tracked</div>
+        <div class="flow-item"><div class="flow-num">4</div> Session submitted &rarr; AI validates for cheating</div>
+        <div class="flow-item"><div class="flow-num">5</div> Legitimate play earns ASF coins to player's wallet</div>
+    </div>
+</div>
+
+<!-- Quick Start -->
+<div class="section">
+    <h2>Quick Start</h2>
+
+    <div class="steps">
+        <div class="step">
+            <h4>Register Your Game</h4>
+            <p>Call <code>positronic_registerGame</code> to register your game on the blockchain. You'll receive a <code>game_id</code> and <code>api_key</code>. Your game enters a review queue (AI + governance council).</p>
+        </div>
+        <div class="step">
+            <h4>Add the SDK</h4>
+            <p>Include the Positronic Telegram SDK in your Mini App HTML:</p>
+<pre><code>&lt;script src="https://cdn.positronic-ai.network/sdk/positronic-telegram.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        <div class="step">
+            <h4>Initialize</h4>
+<pre><code>const game = new PositronicTelegram({
+  rpcUrl: 'https://rpc.positronic-ai.network',
+  gameId: 'your-game-id',
+  apiKey: 'gk_your_api_key'
+});
+
+// Auto-detects Telegram user, creates wallet
+const { wallet, isNew } = await game.init();</code></pre>
+        </div>
+        <div class="step">
+            <h4>Track Gameplay &amp; Earn</h4>
+<pre><code>// Start a session when player begins playing
+const session = await game.startSession();
+
+// Track game events as they happen
+session.trackEvent('kill_enemy', { enemy: 'boss', score: 500 });
+session.trackEvent('collect_item', { item: 'gem', value: 100 });
+session.trackEvent('complete_level', { level: 3 });
+
+// Submit when round/level ends — AI validates and calculates reward
+const result = await session.submit({ score: 15000, level: 3 });
+
+// Show reward using Telegram's native popup
+game.showReward(result.reward);</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- API Reference -->
+<div class="section">
+    <h2>SDK Methods</h2>
+
+    <h3>PositronicTelegram</h3>
+    <table>
+        <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+        <tr><td><code>init()</code></td><td><code>Promise&lt;{wallet, isNew}&gt;</code></td><td>Initialize SDK, detect Telegram user, create/get wallet</td></tr>
+        <tr><td><code>startSession(proofType?)</code></td><td><code>Promise&lt;Session&gt;</code></td><td>Start a new game session for current player</td></tr>
+        <tr><td><code>showReward(reward)</code></td><td><code>void</code></td><td>Show reward popup via Telegram WebApp API</td></tr>
+        <tr><td><code>showPopup(title, msg)</code></td><td><code>void</code></td><td>Show popup via Telegram WebApp API</td></tr>
+        <tr><td><code>getGameInfo()</code></td><td><code>Promise&lt;GameInfo&gt;</code></td><td>Get your game's blockchain info</td></tr>
+        <tr><td><code>getMiningRate()</code></td><td><code>Promise&lt;MiningRate&gt;</code></td><td>Current mining rate and daily cap</td></tr>
+        <tr><td><code>getPlayerHistory(limit?)</code></td><td><code>Promise&lt;Session[]&gt;</code></td><td>Player's past sessions</td></tr>
+        <tr><td><code>getWalletInfo()</code></td><td><code>Promise&lt;UserInfo&gt;</code></td><td>Telegram user's wallet info and stats</td></tr>
+    </table>
+
+    <h3>TelegramGameSession</h3>
+    <table>
+        <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+        <tr><td><code>trackEvent(type, data?)</code></td><td><code>void</code></td><td>Track a game event (auto-batched every 10 events)</td></tr>
+        <tr><td><code>submit(metrics)</code></td><td><code>Promise&lt;Result&gt;</code></td><td>Submit session for AI validation and reward</td></tr>
+        <tr><td><code>getStatus()</code></td><td><code>Promise&lt;Status&gt;</code></td><td>Check current session status</td></tr>
+        <tr><td><code>.elapsed</code></td><td><code>number</code></td><td>Seconds since session started</td></tr>
+    </table>
+</div>
+
+<!-- Event Types -->
+<div class="section">
+    <h2>Event Types</h2>
+    <p>Track these events during gameplay for accurate AI validation and reward calculation:</p>
+    <table>
+        <tr><th>Event</th><th>Description</th><th>Example Data</th></tr>
+        <tr><td><code>kill_enemy</code></td><td>Player defeated an enemy</td><td><code>{ enemy: 'dragon', score: 500 }</code></td></tr>
+        <tr><td><code>collect_item</code></td><td>Item collected</td><td><code>{ item: 'gem', value: 100 }</code></td></tr>
+        <tr><td><code>complete_level</code></td><td>Level completed</td><td><code>{ level: 3, time: 120 }</code></td></tr>
+        <tr><td><code>take_damage</code></td><td>Player took damage</td><td><code>{ amount: 25 }</code></td></tr>
+        <tr><td><code>use_skill</code></td><td>Skill/ability used</td><td><code>{ skill: 'fireball' }</code></td></tr>
+        <tr><td><code>craft_item</code></td><td>Item crafted</td><td><code>{ item: 'sword', materials: 3 }</code></td></tr>
+        <tr><td><code>trade</code></td><td>Player traded</td><td><code>{ gave: 'gold', got: 'potion' }</code></td></tr>
+        <tr><td><code>achievement</code></td><td>Achievement unlocked</td><td><code>{ name: 'First Blood' }</code></td></tr>
+    </table>
+</div>
+
+<!-- Reward System -->
+<div class="section">
+    <h2>Reward System</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/></svg></div>
+            <h4>Player Daily Cap</h4>
+            <p>Each player can earn up to <strong>50 ASF/day</strong> per game. Resets every 24 hours.</p>
+        </div>
+        <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></div>
+            <h4>Game Daily Cap</h4>
+            <p>Each game has a total daily emission cap (default <strong>10,000 ASF/day</strong>). Customizable when registering.</p>
+        </div>
+        <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div>
+            <h4>AI Validation</h4>
+            <p>Every session is validated by AI anti-cheat. Suspicious play gets <strong>50% reduced</strong> reward. Detected cheating gets <strong>0</strong>.</p>
+        </div>
+        <div class="card">
+            <div class="icon">&#x2B50;</div>
+            <h4>Trust Score</h4>
+            <p>Games start at trust score 100. Low cheat rates increase your multiplier up to <strong>2x</strong>. Cheating drops it fast.</p>
+        </div>
+    </div>
+
+    <h3>Reward Formula</h3>
+<pre><code>reward = base_reward * scarcity_factor * trust_multiplier * skill_factor
+
+  base_reward      — Set per game (depends on game type and daily cap)
+  scarcity_factor  — 1.0x when supply available, decreasing as pool empties
+  trust_multiplier — Game's trust score (100 = 1.0x, max 2.0x)
+  skill_factor     — Player's score-based multiplier (max 3.0x)</code></pre>
+</div>
+
+<!-- RPC Methods -->
+<div class="section">
+    <h2>Telegram RPC Methods</h2>
+    <p>These methods are available in addition to the 24 Game Bridge methods. See <a href="../docs/index.html">full API docs</a> for all methods.</p>
+
+    <table>
+        <tr><th>Method</th><th>Access</th><th>Description</th></tr>
+        <tr><td><code>positronic_telegramAuth</code></td><td>Public</td><td>Authenticate Telegram user, get/create wallet</td></tr>
+        <tr><td><code>positronic_telegramGetWallet</code></td><td>Public</td><td>Get wallet info for Telegram user</td></tr>
+        <tr><td><code>positronic_telegramGetStats</code></td><td>Public</td><td>Get Telegram bridge statistics</td></tr>
+        <tr><td><code>positronic_telegramRegisterBot</code></td><td>Admin</td><td>Register Telegram bot token for a game</td></tr>
+    </table>
+
+    <h3>positronic_telegramAuth</h3>
+<pre><code>// Request
+{
+  "jsonrpc": "2.0",
+  "method": "positronic_telegramAuth",
+  "params": [12345678, "username", "First Name"],
+  "id": 1
+}
+
+// Response
+{
+  "result": {
+    "success": true,
+    "wallet_address": "0x1a2b3c...",
+    "is_new": true,
+    "telegram_id": 12345678
+  }
+}</code></pre>
+
+    <h3>positronic_telegramGetWallet</h3>
+<pre><code>// Request
+{
+  "jsonrpc": "2.0",
+  "method": "positronic_telegramGetWallet",
+  "params": [12345678],
+  "id": 1
+}
+
+// Response
+{
+  "result": {
+    "telegram_id": 12345678,
+    "username": "player1",
+    "wallet_address": "0x1a2b3c...",
+    "total_sessions": 42,
+    "total_earned": 1500000000000000000000
+  }
+}</code></pre>
+</div>
+
+<!-- Full Example -->
+<div class="section">
+    <h2>Full Example: Telegram Clicker Game</h2>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My ASF Clicker&lt;/title&gt;
+  &lt;script src="https://telegram.org/js/telegram-web-app.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdn.positronic-ai.network/sdk/positronic-telegram.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Tap to Mine ASF!&lt;/h1&gt;
+  &lt;p&gt;Score: &lt;span id="score"&gt;0&lt;/span&gt;&lt;/p&gt;
+  &lt;button id="tap" style="font-size:48px;padding:40px"&gt;&#x1FA99;&lt;/button&gt;
+  &lt;p id="status"&gt;Loading...&lt;/p&gt;
+
+  &lt;script&gt;
+  (async function() {
+    // 1. Initialize SDK
+    const game = new PositronicTelegram({
+      rpcUrl: 'https://rpc.positronic-ai.network',
+      gameId: 'my-clicker-v1',
+      apiKey: 'gk_your_api_key_here'
+    });
+
+    const { wallet, isNew } = await game.init();
+    document.getElementById('status').textContent =
+      isNew ? 'New wallet created!' : 'Welcome back!';
+
+    // 2. Start session
+    const session = await game.startSession();
+    let score = 0;
+
+    // 3. Track taps
+    document.getElementById('tap').onclick = function() {
+      score += 10;
+      document.getElementById('score').textContent = score;
+      session.trackEvent('collect_item', { item: 'coin', value: 10 });
+    };
+
+    // 4. Submit after 60 seconds
+    setTimeout(async function() {
+      const result = await session.submit({ score: score, level: 1 });
+      game.showReward(result.reward);
+    }, 60000);
+  })();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+
+<!-- Game Registration Flow -->
+<div class="section">
+    <h2>Game Registration Flow</h2>
+    <div class="steps">
+        <div class="step">
+            <h4>Register</h4>
+            <p>Call <code>positronic_registerGame</code> with your game name, type (<code>SDK_INTEGRATED</code> for Telegram), and description. You receive a <code>game_id</code> and <code>api_key</code>.</p>
+        </div>
+        <div class="step">
+            <h4>AI Review</h4>
+            <p>Your game is automatically reviewed by 4 AI models for risk assessment. Low-risk games pass quickly.</p>
+        </div>
+        <div class="step">
+            <h4>Council Vote</h4>
+            <p>Governance council members vote on your game. Requires 3+ votes with 60% approval.</p>
+        </div>
+        <div class="step">
+            <h4>Activation</h4>
+            <p>Once approved, your game goes <strong>ACTIVE</strong>. Players can now start earning ASF.</p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+    <h2>FAQ</h2>
+
+    <h3>Do players need a crypto wallet?</h3>
+    <p>No. The SDK automatically creates a Positronic wallet for each Telegram user when they first play. Zero setup needed.</p>
+
+    <h3>How do players withdraw their ASF?</h3>
+    <p>Players can connect their auto-created wallet to the <a href="../wallet/index.html">Positronic Web Wallet</a> to manage their tokens.</p>
+
+    <h3>What happens if players cheat?</h3>
+    <p>AI validates every session. Suspicious patterns get 50% reduced rewards. Detected cheating gets zero. Games with high cheat rates lose trust score and may be suspended.</p>
+
+    <h3>How much can players earn?</h3>
+    <p>Default: up to 50 ASF per player per day per game. The reward depends on play quality, game trust score, and overall scarcity.</p>
+
+    <h3>Is there a cost to integrate?</h3>
+    <p>No. Registration is free. There are no fees for using the Game Bridge or Telegram SDK.</p>
+
+    <h3>Can I use the SDK outside Telegram?</h3>
+    <p>Yes. The SDK works in any browser. Outside Telegram, it runs in development mode with a test user ID.</p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2026 Positronic &mdash; <a href="../docs/index.html">API Docs</a> &mdash; <a href="../index.html">Home</a> &mdash; <a href="../litepaper.html">Litepaper</a></p>
+</div>
+
+</div>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+</body>
+</html>

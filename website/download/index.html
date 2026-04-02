@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>Download Positronic Node | Run a Validator</title>
+<meta name="description" content="Download Positronic Desktop Node for Windows, macOS, and Linux. Full blockchain node with AI consensus monitoring, encrypted wallet, and one-click validator mode.">
+<link rel="canonical" href="https://positronic-ai.network/download/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://positronic-ai.network/download/">
+<meta property="og:title" content="Download Positronic Desktop Node">
+<meta property="og:description" content="Full blockchain node for Windows, macOS, and Linux. AI consensus monitoring, AES-256-GCM encrypted wallet, post-quantum signatures.">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta property="og:site_name" content="Positronic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<meta name="twitter:title" content="Download Positronic Desktop Node">
+<meta name="twitter:description" content="Full blockchain node for Windows, macOS, and Linux. AI consensus monitoring, AES-256-GCM encrypted wallet, post-quantum signatures.">
+<meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root{--bg:#060D1A;--bg-surface:#0D1B2A;--card-bg:#0A1628;--card-border:#1a3a5c;--positronic-blue:#0080FF;--positronic-cyan:#00E5FF;--positronic-silver:#B0B8C0;--positronic-dark:#0D1B2A;--positronic-darker:#060D1A;--positronic-glow:#1a3a5c;--text-primary:#e4e4f0;--text-secondary:#B0B8C0;--text-muted:#6a7a8a;--glow-cyan:rgba(0,229,255,.35);--glow-blue:rgba(0,128,255,.35);--font-heading:'Space Grotesk',sans-serif;--font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--radius:14px;--radius-sm:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+a{color:var(--positronic-cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--bg-surface);border-bottom:1px solid var(--card-border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--positronic-cyan);box-shadow:0 0 12px var(--glow-cyan)}
+.topbar-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.topbar-title{font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+.topbar-nav{display:flex;gap:16px}
+.topbar-nav a{color:var(--text-secondary);font-size:14px;padding:6px 12px;border-radius:var(--radius-sm);transition:.3s}
+.topbar-nav a:hover{color:#fff;background:rgba(255,255,255,.06);text-decoration:none}
+
+/* Hero */
+.hero{text-align:center;padding:80px 24px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,229,255,.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;background:rgba(0,229,255,.1);color:var(--positronic-cyan);border:1px solid rgba(0,229,255,.2);margin-bottom:20px;text-transform:uppercase}
+.hero h1{font-family:var(--font-heading);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--positronic-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:var(--text-secondary);max-width:680px;margin:0 auto 40px;line-height:1.6}
+.hero-version{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-muted);margin-top:16px}
+
+/* Platform Cards */
+.platforms{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:960px;margin:0 auto;padding:0 24px 60px}
+.platform-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:32px 24px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.platform-card:hover{transform:translateY(-4px);border-color:var(--positronic-cyan);box-shadow:0 8px 32px var(--glow-cyan)}
+.platform-card .accent{position:absolute;top:0;left:0;right:0;height:3px}
+.platform-icon{font-size:48px;margin-bottom:16px;display:block}
+.platform-name{font-family:var(--font-heading);font-size:22px;font-weight:700;margin-bottom:8px}
+.platform-desc{color:var(--text-secondary);font-size:14px;margin-bottom:20px;line-height:1.5}
+.platform-size{color:var(--text-muted);font-size:13px;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+.btn-download{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:var(--radius-sm);font-weight:600;font-size:15px;border:none;cursor:pointer;transition:all .3s;text-decoration:none}
+.btn-download.windows{background:var(--positronic-cyan);color:#000}
+.btn-download.windows:hover{background:#33ecff;text-decoration:none}
+.btn-download.macos{background:var(--positronic-blue);color:#fff}
+.btn-download.macos:hover{background:#2090ff;text-decoration:none}
+.btn-download.linux{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.btn-download.linux:hover{background:linear-gradient(135deg,#8b4af0,#b366ff);text-decoration:none}
+.btn-download.disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+
+/* Sections */
+.section{max-width:960px;margin:0 auto;padding:0 24px 60px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{font-size:24px}
+.section-header h2{font-family:var(--font-heading);font-size:24px;font-weight:700}
+
+/* Info Grid */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.info-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px}
+.info-card h3{font-family:var(--font-heading);font-size:16px;font-weight:600;margin-bottom:8px;color:var(--positronic-cyan)}
+.info-card p{color:var(--text-secondary);font-size:14px;line-height:1.6}
+.info-card ul{list-style:none;padding:0}
+.info-card ul li{color:var(--text-secondary);font-size:14px;padding:4px 0;display:flex;align-items:center;gap:8px}
+.info-card ul li::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--positronic-cyan);flex-shrink:0}
+
+/* Steps */
+.steps{counter-reset:step}
+.step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}
+.step-num{counter-increment:step;width:36px;height:36px;border-radius:50%;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--positronic-cyan);flex-shrink:0}
+.step-num::after{content:counter(step)}
+.step-content h4{font-family:var(--font-heading);font-size:15px;font-weight:600;margin-bottom:4px}
+.step-content p{color:var(--text-secondary);font-size:14px;line-height:1.5}
+.step-content code{background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px;font-family:'JetBrains Mono',monospace}
+
+/* FAQ */
+.faq-item{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:20px;margin-bottom:12px}
+.faq-item h4{font-size:15px;font-weight:600;margin-bottom:8px;color:#fff}
+.faq-item p{color:var(--text-secondary);font-size:14px;line-height:1.5}
+
+/* Checksum */
+.checksum-box{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:16px 20px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);word-break:break-all;line-height:1.6}
+.checksum-box strong{color:var(--positronic-cyan);font-size:13px}
+
+/* Footer */
+.footer{text-align:center;padding:24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--card-border);margin-top:40px}
+
+@media(max-width:768px){.topbar-nav{display:none}.platforms{grid-template-columns:1fr}.hero h1{font-size:28px}.hero p{font-size:15px}
+    /* Text wrapping & overflow fixes */
+    body{overflow-x:hidden}
+    h1,h2,h3,h4{word-break:break-word;hyphens:auto}
+    p,li,td,th,span,div{overflow-wrap:break-word;word-wrap:break-word}
+    pre,code,.code-block,.checksum-box{overflow-x:auto;max-width:100%;white-space:pre-wrap;word-break:break-all;font-size:12px}
+    img{max-width:100%;height:auto}
+    .container,.content,main,article,section{padding:10px !important;max-width:100% !important}
+    table{display:block;overflow-x:auto;max-width:100%;font-size:12px}
+}
+
+/* ===== Inline SVG Icon System ===== */
+.icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex-shrink:0;vertical-align:middle}
+.icon svg{width:100%;height:100%;stroke:var(--positronic-cyan);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:filter .3s ease,transform .3s ease}
+.icon:hover svg{filter:drop-shadow(0 0 8px rgba(0,229,255,.6));transform:scale(1.1)}
+.icon-sm{width:18px;height:18px}
+.icon-lg{width:32px;height:32px}
+.icon-xl{width:48px;height:48px}
+.platform-icon .icon{width:48px;height:48px}
+.platform-icon .icon svg{stroke-width:1.5}
+.section-icon .icon{width:24px;height:24px}
+.section-icon .icon svg{stroke:var(--positronic-cyan)}
+.platform-card .icon svg{animation:iconFloat 3s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.btn-download .icon{width:18px;height:18px;margin-right:4px}
+.btn-download .icon svg{stroke:currentColor}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+    <div class="topbar-brand">
+        <div class="topbar-logo"><img src="../logo-200.webp" alt="ASF"></div>
+        <div class="topbar-title">POSITRONIC NODE</div>
+    </div>
+    <nav class="topbar-nav">
+        <a href="../index.html">Home</a>
+        <a href="../explorer/index.html">Explorer</a>
+        <a href="../wallet/index.html">Wallet</a>
+        <a href="../docs/index.html">Docs</a>
+        <a href="../critics/index.html">FAQ</a>
+    </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-badge">Validator Node Software</div>
+    <h1>Run a Positronic Validator</h1>
+    <p>Download the Positronic Node to become a validator. Stake 32+ ASF, run the AI validation engine, earn block rewards, and help secure the world's first AI-validated blockchain.</p>
+    <div class="hero-version">v0.3.1 &mdash; Beta Release &mdash; SHA-512 Verified</div>
+</section>
+
+<!-- Platform Downloads -->
+<div class="platforms">
+    <!-- Windows -->
+    <div class="platform-card">
+        <div class="accent" style="background:linear-gradient(90deg,var(--positronic-cyan),var(--positronic-blue))"></div>
+        <span class="platform-icon"><span class="icon icon-xl"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span></span>
+        <div class="platform-name">Windows</div>
+        <p class="platform-desc">Windows 10/11 (64-bit)<br>Single executable, no installation required</p>
+        <p class="platform-size">~112 MB &bull; .exe</p>
+        <a href="https://dl.positronic-ai.network/releases/desktop/Positronic-Node-0.3.1-Setup.exe" class="btn-download windows" id="btnWindows"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Download for Windows</a>
+    </div>
+
+    <!-- macOS -->
+    <div class="platform-card">
+        <div class="accent" style="background:linear-gradient(90deg,var(--positronic-blue),#2090ff)"></div>
+        <span class="platform-icon"><span class="icon icon-xl"><svg viewBox="0 0 24 24"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg></span></span>
+        <div class="platform-name">macOS</div>
+        <p class="platform-desc">macOS 12+ Monterey / Sonoma / Sequoia<br>Apple Silicon (M1/M2/M3) &amp; Intel x64</p>
+        <p class="platform-size">~125 MB (ARM64) / ~130 MB (x64) &bull; .zip</p>
+        <a href="https://dl.positronic-ai.network/releases/desktop/Positronic-Node-0.3.1-mac-arm64.zip" class="btn-download macos" id="btnMacOS"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Apple Silicon (M1/M2/M3)</a>
+        <a href="https://dl.positronic-ai.network/releases/desktop/Positronic-Node-0.3.1-mac-x64.zip" class="btn-download macos" id="btnMacOSx64" style="margin-top:8px;background:rgba(32,144,255,0.15);border-color:rgba(32,144,255,0.3)"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Intel Mac (x64)</a>
+    </div>
+
+    <!-- Linux -->
+    <div class="platform-card">
+        <div class="accent" style="background:linear-gradient(90deg,#7c3aed,#a855f7)"></div>
+        <span class="platform-icon"><span class="icon icon-xl"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H8"/><path d="M16 2h1.5A2.5 2.5 0 0 1 20 4.5v15a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19.5"/><path d="m8 2 4 4 4-4"/><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16s1.5 1 2 1 2-1 2-1"/></svg></span></span>
+        <div class="platform-name">Linux</div>
+        <p class="platform-desc">Ubuntu 20.04+, Fedora 36+, Debian 11+, Arch<br>x86_64 &amp; aarch64</p>
+        <p class="platform-size">~167 MB &bull; .AppImage</p>
+        <a href="https://dl.positronic-ai.network/releases/desktop/Positronic-Node-0.3.1.AppImage" class="btn-download linux" id="btnLinux"><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span> Download for Linux</a>
+    </div>
+</div>
+
+<!-- Platform Security Notices -->
+<div style="max-width:820px;margin:0 auto 12px;padding:16px 20px;
+            background:rgba(255,184,0,0.06);border:1px solid rgba(255,184,0,0.2);
+            border-radius:12px;display:flex;align-items:flex-start;gap:14px;">
+    <span style="flex-shrink:0;" class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" stroke="#FFB800"/></svg></span>
+    <div>
+        <strong style="color:#FFB800;font-size:14px;">Windows &mdash; SmartScreen Notice</strong>
+        <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0;line-height:1.6;">
+            Since this is a beta release without a code signing certificate, Windows Defender SmartScreen
+            will show an "Unknown Publisher" warning. This is normal and expected.<br>
+            <strong style="color:var(--text-primary);">Chrome/Edge:</strong> Click
+            <strong style="color:var(--text-primary);">"Keep" &rarr; "Keep anyway"</strong> in the download bar.<br>
+            <strong style="color:var(--text-primary);">SmartScreen popup:</strong> Click
+            <strong style="color:var(--text-primary);">"More info" &rarr; "Run anyway"</strong>.<br>
+            Verify file integrity using the SHA-512 checksum below.
+        </p>
+    </div>
+</div>
+<div style="max-width:820px;margin:0 auto 12px;padding:16px 20px;
+            background:rgba(0,128,255,0.06);border:1px solid rgba(0,128,255,0.2);
+            border-radius:12px;display:flex;align-items:flex-start;gap:14px;">
+    <span style="flex-shrink:0;" class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z" stroke="#4DA3FF"/><path d="M10 2c1 .5 2 2 2 5" stroke="#4DA3FF"/></svg></span>
+    <div>
+        <strong style="color:#4DA3FF;font-size:14px;">macOS &mdash; Gatekeeper Bypass Guide</strong>
+        <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0;line-height:1.6;">
+            Since this is a beta release without Apple code signing, macOS Gatekeeper will block the app.
+            After downloading and mounting the <code style="background:rgba(0,128,255,.1);color:#4DA3FF;padding:2px 6px;border-radius:4px;font-size:12px">.dmg</code>,
+            drag <code style="background:rgba(0,128,255,.1);color:#4DA3FF;padding:2px 6px;border-radius:4px;font-size:12px">Positronic.app</code> to Applications, then use one of these methods:<br><br>
+            <strong style="color:var(--text-primary);">Method 1 (Terminal):</strong> Open Terminal and run:
+            <code style="background:rgba(0,128,255,.1);color:#4DA3FF;padding:2px 8px;border-radius:4px;font-size:12px;display:inline-block;margin:4px 0">xattr -cr /Applications/Positronic.app</code>
+            then double-click the app to launch.<br>
+            <strong style="color:var(--text-primary);">Method 2 (GUI):</strong> Right-click
+            <code style="background:rgba(0,128,255,.1);color:#4DA3FF;padding:2px 6px;border-radius:4px;font-size:12px">Positronic.app</code>
+            &rarr; Open &rarr; Open in the dialog.<br>
+            <strong style="color:var(--text-primary);">Method 3:</strong> Go to
+            <strong style="color:var(--text-primary);">System Settings &rarr; Privacy &amp; Security</strong>
+            and click <strong style="color:var(--text-primary);">"Open Anyway"</strong> next to the blocked app message.
+        </p>
+    </div>
+</div>
+<div style="max-width:820px;margin:0 auto 24px;padding:16px 20px;
+            background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);
+            border-radius:12px;display:flex;align-items:flex-start;gap:14px;">
+    <span style="flex-shrink:0;" class="icon icon-lg"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H8" stroke="#a855f7"/><path d="M16 2h1.5A2.5 2.5 0 0 1 20 4.5v15a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19.5" stroke="#a855f7"/><path d="m8 2 4 4 4-4" stroke="#a855f7"/></svg></span>
+    <div>
+        <strong style="color:#a855f7;font-size:14px;">Linux &mdash; Installation Guide</strong>
+        <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0;line-height:1.6;">
+            Download the <code style="background:rgba(124,58,237,.1);color:#a855f7;padding:2px 6px;border-radius:4px;font-size:12px">.tar.gz</code> archive.
+            Open a terminal and run:<br>
+            <code style="background:rgba(124,58,237,.1);color:#a855f7;padding:2px 8px;border-radius:4px;font-size:12px;display:inline-block;margin:4px 0">chmod +x Positronic-Node-0.3.1.AppImage &amp;&amp; ./Positronic-Node-0.3.1.AppImage</code><br>
+            The binary is a single compiled executable &mdash; no dependencies or installation required.
+            To install system-wide: <code style="background:rgba(124,58,237,.1);color:#a855f7;padding:2px 6px;border-radius:4px;font-size:12px">sudo mv Positronic /usr/local/bin/</code>.
+            Data is stored at <code style="background:rgba(124,58,237,.1);color:#a855f7;padding:2px 6px;border-radius:4px;font-size:12px">~/.positronic/</code>.
+        </p>
+    </div>
+</div>
+
+<!-- What You Get -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><span class="icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></span>
+        <h2>What the Node Does</h2>
+    </div>
+    <div class="info-grid">
+        <div class="info-card">
+            <h3><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> Full Blockchain Sync</h3>
+            <p>Download and verify the entire Positronic blockchain. Your node independently validates every block and transaction — no trust required.</p>
+        </div>
+        <div class="info-card">
+            <h3><span class="icon icon-sm"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></span> AI Validation Engine</h3>
+            <p>Run the distributed AI that validates transactions in real-time. Each node is part of a global AI army detecting fraud, anomalies, and attacks.</p>
+        </div>
+        <div class="info-card">
+            <h3><span class="icon icon-sm"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></span> Earn Block Rewards</h3>
+            <p>Validators earn ASF coins for proposing blocks and validating transactions. Stake 32+ ASF to activate your validator and start earning.</p>
+        </div>
+        <div class="info-card">
+            <h3><span class="icon icon-sm"><svg viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Code Protection</h3>
+            <p>The node binary is compiled into a single encrypted executable. UPX compression and SHA-512 integrity verification protect the code.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Requirements -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span></span>
+        <h2>System Requirements</h2>
+    </div>
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>Minimum</h3>
+            <ul>
+                <li>2 CPU cores</li>
+                <li>4 GB RAM</li>
+                <li>20 GB free disk space</li>
+                <li>10 Mbps internet connection</li>
+                <li>64-bit operating system</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h3>Recommended</h3>
+            <ul>
+                <li>4+ CPU cores</li>
+                <li>8 GB RAM</li>
+                <li>50 GB SSD storage</li>
+                <li>25+ Mbps internet connection</li>
+                <li>Dedicated machine or VPS</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Installation Guide -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span></span>
+        <h2>How to Become a Validator</h2>
+    </div>
+
+    <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+            <h4>Download &amp; Launch</h4>
+            <p><strong>Windows:</strong> Run <code>Positronic.exe</code> directly &mdash; no installation needed. If SmartScreen warns, click "More info" &rarr; "Run anyway".<br>
+            <strong>macOS:</strong> Mount the <code>.dmg</code>, drag <code>Positronic.app</code> to Applications. Open Terminal and run <code>xattr -cr /Applications/Positronic.app</code>, then launch.<br>
+            <strong>Linux:</strong> Extract <code>.tar.gz</code>, then run <code>chmod +x Positronic &amp;&amp; ./Positronic</code> in terminal.<br>
+            Data is stored at <code>%APPDATA%\Positronic\</code> (Win), <code>~/Library/Application Support/Positronic/</code> (Mac), or <code>~/.positronic/</code> (Linux).</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+            <h4>Create a Wallet</h4>
+            <p>Go to the <strong>Wallet</strong> tab in the app. Click <strong>Create</strong> to generate a new wallet. Save your password securely — it encrypts your private keys with AES-256.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+            <h4>Get 32+ ASF Coins</h4>
+            <p>You need at least 32 ASF to become a validator. Use the <a href="../faucet/index.html">Faucet</a> to get 50 ASF — stake 32 to become a validator!</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+            <h4>Stake Your ASF</h4>
+            <p>Go to the <strong>Validator</strong> tab. Enter the amount (minimum 32 ASF), your wallet address, and password. Click <strong>Stake ASF</strong> to activate your validator.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+            <h4>Start Earning</h4>
+            <p>Your validator activates at the next epoch (every ~6 minutes). You'll see your status change to <strong>ACTIVE</strong> and start earning block rewards automatically.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Integrity -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></span></span>
+        <h2>Verify Integrity</h2>
+    </div>
+    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px">Every release includes a SHA-512 checksum. Verify your download matches:</p>
+    <div class="checksum-box" style="margin-bottom:12px">
+        <strong><span class="icon icon-sm"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span> Positronic-Node-0.3.1-Setup.exe (Windows v0.3.1)</strong><br>
+        SHA-512: <span id="checksumWin" style="word-break:break-all;">1c1ff20862f3af7ea3d5ef9b4711adc61f24ada925fcdc4f947d1fa0c7b0c27f1d4c2e2aeea36b58b18746de1c5e9e623b5e12d4480440d73bf667e5ec1a8197
+    </div>
+    <div class="checksum-box" style="margin-bottom:12px">
+        <strong><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg></span> Positronic-Node-0.3.1-mac-arm64.zip (macOS v0.3.1 Apple Silicon)</strong><br>
+        SHA-512: <span id="checksumMac" style="word-break:break-all;">235d8bd9f234cce410127558ff15ec37d22608fdc1a180b90344a711cc381a85c5e2ab5b022eeec0c018e77c54e8cf55459b5fb1b0ce1c6242fd8debfe709e3f</span>
+        <br><br>
+        <strong>Positronic-Node-0.3.1-mac-x64.zip (macOS v0.3.1 Intel)</strong><br>
+        SHA-512: <span id="checksumMacX64" style="word-break:break-all;">11402724bc98c56457679803c29e0eb59eab65dce1af4742bc084db9677d08ef2470087ab5c4e06317f34fe966a471265eee9f4980dd32338947e8acef693ab2</span>
+    </div>
+    <div class="checksum-box">
+        <strong><span class="icon icon-sm"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H8"/><path d="M16 2h1.5A2.5 2.5 0 0 1 20 4.5v15a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19.5"/><path d="m8 2 4 4 4-4"/></svg></span> Positronic-Node-0.3.1.AppImage (Linux v0.3.1)</strong><br>
+        SHA-512: <span id="checksumLinux" style="word-break:break-all;">16c73bc2259bd27c619538a55340574f390023c593f475f95c4834db0311ee75ac05905778e4e4ea95819a4c103e13120ed6d68c4ac13b9478355c3b40b406a1</span>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-icon"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span></span>
+        <h2>FAQ</h2>
+    </div>
+
+    <div class="faq-item">
+        <h4>Is the node safe to run?</h4>
+        <p>Yes. The node binary is compiled into a single encrypted executable with UPX compression and SHA-512 integrity verification. It runs as a standard user process with no elevated privileges required.</p>
+    </div>
+    <div class="faq-item">
+        <h4>Where is my data stored?</h4>
+        <p>On Windows: <code style="background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px">%APPDATA%\Positronic\</code>. On macOS: <code style="background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px">~/Library/Application Support/Positronic/</code>. On Linux: <code style="background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px">~/.positronic/</code></p>
+    </div>
+    <div class="faq-item">
+        <h4>Can I run it on a VPS/cloud server?</h4>
+        <p>Yes! The node works on any 64-bit machine. For headless servers, run with the <code style="background:rgba(0,229,255,.08);color:var(--positronic-cyan);padding:2px 6px;border-radius:4px;font-size:13px">--founder</code> flag for CLI mode.</p>
+    </div>
+    <div class="faq-item">
+        <h4>How much can I earn?</h4>
+        <p>Block rewards are distributed to active validators proportional to their stake. The exact amount depends on network activity, total validators, and your uptime.</p>
+    </div>
+    <div class="faq-item">
+        <h4>Can I unstake my ASF?</h4>
+        <p>Yes. Go to the Validator tab and click Unstake. Your tokens will be released after the current epoch ends.</p>
+    </div>
+</div>
+
+<div class="footer">
+    Positronic Network &copy; 2026 &mdash; The World's First AI-Validated Layer-1 Blockchain &mdash; 7,799 Tests Passing
+</div>
+
+<script>
+// Universal download handler for .sh and .command files.
+// Works on HTTP/HTTPS (production) and file:// (local testing).
+// Strategy: XHR blob download for ALL browsers on ALL protocols.
+//   HTTP  → status 200 = success
+//   file: → status 0   = success (Edge/Firefox/Safari)
+//   file: + Chrome → XHR blocked by CORS → show "right-click" hint
+(function() {
+    var buttons = [
+        document.getElementById('btnMacOS'),
+        document.getElementById('btnLinux')
+    ].filter(Boolean);
+
+    buttons.forEach(function(btn) {
+        var url = btn.getAttribute('href');
+        var filename = btn.getAttribute('download');
+        if (!filename) return;
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.responseType = 'blob';
+                xhr.onload = function() {
+                    // status 200 = HTTP success, status 0 = file:// success
+                    if ((xhr.status === 200 || xhr.status === 0) && xhr.response && xhr.response.size > 0) {
+                        var blob = new Blob([xhr.response], {type: 'application/octet-stream'});
+                        var a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(function() {
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(a.href);
+                        }, 200);
+                    } else {
+                        showDownloadHint();
+                    }
+                };
+                xhr.onerror = function() { showDownloadHint(); };
+                xhr.send();
+            } catch(ex) {
+                showDownloadHint();
+            }
+        });
+    });
+
+    function showDownloadHint() {
+        var existing = document.getElementById('dl-hint');
+        if (existing) existing.remove();
+        var hint = document.createElement('div');
+        hint.id = 'dl-hint';
+        hint.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+            'background:#1a1a2e;border:1px solid #FFB800;border-radius:12px;padding:16px 24px;' +
+            'color:#ccc;font-size:13px;line-height:1.6;z-index:9999;max-width:480px;text-align:center;' +
+            'box-shadow:0 8px 32px rgba(255,184,0,0.2);cursor:pointer';
+        var title = document.createElement('strong');
+        title.style.color = '#FFB800';
+        title.textContent = 'Download Tip: ';
+        var msg = document.createTextNode('Your browser blocked the direct download. ');
+        var br1 = document.createElement('br');
+        var inst1 = document.createElement('strong');
+        inst1.style.color = '#fff';
+        inst1.textContent = 'Right-click';
+        var inst2 = document.createTextNode(' the button and choose ');
+        var inst3 = document.createElement('strong');
+        inst3.style.color = '#fff';
+        inst3.textContent = '"Save link as..."';
+        var br2 = document.createElement('br');
+        var note = document.createElement('span');
+        note.style.cssText = 'opacity:0.6;font-size:11px';
+        note.textContent = 'On the live website, downloads work automatically in all browsers.';
+        hint.appendChild(title);
+        hint.appendChild(msg);
+        hint.appendChild(br1);
+        hint.appendChild(inst1);
+        hint.appendChild(inst2);
+        hint.appendChild(inst3);
+        hint.appendChild(br2);
+        hint.appendChild(note);
+        document.body.appendChild(hint);
+        setTimeout(function() {
+            if (hint.parentNode) {
+                hint.style.opacity = '0';
+                hint.style.transition = 'opacity 0.5s';
+                setTimeout(function() { if (hint.parentNode) hint.remove(); }, 500);
+            }
+        }, 8000);
+        hint.addEventListener('click', function() { hint.remove(); });
+    }
+})();
+</script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+</body>
+</html>

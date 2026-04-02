@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>Community — Positronic</title>
+<meta name="description" content="Join the Positronic community. Connect with developers, validators, and enthusiasts building the future of AI-validated blockchain.">
+<link rel="canonical" href="https://positronic-ai.network/community/">
+<meta property="og:title" content="Positronic Community — Discord, Telegram, GitHub">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Positronic">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../logo-200.webp">
+<meta name="theme-color" content="#0080FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root{
+    --positronic-blue:#0080FF;
+    --positronic-cyan:#00E5FF;
+    --positronic-silver:#B0B8C0;
+    --positronic-electric:#00BFFF;
+    --positronic-dark:#0D1B2A;
+    --positronic-darker:#060D1A;
+    --positronic-accent:#0A1628;
+    --positronic-glow:#1a3a5c;
+    --positronic-highlight:#00E5FF;
+    --text-primary:#ffffff;
+    --text-secondary:#B0B8C0;
+    --card-bg:rgba(255,255,255,0.04);
+    --card-border:rgba(255,255,255,0.08);
+    --glow-cyan:rgba(0,229,255,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--positronic-darker);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 0%,rgba(0,229,255,0.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 100%,rgba(0,128,255,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+
+/* Top Bar */
+.topbar{width:100%;background:var(--positronic-dark);border-bottom:1px solid var(--card-border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.topbar-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text-primary)}
+.topbar-brand img{height:32px;width:32px;border-radius:50%;object-fit:cover;background:var(--positronic-dark)}
+.topbar-brand span{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--positronic-cyan)}
+.topbar-links{display:flex;gap:16px;align-items:center}
+.topbar-links a{color:var(--text-secondary);text-decoration:none;font-size:13px;transition:color .2s}
+.topbar-links a:hover{color:var(--positronic-cyan)}
+
+/* Content */
+.content{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:40px 24px 80px}
+
+/* Hero */
+.hero{text-align:center;padding:60px 0 48px}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:32px;color:var(--text-primary);margin-bottom:12px;text-shadow:0 0 40px var(--glow-cyan)}
+.hero h1 span{color:var(--positronic-cyan)}
+.hero p{color:var(--text-secondary);font-size:16px;max-width:520px;margin:0 auto;line-height:1.7}
+
+/* Section */
+.section{margin-bottom:56px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:20px;color:var(--positronic-cyan);margin-bottom:24px;text-shadow:0 0 20px var(--glow-cyan);text-align:center}
+
+/* Social Cards Grid */
+.social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.social-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:28px 24px;text-align:center;text-decoration:none;color:var(--text-primary);transition:all .3s;position:relative;overflow:hidden}
+.social-card:hover{border-color:rgba(0,229,255,0.2);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,229,255,0.08)}
+.social-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--positronic-cyan),transparent);opacity:0;transition:opacity .3s}
+.social-card:hover::before{opacity:1}
+.social-card .icon{font-size:36px;margin-bottom:12px;display:block;width:64px;height:64px;margin-left:auto;margin-right:auto}
+.social-card .name{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;margin-bottom:6px}
+.social-card .desc{color:var(--text-secondary);font-size:13px;line-height:1.5}
+
+/* Steps */
+.steps{display:grid;gap:16px}
+.step{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--text-primary);transition:all .3s}
+.step:hover{border-color:rgba(0,229,255,0.2);transform:translateX(4px)}
+.step-num{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--positronic-cyan);min-width:36px;text-align:center;text-shadow:0 0 16px var(--glow-cyan)}
+.step-body h3{font-size:14px;font-weight:600;margin-bottom:2px}
+.step-body p{color:var(--text-secondary);font-size:13px}
+
+/* Resource Grid */
+.resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.resource-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:22px 20px;text-decoration:none;color:var(--text-primary);transition:all .3s;display:flex;align-items:center;gap:14px}
+.resource-card:hover{border-color:rgba(0,229,255,0.2);transform:translateY(-2px)}
+.resource-card .r-icon{font-size:24px;min-width:32px;text-align:center}
+.resource-card .r-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600}
+.resource-card .r-desc{color:var(--text-secondary);font-size:12px;margin-top:2px}
+
+/* Footer */
+.footer{text-align:center;padding:40px 24px;border-top:1px solid var(--card-border);color:var(--text-secondary);font-size:12px}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+
+/* Responsive */
+@media(max-width:640px){
+    .social-grid{grid-template-columns:1fr}
+    .resource-grid{grid-template-columns:1fr}
+    .hero h1{font-size:24px}
+    .hero p{font-size:14px}
+    .topbar{padding:10px 14px}
+    .topbar-brand span{font-size:9px}
+    .topbar-links{gap:10px}
+    .topbar-links a{font-size:11px}
+    .content{padding:24px 16px 60px}
+    .hero{padding:40px 0 32px}
+}
+@media(max-width:768px){
+    body{overflow-x:hidden}
+    h1,h2,h3,h4{word-break:break-word;hyphens:auto}
+    p,li,td,th,span,div{overflow-wrap:break-word;word-wrap:break-word}
+    pre,code,.code-block{overflow-x:auto;max-width:100%;white-space:pre-wrap;word-break:break-all;font-size:12px;padding:8px}
+    img{max-width:100%;height:auto}
+    .container,.content,main,article,section{padding:10px !important;max-width:100% !important}
+    table{display:block;overflow-x:auto;max-width:100%;font-size:12px}
+}
+/* SVG Icon System */
+.icon svg,.r-icon svg{width:100%;height:100%;stroke:var(--positronic-cyan,#00E5FF);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:filter .3s}
+.social-card:hover .icon svg,.resource-card:hover .r-icon svg{filter:drop-shadow(0 0 6px rgba(0,229,255,.5))}
+.icon,.r-icon{display:inline-flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<!-- Top Bar -->
+<div class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <img src="../logo-200.webp" alt="ASF">
+        <span>COMMUNITY</span>
+    </a>
+    <div class="topbar-links">
+        <a href="../whitepaper.html">Whitepaper</a>
+        <a href="../docs/index.html">Docs</a>
+        <a href="../explorer/index.html">Explorer</a>
+        <a href="../download/index.html">Download</a>
+        <a href="../critics/index.html">FAQ</a>
+        <a href="../index.html">Home</a>
+    </div>
+</div>
+
+<div class="content">
+    <!-- Hero -->
+    <div class="hero reveal">
+        <h1>Join the <span>Positronic</span> Community</h1>
+        <p>Connect with developers, validators, and enthusiasts building the future of AI-validated blockchain technology.</p>
+    </div>
+
+    <!-- Social Links -->
+    <div class="section reveal reveal-delay-1">
+        <h2 class="section-title">Connect With Us</h2>
+        <div class="social-grid">
+            <a href="https://discord.gg/8Q6Cyy6gv" target="_blank" rel="noopener" class="social-card">
+                <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5"/><path d="M7.9 4.5a19.5 19.5 0 0 1 8.2 0M3.46 7.5a17 17 0 0 0-1 5.5c2 3 5 4.5 5 4.5s1-1.5 1.5-3a11 11 0 0 1-3.5-2 .5.5 0 0 1 .5-.87 13 13 0 0 0 12 0 .5.5 0 0 1 .54.87 11 11 0 0 1-3.5 2c.5 1.5 1.5 3 1.5 3s3-1.5 5-4.5a17 17 0 0 0-1-5.5"/></svg></span>
+                <div class="name">Discord</div>
+                <div class="desc">Chat with the community, get support, and participate in governance discussions.</div>
+            </a>
+            <a href="https://t.me/PositronicAI" target="_blank" rel="noopener" class="social-card">
+                <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span>
+                <div class="name">Telegram</div>
+                <div class="desc">Stay updated with announcements, join discussions, and connect with other node operators.</div>
+            </a>
+            <a href="https://github.com/PositronicAI-Blockchain-L1" target="_blank" rel="noopener" class="social-card">
+                <span class="icon"><svg viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></span>
+                <div class="name">GitHub</div>
+                <div class="desc">Explore the source code, report issues, and contribute to the protocol.</div>
+            </a>
+            <a href="https://x.com/PositronicAI" target="_blank" rel="noopener" class="social-card">
+                <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg></span>
+                <div class="name">X (Twitter)</div>
+                <div class="desc">Follow for the latest news, development updates, and ecosystem highlights.</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Getting Started -->
+    <div class="section reveal reveal-delay-2">
+        <h2 class="section-title">Getting Started</h2>
+        <div class="steps">
+            <a href="../download/index.html" class="step">
+                <span class="step-num">1</span>
+                <div class="step-body">
+                    <h3>Download the Node</h3>
+                    <p>Get the Positronic node binary for Windows, macOS, or Linux.</p>
+                </div>
+            </a>
+            <a href="../faucet/index.html" class="step">
+                <span class="step-num">2</span>
+                <div class="step-body">
+                    <h3>Get Testnet ASF</h3>
+                    <p>Claim 50 ASF from the faucet — enough to become a validator!</p>
+                </div>
+            </a>
+            <a href="../explorer/index.html" class="step">
+                <span class="step-num">3</span>
+                <div class="step-body">
+                    <h3>Explore the Blockchain</h3>
+                    <p>Browse blocks, transactions, and accounts on the live explorer.</p>
+                </div>
+            </a>
+            <a href="../docs/index.html" class="step">
+                <span class="step-num">4</span>
+                <div class="step-body">
+                    <h3>Read the Docs</h3>
+                    <p>Dive into the API reference with 259 RPC methods and SDK guides.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Developer Resources -->
+    <div class="section reveal reveal-delay-3">
+        <h2 class="section-title">Developer Resources</h2>
+        <div class="resource-grid">
+            <a href="../docs/index.html" class="resource-card">
+                <span class="r-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span>
+                <div>
+                    <div class="r-title">SDK Documentation</div>
+                    <div class="r-desc">Python, TypeScript, and Telegram SDKs</div>
+                </div>
+            </a>
+            <a href="../docs/index.html" class="resource-card">
+                <span class="r-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+                <div>
+                    <div class="r-title">API Reference</div>
+                    <div class="r-desc">259 RPC methods with examples</div>
+                </div>
+            </a>
+            <a href="../whitepaper.html" class="resource-card">
+                <span class="r-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span>
+                <div>
+                    <div class="r-title">Whitepaper</div>
+                    <div class="r-desc">Technical design and consensus protocol</div>
+                </div>
+            </a>
+            <a href="../bug-bounty/index.html" class="resource-card">
+                <span class="r-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg></span>
+                <div>
+                    <div class="r-title">Bug Bounty Program</div>
+                    <div class="r-desc">Report vulnerabilities and earn rewards</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    Positronic (ASF) &mdash; Layer-1 Blockchain with AI-Validated Consensus &mdash; 7,799 Tests &middot; 249 Modules &middot; 33 Phases
+</div>
+
+<script src="/security.js"></script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(()=>{});</script>
+<script>
+// Scroll reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => {
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>

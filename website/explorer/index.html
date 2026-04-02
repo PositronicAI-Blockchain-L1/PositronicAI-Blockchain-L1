@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <title>ASF Explorer - Positronic Blockchain</title>
+    <meta name="description" content="Block explorer for the Positronic (ASF) Layer-1 blockchain. Browse blocks, transactions, and accounts.">
+    <link rel="canonical" href="https://positronic-ai.network/explorer/">
+    <meta property="og:title" content="ASF Explorer - Positronic Blockchain">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Positronic">
+    <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@positronic_ai">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+    </style>
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../logo-200.webp">
+    <meta name="theme-color" content="#0080FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+/* ===== Reset & Variables ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-deepest: #060D1A;
+    --bg-deep: #0D1B2A;
+    --bg-card: rgba(255,255,255,0.035);
+    --bg-card-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(0,229,255,0.22);
+    --red: #0080FF;
+    --red-dim: rgba(0,128,255,0.15);
+    --gold: #00E5FF;
+    --gold-dim: rgba(0,229,255,0.12);
+    --green: #00c853;
+    --green-dim: rgba(0,200,83,0.12);
+    --blue: #00BFFF;
+    --blue-dim: rgba(0,191,255,0.12);
+    --purple: #1a3a5c;
+    --purple-dim: rgba(26,58,92,0.12);
+    --text: #f0f0f8;
+    --text-sec: #B0B8C0;
+    --text-muted: #6a7a8a;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 14px;
+    --ease: 0.2s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-deepest);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+a { color: var(--gold); text-decoration: none; transition: color var(--ease); }
+a:hover { color: #ffe566; }
+
+.mono { font-family: 'Courier New', 'Consolas', monospace; font-size: 12px; letter-spacing: -0.3px; }
+
+/* ===== Topbar ===== */
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10,10,26,0.92); backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border); height: 56px;
+}
+.topbar-inner {
+    max-width: 1400px; margin: 0 auto; padding: 0 24px;
+    height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-left { display: flex; align-items: center; gap: 32px; }
+.topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.topbar-logo-img { height: 30px; width: auto; border-radius: 6px; }
+.topbar-brand {
+    font-family: 'Space Grotesk', sans-serif; font-size: 12px;
+    color: var(--gold); text-shadow: 1px 1px 0 rgba(0,128,255,0.4);
+    white-space: nowrap;
+}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-back {
+    display: flex; align-items: center; gap: 4px;
+    color: var(--text-sec); font-size: 12px; font-weight: 500;
+    padding: 5px 12px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); transition: all var(--ease);
+}
+.topbar-back:hover { color: var(--text); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.03); }
+
+/* Connection status */
+.conn-status {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--text-sec);
+    padding: 5px 12px; border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+}
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.conn-dot.on { background: var(--green); box-shadow: 0 0 8px rgba(0,200,83,0.5); animation: pulse 2s infinite; }
+.conn-dot.off { background: var(--red); box-shadow: 0 0 8px rgba(0,128,255,0.3); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+
+/* ===== Network Stats Bar ===== */
+.net-bar {
+    margin-top: 56px; border-bottom: 1px solid var(--border);
+    background: var(--bg-deep); overflow: hidden;
+}
+.net-bar-inner {
+    max-width: 1400px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.net-stat {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-right: 1px solid var(--border);
+    white-space: nowrap; flex-shrink: 0;
+}
+.net-stat:last-child { border-right: none; }
+.net-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 600; }
+.net-stat-val { font-size: 13px; font-weight: 700; color: var(--text); font-family: 'Inter', sans-serif; }
+.net-stat-val.gold { color: var(--gold); }
+
+/* ===== Search Section ===== */
+.search-section {
+    padding: 24px 24px 18px;
+    background: linear-gradient(180deg, rgba(14,14,36,0.7) 0%, transparent 100%);
+}
+.search-wrap { max-width: 760px; margin: 0 auto; }
+.search-box {
+    display: flex; align-items: center;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 3px 3px 3px 16px;
+    transition: all var(--ease);
+}
+.search-box:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(0,229,255,0.08); }
+.search-icon { color: var(--text-muted); flex-shrink: 0; margin-right: 10px; }
+.search-input {
+    flex: 1; background: none; border: none; outline: none;
+    color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif;
+    padding: 10px 0; min-width: 0;
+}
+.search-input::placeholder { color: var(--text-muted); }
+.search-btn {
+    background: var(--red); color: white; border: none;
+    border-radius: var(--radius); padding: 10px 18px; cursor: pointer;
+    transition: all var(--ease); display: flex; align-items: center; flex-shrink: 0;
+    font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; gap: 6px;
+}
+.search-btn:hover { background: #0066CC; transform: scale(1.02); }
+
+/* ===== Main Content ===== */
+.main-content {
+    flex: 1; max-width: 1400px; width: 100%; margin: 0 auto;
+    padding: 20px 24px 48px;
+}
+
+/* ===== Tabs ===== */
+.tabs {
+    display: flex; gap: 2px; margin-bottom: 20px;
+    background: var(--bg-card); border-radius: var(--radius); padding: 3px;
+    border: 1px solid var(--border); width: fit-content;
+}
+.tab-btn {
+    background: none; border: none; color: var(--text-sec);
+    font-size: 12px; font-weight: 600; padding: 8px 18px;
+    border-radius: 7px; cursor: pointer; font-family: 'Inter', sans-serif;
+    transition: all var(--ease); white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { background: var(--red); color: #fff; }
+
+/* ===== Stat Cards Grid ===== */
+.stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+}
+.stat-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 18px 20px;
+    transition: all var(--ease); position: relative; overflow: hidden;
+}
+.stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, var(--red), var(--gold));
+    opacity: 0; transition: opacity var(--ease);
+}
+.stat-card:hover { border-color: var(--border-hover); background: var(--bg-card-hover); transform: translateY(-2px); }
+.stat-card:hover::before { opacity: 1; }
+.stat-label {
+    font-size: 10px; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 1px; font-weight: 600; margin-bottom: 6px;
+}
+.stat-val {
+    font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: var(--gold);
+    word-break: break-all;
+}
+.stat-val.v-green { color: var(--green); }
+.stat-val.v-red { color: var(--red); }
+.stat-val.v-blue { color: var(--blue); }
+.stat-val.v-purple { color: var(--purple); }
+
+/* ===== Section Heading ===== */
+.sec-head {
+    font-family: 'Space Grotesk', sans-serif; font-size: 11px;
+    color: var(--text); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+}
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ===== Data Tables ===== */
+.tbl-wrap {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px;
+}
+.tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tbl {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.tbl thead th {
+    background: rgba(255,255,255,0.025); padding: 11px 16px; text-align: left;
+    font-size: 10px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.tbl tbody tr { border-bottom: 1px solid rgba(255,255,255,0.025); transition: background var(--ease); }
+.tbl tbody tr:last-child { border-bottom: none; }
+.tbl tbody tr:hover { background: rgba(255,255,255,0.025); }
+.tbl td {
+    padding: 11px 16px; color: var(--text-sec);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;
+}
+.tbl td a { color: var(--gold); font-size: 12px; }
+.tbl td a:hover { text-decoration: underline; }
+.tbl-empty { padding: 40px 20px !important; text-align: center !important; color: var(--text-muted) !important; }
+.clickable { cursor: pointer; }
+
+/* ===== Copy button ===== */
+.copy-wrap { display: inline-flex; align-items: center; gap: 6px; }
+.copy-btn {
+    background: none; border: none; color: var(--text-muted); cursor: pointer;
+    padding: 2px; border-radius: 3px; transition: all var(--ease);
+    display: inline-flex; align-items: center;
+}
+.copy-btn:hover { color: var(--gold); }
+.copy-btn.copied { color: var(--green); }
+
+/* ===== Detail Cards ===== */
+.detail-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px;
+}
+.detail-hdr {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.015);
+}
+.detail-hdr h2 { font-family: 'Space Grotesk', sans-serif; font-size: 10px; color: var(--gold); }
+.detail-rows { padding: 2px 0; }
+.d-row {
+    display: flex; padding: 11px 20px; gap: 16px; align-items: flex-start;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+.d-row:last-child { border-bottom: none; }
+.d-label { flex: 0 0 170px; font-size: 12px; color: var(--text-muted); font-weight: 500; padding-top: 2px; }
+.d-val { flex: 1; font-size: 13px; color: var(--text); word-break: break-all; }
+.d-val a { word-break: break-all; }
+
+/* ===== Badges ===== */
+.badge {
+    display: inline-flex; align-items: center; padding: 3px 10px;
+    border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+}
+.b-pending { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(0,229,255,0.2); }
+.b-success { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,200,83,0.2); }
+.b-warn { background: rgba(255,152,0,0.12); color: #ffa726; border: 1px solid rgba(255,152,0,0.2); }
+.b-fail { background: var(--red-dim); color: var(--red); border: 1px solid rgba(0,128,255,0.2); }
+.b-info { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(4,156,216,0.2); }
+
+/* ===== ASF Value ===== */
+.asf-v { font-weight: 700; color: var(--gold); }
+.asf-u { font-size: 11px; color: var(--text-muted); margin-left: 3px; font-weight: 500; }
+
+/* ===== AI Score Bar ===== */
+.ai-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.ai-bar {
+    flex: 0 0 120px; height: 6px; background: rgba(255,255,255,0.06);
+    border-radius: 3px; overflow: hidden;
+}
+.ai-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+.ai-bar-fill.safe { background: var(--green); }
+.ai-bar-fill.med { background: var(--gold); }
+.ai-bar-fill.risky { background: var(--red); }
+.ai-score-num { font-weight: 700; font-size: 13px; }
+.ai-score-num.safe { color: var(--green); }
+.ai-score-num.med { color: var(--gold); }
+.ai-score-num.risky { color: var(--red); }
+
+/* ===== Trust Level ===== */
+.trust-lvl {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+}
+.trust-lvl.trusted { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,200,83,0.2); }
+.trust-lvl.neutral { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(4,156,216,0.2); }
+.trust-lvl.suspicious { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(0,229,255,0.2); }
+.trust-lvl.malicious { background: var(--red-dim); color: var(--red); border: 1px solid rgba(0,128,255,0.2); }
+
+/* ===== Page Header ===== */
+.page-hdr { margin-bottom: 22px; }
+.page-hdr h1 { font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: var(--gold); margin-bottom: 4px; }
+.page-hdr .sub { color: var(--text-sec); font-size: 13px; }
+
+/* ===== Back Link ===== */
+.back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--text-sec); font-size: 13px; font-weight: 500;
+    margin-bottom: 18px; transition: color var(--ease);
+}
+.back-link:hover { color: var(--gold); }
+
+/* ===== Loading / Error / NotFound ===== */
+.state-box {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 80px 24px; text-align: center; gap: 12px;
+}
+.state-box .icon { font-size: 48px; opacity: 0.5; }
+.state-box h2 { font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: var(--red); }
+.state-box p { color: var(--text-sec); font-size: 14px; max-width: 420px; }
+.spinner {
+    width: 36px; height: 36px; border: 3px solid var(--border);
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.retry-btn {
+    margin-top: 12px; background: var(--red); color: white; border: none;
+    padding: 10px 24px; border-radius: var(--radius); font-size: 13px;
+    font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;
+    transition: all var(--ease);
+}
+.retry-btn:hover { background: #0066CC; transform: translateY(-1px); }
+
+/* ===== Auto-refresh Toggle ===== */
+.refresh-toggle {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 18px; font-size: 12px; color: var(--text-muted);
+}
+.toggle-switch {
+    position: relative; width: 36px; height: 20px; cursor: pointer;
+}
+.toggle-switch input { display: none; }
+.toggle-track {
+    position: absolute; inset: 0; background: rgba(255,255,255,0.08);
+    border-radius: 10px; transition: background var(--ease);
+}
+.toggle-switch input:checked + .toggle-track { background: var(--green); }
+.toggle-thumb {
+    position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+    background: white; border-radius: 50%; transition: transform var(--ease);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.toggle-switch input:checked ~ .toggle-thumb { transform: translateX(16px); }
+.refresh-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    animation: pulse 2s infinite;
+}
+
+/* ===== Two Col ===== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+
+/* ===== Footer ===== */
+.explorer-footer {
+    border-top: 1px solid var(--border); padding: 14px 24px;
+    background: rgba(10,10,26,0.85); margin-top: auto;
+}
+.footer-inner {
+    max-width: 1400px; margin: 0 auto; display: flex;
+    justify-content: space-between; align-items: center;
+}
+.footer-brand { font-family: 'Space Grotesk', sans-serif; font-size: 8px; color: var(--text-muted); }
+.footer-info { font-size: 11px; color: var(--text-muted); }
+
+/* ===== Animations ===== */
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.fade-in { animation: fadeIn 0.25s ease forwards; }
+
+/* ===== Responsive: Tablet ===== */
+@media (max-width: 1024px) {
+    .two-col { grid-template-columns: 1fr; }
+    .topbar-back:not(:last-of-type) { display: none; }
+    .net-stat { padding: 8px 14px; }
+    .net-stat-label { font-size: 9px; }
+    .net-stat-val { font-size: 12px; }
+}
+
+/* ===== Responsive: Mobile ===== */
+@media (max-width: 768px) {
+    .topbar-inner { padding: 0 14px; }
+    .topbar-back { display: none; }
+    .search-section { padding: 18px 14px 14px; }
+    .main-content { padding: 14px 14px 32px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-val { font-size: 12px; }
+    .d-row { flex-direction: column; gap: 3px; padding: 9px 14px; }
+    .d-label { flex: none; }
+    .tbl { font-size: 12px; }
+    .tbl thead th, .tbl td { padding: 9px 10px; }
+    .page-hdr h1 { font-size: 12px; }
+    .footer-inner { flex-direction: column; gap: 6px; text-align: center; }
+    .conn-status .conn-text { display: none; }
+    .topbar-brand { font-size: 10px; }
+    .net-stat { padding: 7px 10px; }
+    .tabs { overflow-x: auto; width: 100%; }
+    .tbl-wrap, table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tbl td, table td { min-width: 60px; font-size: 12px; padding: 6px 8px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+    .tbl thead th, table th { min-width: 60px; font-size: 10px; padding: 6px 8px; }
+    /* Text wrapping & overflow fixes */
+    body { overflow-x: hidden; }
+    h1, h2, h3, h4 { word-break: break-word; hyphens: auto; }
+    p, li, td, th, span, div { overflow-wrap: break-word; word-wrap: break-word; }
+    pre, code, .code-block { overflow-x: auto; max-width: 100%; white-space: pre-wrap; word-break: break-all; font-size: 12px; padding: 8px; }
+    img { max-width: 100%; height: auto; }
+    .container, .content, main, article, section { max-width: 100% !important; }
+    /* Truncate long hashes */
+    .hash, .address, .tx-hash, .addr { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-card { padding: 14px; }
+    .stat-val { font-size: 11px; }
+    .sec-head { font-size: 9px; }
+    .search-input { font-size: 13px; }
+}
+
+/* Scroll reveal animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+
+<!-- Topbar -->
+<nav class="topbar">
+    <div class="topbar-inner">
+        <div class="topbar-left">
+            <a href="../index.html" class="topbar-logo">
+                <img src="../logo-200.webp" alt="ASF" class="topbar-logo-img">
+                <span class="topbar-brand">ASF Explorer</span>
+            </a>
+        </div>
+        <div class="topbar-right">
+            <a href="../critics/index.html" class="topbar-back" style="color:#00E5FF;">FAQ</a>
+            <a href="../index.html" class="topbar-back">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Main Site
+            </a>
+            <div class="conn-status">
+                <span class="conn-dot off" id="connDot"></span>
+                <span class="conn-text" id="connText">Offline</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Testnet Banner -->
+<div style="background:linear-gradient(90deg,#1a237e,#0d47a1);color:#fff;text-align:center;padding:8px 16px;font-size:13px;letter-spacing:0.5px">
+    Early Testnet &mdash; Explore live blocks and transactions on the Positronic network
+</div>
+
+<!-- Network Stats Bar -->
+<div class="net-bar" id="netBar">
+    <div class="net-bar-inner">
+        <div class="net-stat">
+            <div>
+                <div class="net-stat-label">Chain Height</div>
+                <div class="net-stat-val gold" id="nsHeight">--</div>
+            </div>
+        </div>
+        <div class="net-stat">
+            <div>
+                <div class="net-stat-label">Total Accounts</div>
+                <div class="net-stat-val" id="nsAccounts">--</div>
+            </div>
+        </div>
+        <div class="net-stat">
+            <div>
+                <div class="net-stat-label">Total TX</div>
+                <div class="net-stat-val" id="nsTx">--</div>
+            </div>
+        </div>
+        <div class="net-stat">
+            <div>
+                <div class="net-stat-label">Block Time</div>
+                <div class="net-stat-val" id="nsBlockTime">--</div>
+            </div>
+        </div>
+        <div class="net-stat">
+            <div>
+                <div class="net-stat-label">Chain ID</div>
+                <div class="net-stat-val" id="nsChainId">420420</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="search-section">
+    <div class="search-wrap">
+        <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+                <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by block height, tx hash (0x...), or address (0x...)" autocomplete="off">
+            <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+    <div class="state-box">
+        <div class="spinner"></div>
+        <p>Loading explorer...</p>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="explorer-footer">
+    <div class="footer-inner">
+        <span class="footer-brand">Positronic Explorer</span>
+        <span class="footer-info" id="footerInfo">Chain ID: 420420 | Symbol: ASF</span>
+    </div>
+</footer>
+
+
+<script src="/security.js"></script>
+<script src="/config.js"></script>
+<script>
+/* ===================================================================
+   Positronic Block Explorer - Single Page Application
+   Layer-1 blockchain explorer with RPC integration and mock fallback
+   =================================================================== */
+
+// ===== Configuration =====
+const CONFIG = {
+    rpcUrl: 'https://rpc.positronic-ai.network',
+    chainId: 420420,
+    symbol: 'ASF',
+    decimals: 18,
+    refreshInterval: 5000,
+};
+
+// ===== RPC Client =====
+class RPC {
+    constructor(url) { this.url = url; this.id = 1; }
+    async call(method, params = []) {
+        const res = await fetch(this.url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', method, params, id: this.id++ }),
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message || 'RPC Error');
+        return data.result;
+    }
+}
+
+let rpc = new RPC(CONFIG.rpcUrl);
+let connected = false;
+let refreshTimer = null;
+let autoRefreshEnabled = true;
+// Live RPC only — no mock data
+
+// ===== Security: ensure escapeHtml is always available =====
+if (typeof escapeHtml !== 'function') {
+    window.escapeHtml = function(s) {
+        var d = document.createElement('div');
+        d.appendChild(document.createTextNode(String(s)));
+        return d.innerHTML;
+    };
+}
+
+// ===== Empty Data (no mock — live RPC only) =====
+const EMPTY_DATA = {
+    nodeInfo() {
+        return { block_height: 0, total_accounts: 0, total_transactions: 0, block_time: '12s', chain_id: CONFIG.chainId };
+    }
+};
+
+// ===== Utility Functions =====
+
+function fmtASF(value) {
+    if (value == null) return '0';
+    try {
+        let str = String(value);
+        if (str.startsWith('0x')) str = BigInt(str).toString();
+        const bi = BigInt(str);
+        const div = BigInt('1000000000000000000');
+        const whole = bi / div;
+        const rem = bi % div;
+        if (rem === 0n) return whole.toLocaleString('en-US');
+        const frac = rem.toString().padStart(18, '0').slice(0, 6).replace(/0+$/, '');
+        return frac.length ? whole.toLocaleString('en-US') + '.' + frac : whole.toLocaleString('en-US');
+    } catch { return '0'; }
+}
+
+function shortHash(hash, start = 8, end = 6) {
+    if (!hash || hash === '---') return '---';
+    if (hash.length <= start + end + 2) return hash;
+    return hash.slice(0, start) + '...' + hash.slice(-end);
+}
+
+function timeAgo(timestamp) {
+    if (!timestamp) return '---';
+    let ts = Number(timestamp);
+    if (typeof timestamp === 'string' && timestamp.startsWith('0x')) ts = parseInt(timestamp, 16);
+    if (ts < 1e12) ts *= 1000;
+    const diff = Date.now() - ts;
+    if (diff < 0) return 'just now';
+    const s = Math.floor(diff / 1000);
+    if (s < 5) return 'just now';
+    if (s < 60) return s + 's ago';
+    const m = Math.floor(s / 60);
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h / 24) + 'd ago';
+}
+
+function fmtNum(n) {
+    if (n == null) return '0';
+    let num = Number(n);
+    if (typeof n === 'string' && n.startsWith('0x')) num = parseInt(n, 16);
+    if (isNaN(num)) return '0';
+    return num.toLocaleString('en-US');
+}
+
+function hexNum(val) {
+    if (val == null) return 0;
+    if (typeof val === 'number') return val;
+    if (typeof val === 'string' && val.startsWith('0x')) return parseInt(val, 16);
+    return Number(val) || 0;
+}
+
+/* Normalize Positronic block to Ethereum-style flat format */
+function normalizeBlock(b) {
+    if (!b) return b;
+    const h = b.header || {};
+    return {
+        number: b.number ?? h.height ?? h.slot ?? 0,
+        hash: b.hash || h.hash || '---',
+        parentHash: b.parentHash || h.previous_hash || '',
+        timestamp: b.timestamp || h.timestamp || 0,
+        miner: b.miner || (h.validator_pubkey ? '0x' + h.validator_pubkey.slice(0, 40) : '---'),
+        gasUsed: b.gasUsed ?? h.gas_used ?? 0,
+        gasLimit: b.gasLimit ?? h.gas_limit ?? 30000000,
+        transactions: (b.transactions || []).map(tx => ({
+            ...tx,
+            hash: tx.hash || tx.tx_hash || '',
+            from: tx.from || (tx.sender ? '0x' + tx.sender.replace(/^0+/, '').slice(-40).padStart(40,'0') : '---'),
+            to: tx.to || (tx.recipient ? '0x' + tx.recipient : '---'),
+            value: tx.value || 0,
+            blockNumber: b.number ?? h.height ?? 0,
+            timestamp: tx.timestamp || h.timestamp || 0,
+            type: tx.type ?? tx.tx_type ?? 0,
+        })),
+        stateRoot: b.stateRoot || h.state_root || '',
+        transactionsRoot: b.transactionsRoot || h.transactions_root || '',
+        extraData: b.extraData || h.extra_data || '',
+        epoch: h.epoch ?? 0,
+        slot: h.slot ?? h.height ?? 0,
+        aiScoreRoot: h.ai_score_root || '',
+    };
+}
+
+function fullTimestamp(ts) {
+    if (!ts) return '---';
+    let n = hexNum(ts);
+    if (n < 1e12) n *= 1000;
+    return new Date(n).toLocaleString();
+}
+
+function txTypeName(type) {
+    const map = { 0:'Transfer', 1:'Contract Create', 2:'Contract Call', 3:'Stake', 4:'Unstake', 5:'Governance', 6:'Block Reward', 7:'AI Treasury' };
+    return map[Number(type)] || 'Unknown';
+}
+
+function statusBadge(status, txType) {
+    const s = Number(status);
+    // System TXs (Block Reward=6, AI Treasury=7) with status 0 are confirmed, not pending
+    if (s === 0 && (Number(txType) === 6 || Number(txType) === 7)) {
+        return '<span class="badge b-success">Confirmed</span>';
+    }
+    const map = {
+        0: ['Pending', 'b-pending'], 1: ['Accepted', 'b-success'],
+        2: ['Quarantined', 'b-warn'], 3: ['Rejected', 'b-fail'],
+        4: ['Confirmed', 'b-success'], 5: ['Failed', 'b-fail'],
+    };
+    const info = map[s] || ['Unknown', 'b-info'];
+    return `<span class="badge ${info[1]}">${info[0]}</span>`;
+}
+
+function aiScoreHTML(score) {
+    if (score == null) return '---';
+    const n = Number(score);
+    const pct = Math.round(n * 100);
+    let cls = 'safe';
+    if (n < 0.5) cls = 'risky';
+    else if (n < 0.8) cls = 'med';
+    return `<div class="ai-bar-wrap">
+        <div class="ai-bar"><div class="ai-bar-fill ${cls}" style="width:${pct}%"></div></div>
+        <span class="ai-score-num ${cls}">${n.toFixed(4)}</span>
+    </div>`;
+}
+
+function trustLevelHTML(level) {
+    if (!level) return '---';
+    const l = String(level).toLowerCase();
+    let cls = 'neutral';
+    if (l === 'trusted' || l === 'high') cls = 'trusted';
+    else if (l === 'suspicious' || l === 'low') cls = 'suspicious';
+    else if (l === 'malicious' || l === 'blocked') cls = 'malicious';
+    return `<span class="trust-lvl ${cls}">${escapeHtml(level)}</span>`;
+}
+
+function copyable(text) {
+    const safe = escapeHtml(text);
+    const short = shortHash(safe);
+    return `<span class="copy-wrap">
+        <span class="mono">${short}</span>
+        <button class="copy-btn" onclick="copyToClip(event,'${safe}')" title="Copy to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+    </span>`;
+}
+
+function copyFull(text) {
+    const safe = escapeHtml(text);
+    return `<span class="copy-wrap">
+        <span class="mono" style="word-break:break-all">${safe}</span>
+        <button class="copy-btn" onclick="copyToClip(event,'${safe}')" title="Copy to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+    </span>`;
+}
+
+window.copyToClip = function(e, text) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = e.currentTarget;
+        btn.classList.add('copied');
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        }, 1500);
+    });
+};
+
+// ===== DOM Helpers =====
+const $ = sel => document.querySelector(sel);
+const mainEl = () => $('#mainContent');
+
+function setContent(html) { mainEl().innerHTML = html; }
+function showLoading(msg = 'Loading...') {
+    setContent(`<div class="state-box fade-in"><div class="spinner"></div><p>${msg}</p></div>`);
+}
+function showError(message, retryHash) {
+    const safeHash = retryHash ? encodeURIComponent(retryHash) : '';
+    const retryBtn = safeHash ? `<button class="retry-btn" onclick="location.hash=decodeURIComponent('${safeHash}');route()">Retry</button>` : '';
+    setContent(`<div class="state-box fade-in"><div class="icon">&#9888;</div><h2>Offline</h2><p>${escapeHtml(message)}</p>${retryBtn}</div>`);
+}
+function showNotFound(type, id) {
+    setContent(`<div class="state-box fade-in"><div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold,#00E5FF)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h2>Not Found</h2><p>The ${escapeHtml(type)} <strong>${shortHash(escapeHtml(id))}</strong> could not be found on the network.</p><br><a href="#/" class="back-link">&larr; Back to Dashboard</a></div>`);
+}
+
+// ===== Connection Check =====
+async function checkConnection() {
+    try {
+        await rpc.call('eth_chainId');
+        connected = true;
+        $('#connDot').className = 'conn-dot on';
+        $('#connText').textContent = 'Connected';
+    } catch {
+        connected = false;
+        $('#connDot').className = 'conn-dot off';
+        $('#connText').textContent = 'Disconnected';
+    }
+}
+
+// ===== Network Stats Bar =====
+async function updateNetBar() {
+    try {
+        if (!connected) {
+            const info = EMPTY_DATA.nodeInfo();
+            $('#nsHeight').textContent = fmtNum(info.block_height);
+            $('#nsAccounts').textContent = fmtNum(info.total_accounts);
+            $('#nsTx').textContent = fmtNum(info.total_transactions);
+            $('#nsBlockTime').textContent = info.block_time;
+            $('#nsChainId').textContent = info.chain_id;
+            return;
+        }
+        const [nodeInfo, blockNumHex] = await Promise.all([
+            rpc.call('positronic_nodeInfo').catch(() => null),
+            rpc.call('eth_blockNumber').catch(() => '0x0'),
+        ]);
+        const height = nodeInfo?.block_height ?? nodeInfo?.blockHeight ?? nodeInfo?.height ?? hexNum(blockNumHex);
+        const accounts = nodeInfo?.total_accounts ?? nodeInfo?.totalAccounts ?? nodeInfo?.state?.account_count ?? 0;
+        const totalTx = nodeInfo?.total_transactions ?? nodeInfo?.totalTransactions ?? height;
+        const blockTime = nodeInfo?.block_time ?? nodeInfo?.blockTime ?? (height > 10 ? '12s' : '---');
+        const chainId = nodeInfo?.chain_id ?? nodeInfo?.chainId ?? CONFIG.chainId;
+
+        $('#nsHeight').textContent = fmtNum(height);
+        $('#nsAccounts').textContent = fmtNum(accounts);
+        $('#nsTx').textContent = fmtNum(totalTx);
+        $('#nsBlockTime').textContent = typeof blockTime === 'number' ? blockTime.toFixed(1) + 's' : blockTime;
+        $('#nsChainId').textContent = chainId;
+    } catch { /* silent */ }
+}
+
+// ===== Auto-Refresh =====
+function startAutoRefresh(fn, interval) {
+    stopAutoRefresh();
+    if (!autoRefreshEnabled) return;
+    refreshTimer = setInterval(fn, interval || CONFIG.refreshInterval);
+}
+function stopAutoRefresh() {
+    if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
+}
+
+// ===== Router =====
+function route() {
+    stopAutoRefresh();
+    const hash = location.hash || '#/';
+    if (hash === '#/' || hash === '#' || hash === '') renderDashboard();
+    else if (hash.startsWith('#/block/')) renderBlock(hash.split('/')[2]);
+    else if (hash.startsWith('#/tx/')) renderTx(hash.split('/')[2]);
+    else if (hash.startsWith('#/address/')) renderAddress(hash.split('/')[2]);
+    else showNotFound('page', hash);
+}
+
+// ===== DASHBOARD =====
+async function renderDashboard() {
+    showLoading('Loading dashboard...');
+    try {
+        await checkConnection();
+        await updateNetBar();
+
+        let blocks = [];
+        let latestTxs = [];
+
+        if (connected) {
+            const latestHex = await rpc.call('eth_blockNumber').catch(() => '0x0');
+            const latest = hexNum(latestHex);
+            const promises = [];
+            for (let i = latest; i >= Math.max(0, latest - 9); i--) {
+                promises.push(rpc.call('eth_getBlockByNumber', ['0x' + i.toString(16), true]).catch(() => null));
+            }
+            blocks = (await Promise.all(promises)).filter(Boolean).map(normalizeBlock);
+            for (const b of blocks) {
+                if (b.transactions) {
+                    for (const tx of b.transactions) {
+                        latestTxs.push(tx);
+                        if (latestTxs.length >= 15) break;
+                    }
+                }
+                if (latestTxs.length >= 15) break;
+            }
+        }
+
+        // Build dashboard HTML
+        let html = `<div class="fade-in">`;
+
+        // Auto-refresh toggle
+        html += `<div class="refresh-toggle">
+            <label class="toggle-switch">
+                <input type="checkbox" id="autoRefreshToggle" ${autoRefreshEnabled ? 'checked' : ''}>
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+            </label>
+            <span>Auto-refresh every 5s</span>
+            ${autoRefreshEnabled ? '<span class="refresh-dot"></span>' : ''}
+            ${!connected ? '<span style="margin-left:12px;color:var(--red);font-size:11px;font-weight:600;">DISCONNECTED</span>' : ''}
+        </div>`;
+
+        // Tabs
+        html += `<div class="tabs" id="dashTabs">
+            <button class="tab-btn active" data-tab="blocks">Latest Blocks</button>
+            <button class="tab-btn" data-tab="transactions">Latest Transactions</button>
+        </div>`;
+
+        // === Blocks Tab ===
+        html += `<div id="tab-blocks">`;
+        html += `<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl">
+            <thead><tr>
+                <th>Height</th><th>Hash</th><th>Timestamp</th><th>TX Count</th><th>Validator</th><th>Gas Used</th>
+            </tr></thead><tbody>`;
+
+        if (blocks.length === 0) {
+            html += `<tr><td colspan="6" class="tbl-empty">No blocks found</td></tr>`;
+        } else {
+            for (const b of blocks) {
+                const h = hexNum(b.number);
+                const txCount = Array.isArray(b.transactions) ? b.transactions.length : 0;
+                const validator = b.miner || b.validator || '---';
+                const gasUsed = hexNum(b.gasUsed || b.gas_used || 0);
+                const gasLimit = hexNum(b.gasLimit || b.gas_limit || 15000000);
+                const pct = gasLimit > 0 ? ((gasUsed / gasLimit) * 100).toFixed(1) : '0';
+                html += `<tr class="clickable" onclick="location.hash='#/block/${h}'">
+                    <td><a href="#/block/${h}" style="font-weight:600">${fmtNum(h)}</a></td>
+                    <td>${copyable(b.hash || '---')}</td>
+                    <td>${timeAgo(b.timestamp)}</td>
+                    <td>${txCount}</td>
+                    <td><a href="#/address/${escapeHtml(validator)}">${shortHash(escapeHtml(validator))}</a></td>
+                    <td>${fmtNum(gasUsed)} <span style="color:var(--text-muted);font-size:11px">(${pct}%)</span></td>
+                </tr>`;
+            }
+        }
+        html += `</tbody></table></div></div></div>`;
+
+        // === Transactions Tab ===
+        html += `<div id="tab-transactions" style="display:none">`;
+        html += `<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl">
+            <thead><tr>
+                <th>Tx Hash</th><th>From</th><th>To</th><th>Value</th><th>Type</th><th>AI Score</th><th>Status</th>
+            </tr></thead><tbody>`;
+
+        if (latestTxs.length === 0) {
+            html += `<tr><td colspan="7" class="tbl-empty">No transactions found</td></tr>`;
+        } else {
+            for (const tx of latestTxs) {
+                const txHash = tx.hash || tx.tx_hash || '---';
+                const from = tx.from || tx.sender || '---';
+                const to = tx.to || tx.recipient || '---';
+                const value = fmtASF(tx.value || '0');
+                const type = txTypeName(tx.type || tx.tx_type || 0);
+                const aiScore = tx.ai_score != null ? Number(tx.ai_score).toFixed(2) : '---';
+                let aiCls = 'safe';
+                if (tx.ai_score != null) {
+                    const s = Number(tx.ai_score);
+                    if (s < 0.5) aiCls = 'risky';
+                    else if (s < 0.8) aiCls = 'med';
+                }
+                const status = tx.status !== undefined ? statusBadge(tx.status, tx.type || tx.tx_type) : '<span class="badge b-info">Pending</span>';
+                html += `<tr class="clickable" onclick="location.hash='#/tx/${escapeHtml(txHash)}'">
+                    <td><a href="#/tx/${escapeHtml(txHash)}">${shortHash(escapeHtml(txHash))}</a></td>
+                    <td><a href="#/address/${escapeHtml(from)}">${shortHash(escapeHtml(from), 6, 4)}</a></td>
+                    <td><a href="#/address/${escapeHtml(to)}">${shortHash(escapeHtml(to), 6, 4)}</a></td>
+                    <td><span class="asf-v">${value}</span><span class="asf-u">ASF</span></td>
+                    <td>${escapeHtml(type)}</td>
+                    <td><span class="ai-score-num ${aiCls}">${aiScore}</span></td>
+                    <td>${status}</td>
+                </tr>`;
+            }
+        }
+        html += `</tbody></table></div></div></div>`;
+
+        html += `</div>`; // fade-in
+        setContent(html);
+
+        // Tab switching
+        document.querySelectorAll('#dashTabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#dashTabs .tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const tab = btn.dataset.tab;
+                document.getElementById('tab-blocks').style.display = tab === 'blocks' ? '' : 'none';
+                document.getElementById('tab-transactions').style.display = tab === 'transactions' ? '' : 'none';
+            });
+        });
+
+        // Auto-refresh toggle handler
+        const toggle = document.getElementById('autoRefreshToggle');
+        if (toggle) {
+            toggle.addEventListener('change', () => {
+                autoRefreshEnabled = toggle.checked;
+                if (autoRefreshEnabled) startAutoRefresh(renderDashboard);
+                else stopAutoRefresh();
+            });
+        }
+
+        if (autoRefreshEnabled) startAutoRefresh(renderDashboard);
+
+    } catch (err) {
+        showError('Cannot connect to ASF node at ' + CONFIG.rpcUrl + '. ' + err.message, '#/');
+    }
+}
+
+// ===== BLOCK DETAIL =====
+async function renderBlock(blockId) {
+    showLoading('Loading block #' + blockId + '...');
+    try {
+        await checkConnection();
+        let block;
+
+        if (!connected) { showNotFound('block', '#' + blockId + ' — connect to RPC node first'); return; }
+        let param;
+        if (String(blockId).startsWith('0x')) param = blockId;
+        else param = '0x' + Number(blockId).toString(16);
+        block = await rpc.call('eth_getBlockByNumber', [param, true]);
+        if (!block) {
+            block = await rpc.call('eth_getBlockByHash', [blockId, true]).catch(() => null);
+        }
+
+        if (!block) { showNotFound('block', '#' + blockId); return; }
+        block = normalizeBlock(block);
+
+        const height = hexNum(block.number);
+        const hash = block.hash || '---';
+        const parentHash = block.parentHash || block.previous_hash || '---';
+        const validator = block.miner || block.validator || '---';
+        const gasUsed = hexNum(block.gasUsed || block.gas_used || 0);
+        const gasLimit = hexNum(block.gasLimit || block.gas_limit || 0);
+        const pct = gasLimit > 0 ? ((gasUsed / gasLimit) * 100).toFixed(1) : '0';
+        const txs = block.transactions || [];
+        const ts = fullTimestamp(block.timestamp);
+
+        let html = `<div class="fade-in">`;
+        html += `<a href="#/" class="back-link">&larr; Back to Dashboard</a>`;
+        html += `<div class="page-hdr"><h1>Block #${fmtNum(height)}</h1></div>`;
+
+        // Block info card
+        html += `<div class="detail-card"><div class="detail-hdr"><h2>Block Information</h2></div><div class="detail-rows">`;
+        html += `<div class="d-row"><span class="d-label">Block Height</span><span class="d-val">${fmtNum(height)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Block Hash</span><span class="d-val">${copyFull(hash)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Parent Hash</span><span class="d-val"><a href="#/block/${Math.max(0, height-1)}">${copyable(parentHash)}</a></span></div>`;
+        html += `<div class="d-row"><span class="d-label">Timestamp</span><span class="d-val">${ts} (${timeAgo(block.timestamp)})</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Validator</span><span class="d-val"><a href="#/address/${escapeHtml(validator)}">${copyable(validator)}</a></span></div>`;
+        html += `<div class="d-row"><span class="d-label">Gas Used / Limit</span><span class="d-val">${fmtNum(gasUsed)} / ${fmtNum(gasLimit)} (${pct}%)</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Transactions</span><span class="d-val">${txs.length} transaction${txs.length !== 1 ? 's' : ''}</span></div>`;
+        html += `</div></div>`;
+
+        // Transaction list
+        if (txs.length > 0) {
+            html += `<h3 class="sec-head">Transactions in Block</h3>`;
+            html += `<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl">
+                <thead><tr>
+                    <th>Tx Hash</th><th>Type</th><th>From</th><th>To</th><th>Value</th><th>AI Score</th><th>Status</th>
+                </tr></thead><tbody>`;
+            for (const tx of txs) {
+                const txHash = tx.hash || tx.tx_hash || '---';
+                const type = txTypeName(tx.type || tx.tx_type || 0);
+                const from = tx.from || tx.sender || '---';
+                const to = tx.to || tx.recipient || '---';
+                const value = fmtASF(tx.value || '0');
+                const aiScore = tx.ai_score != null ? Number(tx.ai_score).toFixed(2) : '---';
+                let aiCls = 'safe';
+                if (tx.ai_score != null) {
+                    const s = Number(tx.ai_score);
+                    if (s < 0.5) aiCls = 'risky'; else if (s < 0.8) aiCls = 'med';
+                }
+                const status = tx.status !== undefined ? statusBadge(tx.status, tx.type || tx.tx_type) : '<span class="badge b-success">Confirmed</span>';
+                html += `<tr class="clickable" onclick="location.hash='#/tx/${escapeHtml(txHash)}'">
+                    <td><a href="#/tx/${escapeHtml(txHash)}">${shortHash(escapeHtml(txHash))}</a></td>
+                    <td>${escapeHtml(type)}</td>
+                    <td><a href="#/address/${escapeHtml(from)}">${shortHash(escapeHtml(from), 6, 4)}</a></td>
+                    <td><a href="#/address/${escapeHtml(to)}">${shortHash(escapeHtml(to), 6, 4)}</a></td>
+                    <td><span class="asf-v">${value}</span><span class="asf-u">ASF</span></td>
+                    <td><span class="ai-score-num ${aiCls}">${aiScore}</span></td>
+                    <td>${status}</td>
+                </tr>`;
+            }
+            html += `</tbody></table></div></div>`;
+        }
+
+        // Navigation between blocks
+        html += `<div style="display:flex;justify-content:space-between;margin-top:8px">`;
+        if (height > 0) html += `<a href="#/block/${height - 1}" class="back-link">&larr; Block #${fmtNum(height - 1)}</a>`;
+        else html += `<span></span>`;
+        html += `<a href="#/block/${height + 1}" class="back-link">Block #${fmtNum(height + 1)} &rarr;</a>`;
+        html += `</div>`;
+
+        html += `</div>`;
+        setContent(html);
+
+    } catch (err) {
+        showError('Failed to load block: ' + err.message, '#/block/' + blockId);
+    }
+}
+
+// ===== TRANSACTION DETAIL =====
+async function renderTx(txHash) {
+    showLoading('Loading transaction...');
+    try {
+        await checkConnection();
+        let tx, receipt;
+
+        if (!connected) { showNotFound('transaction', txHash + ' — connect to RPC node first'); return; }
+        tx = await rpc.call('eth_getTransactionByHash', [txHash]);
+        if (!tx && !txHash.startsWith('0x')) {
+            tx = await rpc.call('eth_getTransactionByHash', ['0x' + txHash]).catch(() => null);
+        }
+        if (!tx) { showNotFound('transaction', txHash); return; }
+        receipt = await rpc.call('eth_getTransactionReceipt', [txHash]).catch(() => null);
+
+        const hash = tx.hash || tx.tx_hash || txHash;
+        const type = txTypeName(tx.type || tx.tx_type || 0);
+        const from = tx.from || tx.sender || '---';
+        const to = tx.to || tx.recipient || '---';
+        const value = fmtASF(tx.value || '0');
+        const gas = hexNum(tx.gas || tx.gasLimit || tx.gas_limit || 0);
+        const gasPrice = hexNum(tx.gasPrice || tx.gas_price || 0);
+        const nonce = hexNum(tx.nonce || 0);
+        const blockNum = tx.blockNumber || tx.block_number || tx.block_height;
+        const status = tx.status !== undefined ? statusBadge(tx.status, tx.type || tx.tx_type) :
+            (receipt ? (hexNum(receipt.status) === 1 ? statusBadge(4) : statusBadge(5)) : '<span class="badge b-info">Pending</span>');
+        const aiScore = tx.ai_score !== undefined ? tx.ai_score : tx.aiScore;
+        const ts = fullTimestamp(tx.timestamp);
+
+        let html = `<div class="fade-in">`;
+        html += `<a href="#/" class="back-link">&larr; Back to Dashboard</a>`;
+        html += `<div class="page-hdr"><h1>Transaction Details</h1></div>`;
+
+        html += `<div class="detail-card"><div class="detail-hdr"><h2>Transaction</h2></div><div class="detail-rows">`;
+        html += `<div class="d-row"><span class="d-label">Tx Hash</span><span class="d-val">${copyFull(hash)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Type</span><span class="d-val">${escapeHtml(type)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Status</span><span class="d-val">${status}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Block</span><span class="d-val">${blockNum ? `<a href="#/block/${hexNum(blockNum)}">#${fmtNum(hexNum(blockNum))}</a>` : 'Pending'}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Timestamp</span><span class="d-val">${escapeHtml(ts)} (${timeAgo(tx.timestamp)})</span></div>`;
+        html += `<div class="d-row"><span class="d-label">From</span><span class="d-val"><a href="#/address/${escapeHtml(from)}">${copyFull(from)}</a></span></div>`;
+        html += `<div class="d-row"><span class="d-label">To</span><span class="d-val"><a href="#/address/${escapeHtml(to)}">${copyFull(to)}</a></span></div>`;
+        html += `<div class="d-row"><span class="d-label">Value</span><span class="d-val"><span class="asf-v">${value}</span><span class="asf-u">ASF</span></span></div>`;
+        html += `<div class="d-row"><span class="d-label">Gas Limit</span><span class="d-val">${fmtNum(gas)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Gas Price</span><span class="d-val">${fmtNum(gasPrice)} wei</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Nonce</span><span class="d-val">${fmtNum(nonce)}</span></div>`;
+
+        if (aiScore != null) {
+            html += `<div class="d-row"><span class="d-label">AI Score</span><span class="d-val">${aiScoreHTML(aiScore)}</span></div>`;
+        }
+        html += `</div></div>`;
+
+        // Receipt card
+        if (receipt) {
+            const rGasUsed = hexNum(receipt.gasUsed || receipt.gas_used || 0);
+            const rCumGas = hexNum(receipt.cumulativeGasUsed || receipt.cumulative_gas_used || 0);
+            const rStatus = hexNum(receipt.status);
+            const logCount = receipt.logs ? receipt.logs.length : 0;
+
+            html += `<div class="detail-card"><div class="detail-hdr"><h2>Receipt</h2></div><div class="detail-rows">`;
+            html += `<div class="d-row"><span class="d-label">Receipt Status</span><span class="d-val">${rStatus === 1 ? '<span class="badge b-success">Success</span>' : '<span class="badge b-fail">Failed</span>'}</span></div>`;
+            html += `<div class="d-row"><span class="d-label">Gas Used</span><span class="d-val">${fmtNum(rGasUsed)} (${gas > 0 ? ((rGasUsed/gas)*100).toFixed(1) : 0}% of limit)</span></div>`;
+            html += `<div class="d-row"><span class="d-label">Cumulative Gas</span><span class="d-val">${fmtNum(rCumGas)}</span></div>`;
+            html += `<div class="d-row"><span class="d-label">Event Logs</span><span class="d-val">${logCount} log${logCount !== 1 ? 's' : ''}</span></div>`;
+            html += `</div></div>`;
+        }
+
+        html += `</div>`;
+        setContent(html);
+
+    } catch (err) {
+        showError('Failed to load transaction: ' + err.message, '#/tx/' + txHash);
+    }
+}
+
+// ===== ACCOUNT VIEW =====
+async function renderAddress(addr) {
+    showLoading('Loading account...');
+    try {
+        await checkConnection();
+        let balance, txCount, trustScore, trustLevel, tokensOwned, nftsOwned, stakedAmount;
+
+        if (!connected) { showNotFound('account', addr + ' — connect to RPC node first'); return; }
+        {
+            const [bal, txc, trustData] = await Promise.all([
+                rpc.call('eth_getBalance', [addr, 'latest']).catch(() => '0x0'),
+                rpc.call('eth_getTransactionCount', [addr, 'latest']).catch(() => '0x0'),
+                rpc.call('positronic_getTrustScore', [addr]).catch(() => null),
+            ]);
+            balance = bal;
+            txCount = txc;
+            if (trustData) {
+                trustScore = trustData.score ?? trustData.trust_score ?? trustData.trustScore;
+                trustLevel = trustData.level ?? trustData.trust_level ?? trustData.trustLevel;
+                tokensOwned = trustData.tokens_owned ?? trustData.tokensOwned ?? 0;
+                nftsOwned = trustData.nfts_owned ?? trustData.nftsOwned ?? 0;
+                stakedAmount = trustData.staked_amount ?? trustData.stakedAmount ?? '0';
+            }
+        }
+
+        const asfBalance = fmtASF(balance);
+        const nonce = hexNum(txCount);
+
+        let html = `<div class="fade-in">`;
+        html += `<a href="#/" class="back-link">&larr; Back to Dashboard</a>`;
+        html += `<div class="page-hdr"><h1>Account</h1><p class="sub mono">${escapeHtml(addr)}</p></div>`;
+
+        // Overview card
+        html += `<div class="detail-card"><div class="detail-hdr"><h2>Overview</h2></div><div class="detail-rows">`;
+        html += `<div class="d-row"><span class="d-label">Address</span><span class="d-val">${copyFull(addr)}</span></div>`;
+        html += `<div class="d-row"><span class="d-label">Balance</span><span class="d-val"><span class="asf-v">${asfBalance}</span><span class="asf-u">ASF</span></span></div>`;
+        html += `<div class="d-row"><span class="d-label">Nonce (TX Count)</span><span class="d-val">${fmtNum(nonce)}</span></div>`;
+        html += `</div></div>`;
+
+        // Trust & AI card
+        if (trustScore != null || trustLevel) {
+            html += `<div class="detail-card"><div class="detail-hdr"><h2>Trust & AI</h2></div><div class="detail-rows">`;
+            if (trustScore != null) {
+                html += `<div class="d-row"><span class="d-label">Trust Score</span><span class="d-val">${aiScoreHTML(trustScore)}</span></div>`;
+            }
+            if (trustLevel) {
+                html += `<div class="d-row"><span class="d-label">Trust Level</span><span class="d-val">${trustLevelHTML(trustLevel)}</span></div>`;
+            }
+            html += `</div></div>`;
+        }
+
+        // Assets card
+        if (tokensOwned != null || nftsOwned != null) {
+            html += `<div class="detail-card"><div class="detail-hdr"><h2>Assets</h2></div><div class="detail-rows">`;
+            if (tokensOwned != null) {
+                html += `<div class="d-row"><span class="d-label">Tokens Owned</span><span class="d-val">${fmtNum(tokensOwned)}</span></div>`;
+            }
+            if (nftsOwned != null) {
+                html += `<div class="d-row"><span class="d-label">NFTs Owned</span><span class="d-val">${fmtNum(nftsOwned)}</span></div>`;
+            }
+            html += `</div></div>`;
+        }
+
+        // Staking card
+        if (stakedAmount && stakedAmount !== '0' && stakedAmount !== '0x0') {
+            html += `<div class="detail-card"><div class="detail-hdr"><h2>Staking</h2></div><div class="detail-rows">`;
+            html += `<div class="d-row"><span class="d-label">Staked Amount</span><span class="d-val"><span class="asf-v">${fmtASF(stakedAmount)}</span><span class="asf-u">ASF</span></span></div>`;
+            html += `</div></div>`;
+        }
+
+        // Recent transactions for this address
+        try {
+            const addrTxs = await rpc.call('positronic_getAddressTransactions', [addr, 20]).catch(() => null);
+            const txList = Array.isArray(addrTxs) ? addrTxs : (addrTxs?.transactions || []);
+            if (txList.length > 0) {
+                html += `<h3 class="sec-head">Recent Transactions (${txList.length})</h3>`;
+                html += `<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl">
+                    <thead><tr>
+                        <th>Tx Hash</th><th>Type</th><th>From</th><th>To</th><th>Value</th><th>Status</th>
+                    </tr></thead><tbody>`;
+                for (const tx of txList) {
+                    const txHash = tx.hash || tx.tx_hash || '---';
+                    const type = txTypeName(tx.type || tx.tx_type || 0);
+                    const from = tx.from || (tx.sender ? '0x' + tx.sender.replace(/^0+/, '').slice(-40).padStart(40,'0') : '---');
+                    const to = tx.to || (tx.recipient ? '0x' + tx.recipient : '---');
+                    const value = fmtASF(tx.value || '0');
+                    const status = tx.status !== undefined ? statusBadge(tx.status, tx.type || tx.tx_type) : '<span class="badge b-success">Confirmed</span>';
+                    const isIncoming = to.toLowerCase().includes(addr.toLowerCase().replace('0x',''));
+                    const direction = isIncoming ? '<span style="color:var(--green)">▼ IN</span>' : '<span style="color:var(--red)">▲ OUT</span>';
+                    html += `<tr class="clickable" onclick="location.hash='#/tx/${escapeHtml(txHash)}'">
+                        <td><a href="#/tx/${escapeHtml(txHash)}">${shortHash(escapeHtml(txHash))}</a></td>
+                        <td>${escapeHtml(type)}</td>
+                        <td><a href="#/address/${escapeHtml(from)}">${shortHash(escapeHtml(from), 6, 4)}</a></td>
+                        <td><a href="#/address/${escapeHtml(to)}">${shortHash(escapeHtml(to), 6, 4)}</a></td>
+                        <td><span class="asf-v">${value}</span><span class="asf-u">ASF</span></td>
+                        <td>${status}</td>
+                    </tr>`;
+                }
+                html += `</tbody></table></div></div>`;
+            } else {
+                html += `<div class="detail-card" style="text-align:center;padding:24px;color:var(--text-muted)">No transactions found for this address</div>`;
+            }
+        } catch (e) {
+            html += `<div class="detail-card" style="text-align:center;padding:24px;color:var(--text-muted)">Transaction history unavailable</div>`;
+        }
+
+        html += `</div>`;
+        setContent(html);
+
+    } catch (err) {
+        showError('Failed to load account: ' + err.message, '#/address/' + addr);
+    }
+}
+
+// ===== Search Handler =====
+function handleSearch() {
+    const input = document.getElementById('searchInput');
+    const query = input.value.trim();
+    if (!query) return;
+
+    if (/^\d+$/.test(query)) {
+        // Pure number → block height
+        location.hash = '#/block/' + query;
+    } else if (query.startsWith('0x') && query.length <= 42) {
+        // Short 0x address (Ethereum-style)
+        location.hash = '#/address/' + query;
+    } else if (query.startsWith('0x') && query.length > 42) {
+        // 0x-prefixed hash → tx hash
+        location.hash = '#/tx/' + query.slice(2);
+    } else if (/^[0-9a-fA-F]{128}$/.test(query)) {
+        // 128-char hex → SHA-512 hash (could be block or tx)
+        location.hash = '#/tx/' + query;
+    } else if (/^[0-9a-fA-F]{40}$/.test(query)) {
+        // 40-char hex → address (without 0x)
+        location.hash = '#/address/' + query;
+    } else if (/^[0-9a-fA-F]{64}$/.test(query)) {
+        // 64-char hex → could be pubkey or shorter hash
+        location.hash = '#/address/' + query;
+    } else {
+        const num = parseInt(query);
+        if (!isNaN(num)) location.hash = '#/block/' + num;
+    }
+    input.value = '';
+    input.blur();
+}
+
+// ===== Event Listeners =====
+document.addEventListener('DOMContentLoaded', () => {
+    // Search
+    document.getElementById('searchBtn').addEventListener('click', handleSearch);
+    document.getElementById('searchInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleSearch();
+    });
+
+    // Update footer
+    document.getElementById('footerInfo').textContent = `Chain ID: ${CONFIG.chainId} | Symbol: ${CONFIG.symbol} | RPC: ${CONFIG.rpcUrl}`;
+
+    // Initial route
+    route();
+});
+
+window.addEventListener('hashchange', route);
+window.addEventListener('beforeunload', stopAutoRefresh);
+</script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(()=>{});</script>
+<script>
+// Scroll reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.stat-card, .state-box, .page-hdr').forEach(el => {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>

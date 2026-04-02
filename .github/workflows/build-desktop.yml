@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 env:
-  APP_VERSION: "0.3.1"
+  APP_VERSION: "0.3.2"
   PYTHON_VERSION: "3.12"
   NODE_VERSION: "20"
 

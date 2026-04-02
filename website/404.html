@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>404 &mdash; Page Not Found | Positronic Network</title>
+<meta name="description" content="The page you requested could not be found on the Positronic Network.">
+<meta property="og:title" content="Page Not Found — Positronic">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Positronic">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<meta name="theme-color" content="#0080FF">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<link rel="apple-touch-icon" href="/logo-200.webp">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root {
+    --bg: #060D1A;
+    --bg-surface: #0D1B2A;
+    --bg-card: #0A1628;
+    --positronic-cyan: #00E5FF;
+    --positronic-blue: #0080FF;
+    --border-color: #1a3a5c;
+    --text-primary: #e4e4f0;
+    --text-secondary: #B0B8C0;
+    --text-muted: #6a7a8a;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+}
+
+/* Subtle animated background grid */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(rgba(0,128,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,128,255,.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Radial glow behind content */
+body::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,128,255,.08) 0%, rgba(0,229,255,.04) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 32px;
+    border-radius: 16px;
+    filter: drop-shadow(0 0 20px rgba(0,229,255,.25));
+}
+
+.code {
+    font-family: var(--font-heading);
+    font-size: clamp(80px, 15vw, 160px);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--positronic-blue), var(--positronic-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 40px rgba(0,229,255,.15));
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    font-family: var(--font-body);
+    color: #000;
+    background: linear-gradient(135deg, var(--positronic-cyan), var(--positronic-blue));
+    text-decoration: none;
+    transition: all .3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,229,255,.35);
+    filter: brightness(1.1);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.links {
+    margin-top: 48px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.links a {
+    color: var(--text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color .3s ease;
+    position: relative;
+}
+
+.links a:hover {
+    color: var(--positronic-cyan);
+}
+
+.links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--positronic-cyan);
+    transition: width .3s ease;
+}
+
+.links a:hover::after {
+    width: 100%;
+}
+
+.divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--positronic-blue), var(--positronic-cyan));
+    border-radius: 2px;
+    margin: 24px 0;
+    opacity: 0.5;
+}
+
+@media (max-width: 480px) {
+    .links { gap: 16px; }
+    .logo { width: 48px; height: 48px; margin-bottom: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <img src="/logo-200.webp" alt="Positronic" class="logo">
+    <div class="code">404</div>
+    <h1>Page Not Found</h1>
+    <div class="divider"></div>
+    <p>The page you're looking for doesn't exist or has been moved. The Positronic blockchain is running, but this URL isn't.</p>
+    <a href="/" class="btn">&#x2190; Back to Home</a>
+    <div class="links">
+        <a href="/docs/">API Docs</a>
+        <a href="/explorer/">Explorer</a>
+        <a href="/wallet/">Wallet</a>
+        <a href="/download/">Download</a>
+        <a href="/whitepaper.html">Whitepaper</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data: blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>Evidence Portal — Positronic Blockchain</title>
+<meta name="description" content="Positronic Blockchain Evidence — Court-ready forensic reports and transaction analysis. Immutable, timestamped evidence stored on the Positronic blockchain.">
+<link rel="canonical" href="https://positronic-ai.network/evidence/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://positronic-ai.network/evidence/">
+<meta property="og:title" content="Positronic Blockchain Evidence — Court-Ready Forensics">
+<meta property="og:description" content="Court-ready forensic reports and transaction analysis. Immutable, timestamped evidence on the Positronic blockchain.">
+<meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+<meta property="og:site_name" content="Positronic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@positronic_ai">
+<meta name="twitter:title" content="Positronic Blockchain Evidence — Court-Ready Forensics">
+<meta name="twitter:description" content="Court-ready forensic reports and transaction analysis. Immutable, timestamped evidence on the Positronic blockchain.">
+<meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../logo-200.webp">
+<meta name="theme-color" content="#0080FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+</style>
+<style>
+:root{
+    --positronic-blue:#0080FF;
+    --positronic-cyan:#00E5FF;
+    --positronic-silver:#B0B8C0;
+    --positronic-electric:#00BFFF;
+    --positronic-dark:#0D1B2A;
+    --positronic-darker:#060D1A;
+    --positronic-accent:#0A1628;
+    --positronic-glow:#1a3a5c;
+    --positronic-highlight:#00E5FF;
+    --text-primary:#fff;
+    --text-secondary:#B0B8C0;
+    --card-bg:rgba(255,255,255,0.04);
+    --card-border:rgba(255,255,255,0.08);
+    --glow-blue:rgba(0,128,255,0.25);
+    --glow-cyan:rgba(0,229,255,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--positronic-darker);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 20% 0%,rgba(0,128,255,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(0,229,255,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+/* Top Bar */
+.topbar{background:var(--positronic-dark);border-bottom:1px solid var(--card-border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.topbar-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-primary)}
+.topbar-brand img{height:28px;width:28px;border-radius:50%;object-fit:cover;background:var(--positronic-dark)}
+.topbar-brand span{font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--positronic-cyan)}
+.topbar-nav{display:flex;gap:16px;align-items:center}
+.topbar-nav a{color:var(--text-secondary);text-decoration:none;font-size:13px;transition:color .2s}
+.topbar-nav a:hover{color:var(--positronic-cyan)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#555;display:inline-block;transition:all .3s}
+.status-dot.online{background:var(--positronic-electric);box-shadow:0 0 6px var(--positronic-electric)}
+
+/* Layout */
+.container{max-width:1000px;margin:0 auto;padding:32px 24px;position:relative;z-index:1}
+
+/* Stats Strip */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.stat-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:16px;text-align:center;transition:border-color .3s,transform .2s}
+.stat-card:hover{border-color:var(--positronic-cyan);transform:translateY(-2px)}
+.stat-card .stat-val{font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--positronic-cyan);display:block;margin-bottom:6px}
+.stat-card .stat-lbl{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px}
+
+/* Search Section */
+.search-section{text-align:center;margin-bottom:32px}
+.search-section h1{font-family:'Space Grotesk',sans-serif;font-size:18px;color:var(--positronic-cyan);margin-bottom:6px;text-shadow:0 0 30px var(--glow-cyan)}
+.search-section .badge{display:inline-block;background:rgba(0,128,255,0.15);border:1px solid rgba(0,128,255,0.3);color:var(--positronic-blue);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:8px;letter-spacing:1px}
+.search-section p{color:var(--text-secondary);font-size:14px;margin-bottom:24px}
+.input-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.tab-btn{padding:10px 20px;background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:8px;color:var(--text-secondary);cursor:pointer;font-size:13px;transition:all .2s;font-family:'Inter',sans-serif}
+.tab-btn:hover{border-color:rgba(0,229,255,0.3);color:#ccc}
+.tab-btn.active{background:rgba(0,229,255,.08);border-color:var(--positronic-cyan);color:var(--positronic-cyan)}
+.search-row{display:flex;gap:12px;max-width:650px;margin:0 auto 12px}
+.search-row input{flex:1;padding:14px 16px;background:rgba(0,0,0,.4);border:1px solid var(--card-border);border-radius:8px;color:var(--text-primary);font-family:'Inter',monospace;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+.search-row input:focus{border-color:var(--positronic-cyan);box-shadow:0 0 0 3px var(--glow-cyan)}
+.search-row input::placeholder{color:#444}
+.btn-gold{padding:14px 24px;background:var(--positronic-cyan);color:#000;font-family:'Space Grotesk',sans-serif;font-size:10px;border:none;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-weight:700}
+.btn-gold:hover{background:#ffe033;transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,229,255,0.3)}
+.btn-gold:disabled{background:#333;color:#666;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ZK Privacy Toggle */
+.zk-toggle{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;font-size:13px;color:var(--text-secondary)}
+.zk-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer}
+.zk-toggle input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:36px;height:20px;background:#333;border-radius:10px;position:relative;cursor:pointer;transition:background .2s}
+.zk-toggle input[type="checkbox"]::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#666;border-radius:50%;transition:all .2s}
+.zk-toggle input[type="checkbox"]:checked{background:var(--positronic-electric)}
+.zk-toggle input[type="checkbox"]:checked::after{left:18px;background:#fff}
+
+/* Action Buttons */
+.doc-actions{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.btn-action{padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;border:1px solid var(--card-border);background:rgba(255,255,255,.04);color:var(--text-primary);transition:all .2s;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px}
+.btn-action:hover{border-color:var(--positronic-cyan);color:var(--positronic-cyan);background:rgba(0,229,255,.05)}
+.btn-action.primary{background:var(--positronic-cyan);color:#000;border-color:var(--positronic-cyan);font-weight:600}
+.btn-action.primary:hover{background:#ffe033}
+.btn-action.red{border-color:rgba(0,128,255,0.4);color:var(--positronic-blue)}
+.btn-action.red:hover{background:rgba(0,128,255,0.1);border-color:var(--positronic-blue)}
+
+/* Report Container */
+.report-container{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:32px;margin-bottom:24px}
+.report-header{text-align:center;padding-bottom:24px;border-bottom:1px solid var(--card-border);margin-bottom:24px}
+.report-header h2{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--positronic-cyan);margin-bottom:12px}
+.report-header .meta{color:var(--text-secondary);font-size:13px;line-height:1.8}
+.report-header .meta .hash{font-family:'Courier New',monospace;font-size:12px;color:#777;word-break:break-all}
+
+/* Report Sections */
+.report-section{margin-bottom:28px}
+.report-section h3{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--positronic-blue);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(0,128,255,0.2);display:flex;align-items:center;gap:8px}
+.report-section h3 .sec-num{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;background:rgba(0,128,255,0.15);border-radius:6px;font-size:10px;color:var(--positronic-blue)}
+
+/* Data Table */
+.data-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.data-table th{background:rgba(255,255,255,0.03);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--card-border);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary)}
+.data-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top;word-break:break-all}
+.data-table tr:hover td{background:rgba(255,255,255,0.02)}
+.hash-val{font-family:'Courier New',monospace;font-size:12px;color:#888}
+.risk-low{color:var(--positronic-electric);font-weight:600}
+.risk-med{color:#f5a623;font-weight:600}
+.risk-high{color:var(--positronic-blue);font-weight:600}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;color:var(--positronic-electric);font-weight:600;font-size:12px}
+.unverified-badge{display:inline-flex;align-items:center;gap:4px;color:var(--positronic-blue);font-weight:600;font-size:12px}
+
+/* Risk Score Visual */
+.risk-meter{display:flex;align-items:center;gap:12px}
+.risk-bar-bg{flex:1;max-width:200px;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
+.risk-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.risk-bar-fill.low{background:var(--positronic-electric)}
+.risk-bar-fill.med{background:#f5a623}
+.risk-bar-fill.high{background:var(--positronic-blue)}
+
+/* Timeline */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:8px;top:4px;bottom:4px;width:2px;background:rgba(255,255,255,0.08)}
+.timeline-item{position:relative;padding:12px 0 12px 16px;font-size:13px}
+.timeline-item::before{content:'';position:absolute;left:-24px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--positronic-cyan);border:2px solid var(--positronic-darker)}
+.timeline-item .tl-time{color:var(--text-secondary);font-size:11px;font-family:'Courier New',monospace}
+.timeline-item .tl-action{color:var(--text-primary);font-weight:500;margin:2px 0}
+.timeline-item .tl-detail{color:var(--text-secondary);font-size:12px}
+
+/* AI Analysis Panel */
+.ai-panel{background:rgba(0,128,255,0.04);border:1px solid rgba(0,128,255,0.15);border-radius:12px;padding:20px;margin:12px 0}
+.ai-panel .ai-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:600;color:var(--positronic-blue)}
+.ai-panel .ai-header .pulse{width:8px;height:8px;border-radius:50%;background:var(--positronic-blue);animation:pulse 2s infinite}
+.ai-findings{list-style:none;padding:0}
+.ai-findings li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:var(--text-secondary);display:flex;align-items:flex-start;gap:8px}
+.ai-findings li::before{content:'>';color:var(--positronic-blue);font-family:'Courier New',monospace;font-weight:700;flex-shrink:0}
+.ai-findings li:last-child{border-bottom:none}
+
+/* Verification Result */
+.verify-result{padding:20px;border-radius:12px;margin-top:20px;display:flex;align-items:flex-start;gap:12px}
+.verify-result.valid{background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);color:var(--positronic-electric)}
+.verify-result.invalid{background:rgba(0,128,255,.08);border:1px solid rgba(0,128,255,.2);color:#ef9a9a}
+.verify-icon{font-size:24px;flex-shrink:0}
+
+/* Court Document (formal, white, serif) for PDF/print */
+.court-document{background:#fff;color:#1a1a1a;font-family:Georgia,'Times New Roman',serif;padding:60px;border-radius:8px;box-shadow:0 4px 40px rgba(0,0,0,.5);line-height:1.8;font-size:13px;display:none}
+.court-document h1{font-family:Georgia,serif;text-align:center;font-size:18px;text-transform:uppercase;letter-spacing:3px;border-bottom:2px solid #333;padding-bottom:16px;margin-bottom:24px;color:#111}
+.court-document .doc-subtitle{text-align:center;font-size:13px;color:#555;margin-bottom:32px}
+.court-document h2{font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ccc;padding-bottom:6px;margin:32px 0 16px;color:#222}
+.court-document p{margin-bottom:12px;text-align:justify}
+.court-document table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px}
+.court-document th{background:#f5f5f5;font-weight:600;text-align:left;padding:8px 10px;border:1px solid #ddd;font-size:11px;text-transform:uppercase}
+.court-document td{padding:8px 10px;border:1px solid #ddd;vertical-align:top;word-break:break-all}
+.court-document .hash{font-family:'Courier New',monospace;font-size:11px;color:#555}
+.court-document .verified{color:#2e7d32;font-weight:600}
+.court-document .unverified{color:#c62828;font-weight:600}
+.court-document .risk-low{color:#2e7d32}
+.court-document .risk-med{color:#f57f17}
+.court-document .risk-high{color:#c62828}
+.court-document .doc-footer{margin-top:40px;padding-top:20px;border-top:2px solid #333;font-size:11px;color:#777;text-align:center}
+
+.result-msg{margin-top:16px;padding:14px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px}
+.result-msg.error{background:rgba(0,128,255,.1);border:1px solid rgba(0,128,255,.25);color:#ef9a9a}
+.result-msg.info{background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.15);color:var(--positronic-cyan)}
+
+.hidden{display:none!important}
+
+/* Loading Spinner */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,229,255,0.3);border-top-color:var(--positronic-cyan);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .4s ease}
+
+/* Print Styles */
+@media print{
+    .topbar,.search-section,.doc-actions,.verify-result,.result-msg,.stats-strip,.zk-toggle,script{display:none!important}
+    body{background:#fff;color:#000}
+    body::before{display:none}
+    .container{max-width:100%;padding:0}
+    .report-container{display:none!important}
+    .court-document{display:block!important;box-shadow:none;padding:20px;border-radius:0}
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .stats-strip{grid-template-columns:repeat(2,1fr)}
+    .search-section h1{font-size:13px}
+    .search-row{flex-direction:column}
+    .search-row input{width:100%}
+    .btn-gold{width:100%}
+    .doc-actions{flex-direction:column}
+    .btn-action{width:100%;justify-content:center}
+    .report-container{padding:20px}
+    .topbar-nav{gap:8px}
+    .topbar-nav a{font-size:11px}
+    .data-table{font-size:11px}
+    .data-table th,.data-table td{padding:6px 8px}
+    /* Text wrapping & overflow fixes */
+    body{overflow-x:hidden}
+    h1,h2,h3,h4{word-break:break-word;hyphens:auto}
+    p,li,td,th,span,div{overflow-wrap:break-word;word-wrap:break-word}
+    pre,code,.code-block{overflow-x:auto;max-width:100%;white-space:pre-wrap;word-break:break-all;font-size:12px;padding:8px}
+    img{max-width:100%;height:auto}
+    .container,.content,main,article,section{max-width:100% !important}
+    table{display:block;overflow-x:auto;max-width:100%;font-size:12px}
+}
+@media(max-width:480px){
+    .stats-strip{grid-template-columns:1fr 1fr}
+    .stat-card .stat-val{font-size:12px}
+    .topbar{padding:10px 14px}
+    .topbar-brand span{font-size:8px}
+    .container{padding:20px 14px}
+    .input-tabs{gap:4px}
+    .tab-btn{padding:8px 12px;font-size:11px}
+}
+
+/* Scroll reveal animations */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+</style>
+</head>
+<body>
+<!-- Top Bar -->
+<div class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <img src="../logo-200.webp" alt="ASF">
+        <span>EVIDENCE PORTAL</span>
+    </a>
+    <div class="topbar-nav">
+        <a href="../explorer/index.html">Explorer</a>
+        <a href="../panel/index.html">Panel</a>
+        <a href="../faucet/index.html">Faucet</a>
+        <a href="../critics/index.html">FAQ</a>
+        <a href="../index.html">Home</a>
+        <span class="status-dot" id="statusDot" title="Node status"></span>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Forensic Stats Strip -->
+    <div class="stats-strip" id="statsStrip">
+        <div class="stat-card">
+            <span class="stat-val" id="statReports">--</span>
+            <span class="stat-lbl">Total Reports</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statActive">--</span>
+            <span class="stat-lbl">Active Cases</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statVerified">--</span>
+            <span class="stat-lbl">Verified</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statRisk">--</span>
+            <span class="stat-lbl">Avg Risk Score</span>
+        </div>
+    </div>
+
+    <!-- Legal Framework Section -->
+    <div class="report-container" style="margin-bottom:32px;">
+        <div style="text-align:center;margin-bottom:20px;">
+            <span style="display:inline-block;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a855f7;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;">LEGAL FRAMEWORK</span>
+        </div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--positronic-cyan);margin-bottom:16px;text-align:center;">Evidence Admissibility &amp; Integrity</h3>
+        <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;text-align:center;margin-bottom:20px;">Every report generated by the Positronic Evidence Portal follows a cryptographic integrity chain designed for legal admissibility.</p>
+
+        <div style="background:#0d1230;padding:16px 20px;border-radius:10px;margin-bottom:20px;text-align:center;font-family:monospace;font-size:12px;color:#e0e0e0;line-height:2.2;">
+            Evidence &rarr; <span style="color:#00E5FF;">SHA-512 Hash</span> &rarr; <span style="color:#FFD700;">Ed25519 Signature</span> &rarr; <span style="color:#ed8936;">On-Chain Anchor</span> &rarr; <span style="color:#e53e3e;">Cross-Chain Anchor</span> &rarr; <span style="color:#48bb78;">Court Report</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+            <div style="background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);border-radius:10px;padding:14px;text-align:center;">
+                <div style="margin-bottom:6px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--positronic-cyan,#00E5FF)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Tamper-Proof</div>
+                <div style="font-size:11px;color:var(--text-secondary);line-height:1.5;">SHA-512 hash + Ed25519 signature on every report</div>
+            </div>
+            <div style="background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);border-radius:10px;padding:14px;text-align:center;">
+                <div style="margin-bottom:6px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--positronic-cyan,#00E5FF)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Chain of Custody</div>
+                <div style="font-size:11px;color:var(--text-secondary);line-height:1.5;">Immutable, timestamped custody log at every step</div>
+            </div>
+            <div style="background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);border-radius:10px;padding:14px;text-align:center;">
+                <div style="margin-bottom:6px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--positronic-cyan,#00E5FF)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--positronic-cyan);margin-bottom:4px;">Confidential</div>
+                <div style="font-size:11px;color:var(--text-secondary);line-height:1.5;">ZK-encrypted evidence with authorized-viewer access</div>
+            </div>
+        </div>
+
+        <p style="color:var(--text-secondary);font-size:12px;line-height:1.8;margin-bottom:16px;"><strong style="color:var(--positronic-cyan);">Supported Report Types:</strong> Transaction Trace &bull; Wallet History &bull; Fund Flow Analysis &bull; Suspicious Activity Report (SAR) &bull; Compliance Audit &bull; Incident Report</p>
+
+        <div style="background:rgba(0,128,255,0.04);border:1px solid rgba(0,128,255,0.15);border-radius:8px;padding:14px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+            <strong style="color:var(--positronic-blue);">&#9432; Legal Note:</strong> Evidence packages satisfy authentication requirements under FRE Rule 901(b)(9). Each report includes Merkle proofs linking evidence to block state roots, block finality confirmations, and optional cross-chain anchoring on Ethereum/Bitcoin for independent timestamp verification.
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="badge">COURT-GRADE FORENSICS</div>
+        <h1>EVIDENCE PORTAL</h1>
+        <p>Generate, view, and verify blockchain forensic evidence for legal proceedings</p>
+
+        <div class="input-tabs">
+            <button class="tab-btn active" onclick="setTab('report')" id="tabReport">By Report ID</button>
+            <button class="tab-btn" onclick="setTab('address')" id="tabAddress">By Wallet Address</button>
+        </div>
+        <div class="search-row">
+            <input type="text" id="queryInput" placeholder="Enter Report ID (PRC-FR-...)" spellcheck="false" autocomplete="off">
+            <button class="btn-gold" id="generateBtn" onclick="generate()">SEARCH</button>
+        </div>
+
+        <div class="zk-toggle">
+            <label>
+                <input type="checkbox" id="zkPrivacy">
+                Hash Commitment Privacy Mode (confidential evidence)
+            </label>
+        </div>
+
+        <div id="resultMsg" class="result-msg error hidden"></div>
+    </div>
+
+    <!-- Report Display Section -->
+    <div id="reportSection" class="hidden">
+        <!-- Action Buttons -->
+        <div class="doc-actions">
+            <button class="btn-action primary" onclick="generateCourtPDF()">Print / Export PDF</button>
+            <button class="btn-action" onclick="downloadJSON()">Download JSON</button>
+            <button class="btn-action" onclick="generateEvidencePackage()">Evidence Package</button>
+            <button class="btn-action" onclick="verifyIntegrity()">Verify Integrity</button>
+        </div>
+        <div id="verifyResult"></div>
+
+        <!-- Dark Theme Report Viewer -->
+        <div class="report-container fade-in" id="reportViewer"></div>
+
+        <!-- Court Document (hidden, shown for print/PDF) -->
+        <div class="court-document" id="courtDoc"></div>
+    </div>
+</div>
+
+<script src="/security.js"></script>
+<script src="/config.js"></script>
+<script>
+(function(){
+'use strict';
+
+const RPC = 'https://rpc.positronic-ai.network';
+let rpcId = 1;
+let currentMode = 'report';
+let currentReport = null;
+let currentPackage = null;
+
+// ---- RPC Helper ----
+async function rpc(method, params=[]) {
+    const res = await fetch(RPC, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({jsonrpc:'2.0',method,params,id:rpcId++}),
+    });
+    const d = await res.json();
+    if(d.error) throw new Error(d.error.message||'RPC Error');
+    return d.result;
+}
+
+// ---- Formatters ----
+function fmtTime(ts) {
+    if(!ts) return '--';
+    return new Date(ts * 1000).toISOString().replace('T',' ').replace(/\.\d+Z/,'') + ' UTC';
+}
+
+function fmtShort(str, len=16) {
+    if(!str) return '--';
+    if(str.length <= len*2) return str;
+    return str.slice(0, len) + '...' + str.slice(-8);
+}
+
+function riskClass(score) {
+    if(score < 0.4) return 'low';
+    if(score < 0.75) return 'med';
+    return 'high';
+}
+
+function riskLabel(score) {
+    const cls = riskClass(score);
+    const labels = {low:'LOW RISK', med:'MEDIUM RISK', high:'HIGH RISK'};
+    return `<span class="risk-${cls}">${labels[cls]} (${(score||0).toFixed(4)})</span>`;
+}
+
+function riskMeterHTML(score) {
+    const cls = riskClass(score);
+    const pct = Math.min(Math.round((score||0)*100),100);
+    return `<div class="risk-meter">
+        <div class="risk-bar-bg"><div class="risk-bar-fill ${cls}" style="width:${pct}%"></div></div>
+        ${riskLabel(score)}
+    </div>`;
+}
+
+// ---- Forensic Stats ----
+async function loadForensicStats() {
+    try {
+        const stats = await rpc('positronic_getForensicStats');
+        document.getElementById('statReports').textContent = stats.total_reports ?? '--';
+        document.getElementById('statActive').textContent = stats.active_cases ?? '--';
+        document.getElementById('statVerified').textContent = stats.verified_count ?? '--';
+        document.getElementById('statRisk').textContent = stats.avg_risk_score != null
+            ? parseFloat(stats.avg_risk_score).toFixed(2) : '--';
+    } catch(e) {
+        // Stats unavailable, keep dashes
+    }
+}
+
+// ---- Tab Switching ----
+window.setTab = function(mode) {
+    currentMode = mode;
+    document.getElementById('tabReport').className = mode === 'report' ? 'tab-btn active' : 'tab-btn';
+    document.getElementById('tabAddress').className = mode === 'address' ? 'tab-btn active' : 'tab-btn';
+    document.getElementById('queryInput').placeholder = mode === 'report'
+        ? 'Enter Report ID (PRC-FR-...)' : 'Enter Wallet Address (0x...)';
+};
+
+// ---- Main Generate / Search ----
+window.generate = async function() {
+    const query = document.getElementById('queryInput').value.trim();
+    const msgEl = document.getElementById('resultMsg');
+    const btn = document.getElementById('generateBtn');
+
+    if(!query) { showMsg('Please enter a report ID or address.', 'error'); return; }
+
+    msgEl.className = 'result-msg error hidden';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+        let data;
+        const zkEnabled = document.getElementById('zkPrivacy').checked;
+
+        if(currentMode === 'report') {
+            data = await rpc('positronic_getForensicReport', [query, zkEnabled]);
+        } else {
+            data = await rpc('positronic_getEvidencePackage', [query, zkEnabled]);
+        }
+
+        if(!data || data.error) {
+            showMsg(data?.error || 'No data returned from the node.', 'error');
+            return;
+        }
+
+        if(data.reports) {
+            currentPackage = data;
+            currentReport = null;
+            renderEvidencePackageViewer(data);
+        } else {
+            currentReport = data;
+            currentPackage = null;
+            renderForensicReport(data);
+        }
+
+        document.getElementById('reportSection').classList.remove('hidden');
+        document.getElementById('reportSection').scrollIntoView({behavior:'smooth', block:'start'});
+    } catch(e) {
+        showMsg(e.message || 'Connection to node failed.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'SEARCH';
+    }
+};
+
+function showMsg(text, type) {
+    const el = document.getElementById('resultMsg');
+    el.textContent = text;
+    el.className = `result-msg ${type}`;
+}
+
+// ---- Render Forensic Report (dark theme viewer) ----
+function renderForensicReport(report) {
+    const viewer = document.getElementById('reportViewer');
+    const exhibits = report.exhibits || [];
+    const coc = report.chain_of_custody;
+    const header = report.case_header || {};
+    const txTrace = report.transaction_trace || [];
+    const aiAnalysis = report.ai_analysis || {};
+    const findings = report.findings || [];
+
+    let html = `
+        <div class="report-header">
+            <h2>FORENSIC EVIDENCE REPORT</h2>
+            <div class="meta">
+                Positronic Chain (ID: ${header.chain_id || 420420})<br>
+                Report ID: <span class="hash">${escapeHtml(report.court_report_id || report.forensic_report_id) || '--'}</span><br>
+                Case Ref: ${escapeHtml(report.case_reference) || '--'} &nbsp;|&nbsp; Generated: ${fmtTime(report.generated_at)}
+            </div>
+        </div>
+    `;
+
+    // Section 1: Case Information
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">1</span> CASE INFORMATION</h3>
+            <table class="data-table">
+                <tr><td style="width:180px;color:var(--text-secondary)">Report Type</td><td>${escapeHtml(header.report_type) || '--'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Subject Address</td><td class="hash-val">${escapeHtml(report.subject_address || header.subject_address) || '--'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Blockchain</td><td>${escapeHtml(header.blockchain) || 'Positronic'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Chain ID</td><td>${header.chain_id || 420420}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Consensus</td><td>${escapeHtml(header.consensus) || 'DPoS + Proof of Neural Consensus'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Hash Algorithm</td><td>${escapeHtml(header.hash_algorithm) || 'SHA-512'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Signature Scheme</td><td>${escapeHtml(header.signature_scheme) || 'Ed25519'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Risk Score</td><td>${riskMeterHTML(report.risk_score||0)}</td></tr>
+            </table>
+        </div>
+    `;
+
+    // Section 2: AI Analysis
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">2</span> AI ANALYSIS</h3>
+            <div class="ai-panel">
+                <div class="ai-header"><span class="pulse"></span> Neural Consensus AI Engine</div>
+    `;
+    if(aiAnalysis.summary) {
+        html += `<p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px">${escapeHtml(aiAnalysis.summary)}</p>`;
+    }
+    if(report.executive_summary) {
+        html += `<p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px">${escapeHtml(report.executive_summary)}</p>`;
+    }
+    if(aiAnalysis.patterns && aiAnalysis.patterns.length > 0) {
+        html += '<ul class="ai-findings">';
+        for(const p of aiAnalysis.patterns) html += `<li>${escapeHtml(p)}</li>`;
+        html += '</ul>';
+    }
+    if(aiAnalysis.threat_level) {
+        html += `<div style="margin-top:12px;font-size:12px;color:var(--text-secondary)">Threat Level: <strong style="color:var(--positronic-blue)">${escapeHtml(aiAnalysis.threat_level)}</strong></div>`;
+    }
+    html += `</div></div>`;
+
+    // Section 3: Transaction Trace
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">3</span> TRANSACTION TRACE</h3>
+    `;
+    if(exhibits.length > 0) {
+        html += `<table class="data-table">
+            <thead><tr><th>Exhibit</th><th>Type</th><th>TX Hash</th><th>Block</th><th>Time</th><th>Risk</th></tr></thead><tbody>`;
+        for(const ex of exhibits) {
+            const ev = ex.evidence || {};
+            const ds = ev.data || {};
+            const rs = ds.ai_score != null ? ds.ai_score : null;
+            html += `<tr>
+                <td><strong style="color:var(--positronic-cyan)">${escapeHtml(ex.exhibit_id)}</strong></td>
+                <td>${escapeHtml(ex.title) || '--'}</td>
+                <td class="hash-val">${fmtShort(escapeHtml(ev.tx_hash))}</td>
+                <td>${ev.block_height||'--'}</td>
+                <td style="white-space:nowrap">${fmtTime(ev.timestamp)}</td>
+                <td>${rs != null ? riskLabel(rs) : '--'}</td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+
+        // Detailed exhibits
+        for(const ex of exhibits) {
+            const ev = ex.evidence || {};
+            const data = ev.data || {};
+            html += `
+                <div style="margin-top:20px;padding:16px;background:rgba(0,0,0,0.2);border-radius:8px;border-left:3px solid var(--positronic-cyan)">
+                    <h4 style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--positronic-cyan);margin-bottom:8px">${escapeHtml(ex.exhibit_id)}: ${escapeHtml(ex.title)}</h4>
+                    ${ex.description ? `<p style="color:var(--text-secondary);font-size:13px;margin-bottom:10px">${escapeHtml(ex.description)}</p>` : ''}
+                    <table class="data-table">
+                        <tr><td style="width:160px;color:var(--text-secondary)">TX Hash</td><td class="hash-val">${escapeHtml(ev.tx_hash)||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Block Height</td><td>${ev.block_height||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Timestamp</td><td>${fmtTime(ev.timestamp)}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Evidence Type</td><td>${escapeHtml(ev.evidence_type)||'--'}</td></tr>
+            `;
+            if(data.sender) html += `<tr><td style="color:var(--text-secondary)">Sender</td><td class="hash-val">${escapeHtml(data.sender)}</td></tr>`;
+            if(data.recipient) html += `<tr><td style="color:var(--text-secondary)">Recipient</td><td class="hash-val">${escapeHtml(data.recipient)}</td></tr>`;
+            if(data.value != null) html += `<tr><td style="color:var(--text-secondary)">Value</td><td>${data.value} base units</td></tr>`;
+            if(data.ai_score != null) html += `<tr><td style="color:var(--text-secondary)">AI Risk</td><td>${riskMeterHTML(data.ai_score)}</td></tr>`;
+            html += '</table>';
+
+            // Merkle proof
+            if(ex.merkle_proof) {
+                const mp = ex.merkle_proof;
+                html += `<div style="margin-top:10px;padding:10px;background:rgba(0,200,83,0.04);border-radius:6px;border:1px solid rgba(0,200,83,0.1)">
+                    <strong style="font-size:11px;color:var(--positronic-electric)">Merkle Proof</strong>
+                    <table class="data-table" style="margin-top:6px">
+                        <tr><td style="width:140px;color:var(--text-secondary)">Status</td><td>${mp.verified ? '<span class="verified-badge">VERIFIED</span>' : '<span class="unverified-badge">UNVERIFIED</span>'}</td></tr>
+                        ${mp.merkle_root ? `<tr><td style="color:var(--text-secondary)">Merkle Root</td><td class="hash-val">${escapeHtml(mp.merkle_root)}</td></tr>` : ''}
+                        ${mp.tx_index != null ? `<tr><td style="color:var(--text-secondary)">TX Index</td><td>${mp.tx_index}</td></tr>` : ''}
+                        ${mp.proof_length != null ? `<tr><td style="color:var(--text-secondary)">Proof Nodes</td><td>${mp.proof_length}</td></tr>` : ''}
+                    </table>
+                </div>`;
+            }
+
+            // Block finality
+            if(ex.block_finality) {
+                const bf = ex.block_finality;
+                html += `<div style="margin-top:10px;padding:10px;background:rgba(0,229,255,0.03);border-radius:6px;border:1px solid rgba(0,229,255,0.08)">
+                    <strong style="font-size:11px;color:var(--positronic-cyan)">Block Finality</strong>
+                    <table class="data-table" style="margin-top:6px">
+                        <tr><td style="width:140px;color:var(--text-secondary)">Block</td><td>${bf.block_height||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Current Height</td><td>${bf.current_height||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Confirmations</td><td>${bf.confirmations||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Finalized</td><td>${bf.finalized ? '<span class="verified-badge">YES</span>' : '<span class="unverified-badge">NO</span>'}</td></tr>
+                    </table>
+                </div>`;
+            }
+            html += '</div>';
+        }
+    } else if(txTrace.length > 0) {
+        html += `<table class="data-table">
+            <thead><tr><th>TX Hash</th><th>From</th><th>To</th><th>Value</th><th>Block</th></tr></thead><tbody>`;
+        for(const tx of txTrace) {
+            html += `<tr>
+                <td class="hash-val">${fmtShort(escapeHtml(tx.hash))}</td>
+                <td class="hash-val">${fmtShort(escapeHtml(tx.from))}</td>
+                <td class="hash-val">${fmtShort(escapeHtml(tx.to))}</td>
+                <td>${tx.value||'--'}</td>
+                <td>${tx.block||'--'}</td>
+            </tr>`;
+        }
+        html += '</tbody></table>';
+    } else {
+        html += '<p style="color:var(--text-secondary);font-size:13px">No transaction trace data available.</p>';
+    }
+    html += '</div>';
+
+    // Section 4: Timeline (Chain of Custody)
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">4</span> TIMELINE &amp; CHAIN OF CUSTODY</h3>
+    `;
+    if(coc && coc.entries && coc.entries.length > 0) {
+        html += '<div class="timeline">';
+        for(const e of coc.entries) {
+            html += `<div class="timeline-item">
+                <div class="tl-time">${fmtTime(e.timestamp)}</div>
+                <div class="tl-action">${escapeHtml(e.action)}</div>
+                <div class="tl-detail">${escapeHtml(e.actor)} &mdash; ${escapeHtml(e.details)}</div>
+            </div>`;
+        }
+        html += '</div>';
+        if(coc.blockchain_height) {
+            html += `<p style="margin-top:12px;font-size:12px;color:var(--text-secondary)">Blockchain height at creation: ${coc.blockchain_height}</p>`;
+        }
+    } else {
+        html += '<p style="color:var(--text-secondary);font-size:13px">No chain of custody records available.</p>';
+    }
+    html += '</div>';
+
+    // Section 5: Findings
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">5</span> FINDINGS</h3>
+    `;
+    if(findings.length > 0) {
+        html += '<ul class="ai-findings">';
+        for(const f of findings) html += `<li>${escapeHtml(f)}</li>`;
+        html += '</ul>';
+    } else {
+        html += '<p style="color:var(--text-secondary);font-size:13px">No findings recorded.</p>';
+    }
+    html += '</div>';
+
+    // Section 6: Digital Integrity
+    html += `
+        <div class="report-section">
+            <h3><span class="sec-num">6</span> DIGITAL SIGNATURE &amp; INTEGRITY</h3>
+            <table class="data-table">
+                <tr><td style="width:180px;color:var(--text-secondary)">Report Hash (SHA-512)</td><td class="hash-val">${escapeHtml(report.report_hash)||'N/A'}</td></tr>
+                <tr><td style="color:var(--text-secondary)">Hash Algorithm</td><td>SHA-512</td></tr>
+                <tr><td style="color:var(--text-secondary)">Tamper Detection</td><td style="color:var(--positronic-blue)">Any modification invalidates the hash above</td></tr>
+            </table>
+            <p style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-secondary)">
+                All evidence is cryptographically anchored to the Positronic Blockchain (Chain ID: 420420) and verifiable at any time.
+            </p>
+        </div>
+    `;
+
+    viewer.innerHTML = html;
+    viewer.classList.add('fade-in');
+
+    // Also build court document for print
+    buildCourtDocument(report);
+}
+
+// ---- Render Evidence Package (multi-report) ----
+function renderEvidencePackageViewer(pkg) {
+    const viewer = document.getElementById('reportViewer');
+    let html = `
+        <div class="report-header">
+            <h2>EVIDENCE PACKAGE</h2>
+            <div class="meta">
+                Address: <span class="hash">${escapeHtml(pkg.address)||'--'}</span><br>
+                Package ID: <span class="hash">${escapeHtml(pkg.package_id)||'--'}</span><br>
+                Generated: ${fmtTime(pkg.generated_at)} &nbsp;|&nbsp; Total Reports: ${pkg.total_reports||0}
+            </div>
+        </div>
+    `;
+
+    if(pkg.reports && pkg.reports.length > 0) {
+        html += `<div class="report-section">
+            <h3><span class="sec-num">1</span> REPORTS SUMMARY</h3>
+            <table class="data-table">
+                <thead><tr><th>#</th><th>Court Report ID</th><th>Forensic Report</th><th>Risk</th><th>Exhibits</th></tr></thead><tbody>`;
+        pkg.reports.forEach((r,i) => {
+            html += `<tr style="cursor:pointer" onclick="viewSubReport(${i})">
+                <td>${i+1}</td>
+                <td class="hash-val">${fmtShort(escapeHtml(r.court_report_id),20)}</td>
+                <td class="hash-val">${fmtShort(escapeHtml(r.forensic_report_id),20)}</td>
+                <td>${riskLabel(r.risk_score||0)}</td>
+                <td>${(r.exhibits||[]).length}</td>
+            </tr>`;
+        });
+        html += '</tbody></table></div>';
+
+        // Individual report summaries
+        for(let i=0; i<pkg.reports.length; i++) {
+            const r = pkg.reports[i];
+            const rHeader = r.case_header || {};
+            html += `
+                <div class="report-section" style="margin-top:8px;padding:20px;background:rgba(0,0,0,0.15);border-radius:10px;border:1px solid var(--card-border)">
+                    <h3><span class="sec-num">${i+2}</span> ${escapeHtml(r.court_report_id)||'Report '+(i+1)}</h3>
+                    <table class="data-table">
+                        <tr><td style="width:160px;color:var(--text-secondary)">Type</td><td>${escapeHtml(rHeader.report_type)||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Subject</td><td class="hash-val">${escapeHtml(r.subject_address)||'--'}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Risk</td><td>${riskMeterHTML(r.risk_score||0)}</td></tr>
+                        <tr><td style="color:var(--text-secondary)">Exhibits</td><td>${(r.exhibits||[]).length} items</td></tr>
+                    </table>
+                    ${r.executive_summary ? `<p style="margin-top:10px;color:var(--text-secondary);font-size:13px">${escapeHtml(r.executive_summary)}</p>` : ''}
+                </div>
+            `;
+        }
+    } else {
+        html += '<p style="color:var(--text-secondary);font-size:14px;text-align:center;padding:40px 0">No forensic reports found for this address.</p>';
+    }
+
+    html += `
+        <div style="text-align:center;margin-top:24px;font-size:12px;color:var(--text-secondary)">
+            Package Hash: <span class="hash-val">${escapeHtml(pkg.package_hash)||'N/A'}</span>
+        </div>
+    `;
+
+    viewer.innerHTML = html;
+    viewer.classList.add('fade-in');
+}
+
+window.viewSubReport = function(idx) {
+    if(!currentPackage || !currentPackage.reports[idx]) return;
+    currentReport = currentPackage.reports[idx];
+    renderForensicReport(currentReport);
+    document.getElementById('reportViewer').scrollIntoView({behavior:'smooth'});
+};
+
+// ---- Build Court Document (for print/PDF) ----
+function buildCourtDocument(report) {
+    const doc = document.getElementById('courtDoc');
+    const exhibits = report.exhibits || [];
+    const coc = report.chain_of_custody;
+    const header = report.case_header || {};
+    const findings = report.findings || [];
+
+    let html = `
+        <h1>BLOCKCHAIN EVIDENCE REPORT</h1>
+        <div class="doc-subtitle">
+            Positronic Chain (ID: ${header.chain_id || 420420}) &mdash;
+            ${header.consensus || 'DPoS + Proof of Neural Consensus'}<br>
+            Report ID: <span class="hash">${escapeHtml(report.court_report_id) || '--'}</span><br>
+            Case Reference: ${escapeHtml(report.case_reference) || '--'}<br>
+            Generated: ${fmtTime(report.generated_at)}
+        </div>
+
+        <h2>1. Case Information</h2>
+        <table>
+            <tr><th>Field</th><th>Value</th></tr>
+            <tr><td>Report Type</td><td>${escapeHtml(header.report_type) || '--'}</td></tr>
+            <tr><td>Subject Address</td><td class="hash">${escapeHtml(report.subject_address || header.subject_address) || '--'}</td></tr>
+            <tr><td>Blockchain</td><td>${escapeHtml(header.blockchain) || 'Positronic'}</td></tr>
+            <tr><td>Chain ID</td><td>${header.chain_id || 420420}</td></tr>
+            <tr><td>Hash Algorithm</td><td>${escapeHtml(header.hash_algorithm) || 'SHA-512'}</td></tr>
+            <tr><td>Signature Scheme</td><td>${escapeHtml(header.signature_scheme) || 'Ed25519'}</td></tr>
+            <tr><td>Risk Score</td><td class="${'risk-'+riskClass(report.risk_score||0)}">${(report.risk_score||0).toFixed(4)}</td></tr>
+        </table>
+
+        <h2>2. Executive Summary</h2>
+        <p>${report.executive_summary || 'No summary available.'}</p>
+
+        <h2>3. Evidence Exhibits</h2>
+    `;
+
+    if(exhibits.length > 0) {
+        html += `<table><tr><th>Exhibit</th><th>Type</th><th>TX Hash</th><th>Block</th><th>Time</th></tr>`;
+        for(const ex of exhibits) {
+            const ev = ex.evidence || {};
+            html += `<tr>
+                <td><strong>${ex.exhibit_id}</strong></td>
+                <td>${ex.title}</td>
+                <td class="hash">${(ev.tx_hash||'--').slice(0,24)}...</td>
+                <td>${ev.block_height||'--'}</td>
+                <td>${fmtTime(ev.timestamp)}</td>
+            </tr>`;
+        }
+        html += '</table>';
+    } else {
+        html += '<p>No evidence exhibits in this report.</p>';
+    }
+
+    html += '<h2>4. Chain of Custody</h2>';
+    if(coc && coc.entries && coc.entries.length > 0) {
+        html += `<table><tr><th>Time</th><th>Action</th><th>Actor</th><th>Details</th></tr>`;
+        for(const e of coc.entries) {
+            html += `<tr><td>${fmtTime(e.timestamp)}</td><td>${e.action}</td><td>${e.actor}</td><td>${e.details}</td></tr>`;
+        }
+        html += '</table>';
+    } else {
+        html += '<p>No chain of custody records.</p>';
+    }
+
+    html += '<h2>5. Findings</h2>';
+    if(findings.length > 0) {
+        html += '<ol>';
+        for(const f of findings) html += `<li>${escapeHtml(f)}</li>`;
+        html += '</ol>';
+    } else {
+        html += '<p>No findings recorded.</p>';
+    }
+
+    html += `
+        <h2>6. Digital Signature &amp; Integrity</h2>
+        <table>
+            <tr><td>Report Hash (SHA-512)</td><td class="hash">${report.report_hash||'N/A'}</td></tr>
+            <tr><td>Hash Algorithm</td><td>SHA-512</td></tr>
+            <tr><td>Tamper Detection</td><td>Any modification to this report will invalidate the hash above</td></tr>
+        </table>
+        <div class="doc-footer">
+            <p>This document was generated by the Positronic Blockchain Forensic System.</p>
+            <p>All evidence is cryptographically anchored to the blockchain and verifiable at any time.</p>
+            <p>Chain: Positronic | Chain ID: 420420 | Consensus: DPoS + PoNC | Hash: SHA-512 | Signatures: Ed25519</p>
+        </div>
+    `;
+
+    doc.innerHTML = html;
+}
+
+// ---- Generate Court PDF (print) ----
+window.generateCourtPDF = async function() {
+    if(!currentReport) {
+        showMsg('Load a report first.', 'error');
+        return;
+    }
+    try {
+        // Try server-side generation first
+        const result = await rpc('positronic_generateCourtReport', [
+            currentReport.forensic_report_id || currentReport.court_report_id
+        ]);
+        if(result) {
+            currentReport = result;
+            buildCourtDocument(result);
+        }
+    } catch(e) {
+        // Fall back to local print
+    }
+    window.print();
+};
+
+// ---- Generate Evidence Package ----
+window.generateEvidencePackage = async function() {
+    const addr = currentReport?.subject_address || currentReport?.case_header?.subject_address;
+    if(!addr) {
+        showMsg('No subject address found in current report.', 'error');
+        return;
+    }
+    try {
+        showMsg('Generating evidence package...', 'info');
+        const pkg = await rpc('positronic_getEvidencePackage', [addr]);
+        if(pkg) {
+            currentPackage = pkg;
+            renderEvidencePackageViewer(pkg);
+            document.getElementById('resultMsg').classList.add('hidden');
+        }
+    } catch(e) {
+        showMsg(e.message || 'Failed to generate evidence package.', 'error');
+    }
+};
+
+// ---- Download JSON ----
+window.downloadJSON = function() {
+    const data = currentReport || currentPackage;
+    if(!data) return;
+    const str = JSON.stringify(data, null, 2);
+    const blob = new Blob([str], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `evidence-${data.court_report_id||data.package_id||'report'}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+// ---- Verify Integrity ----
+window.verifyIntegrity = async function() {
+    const el = document.getElementById('verifyResult');
+    const reportId = currentReport?.court_report_id || currentReport?.forensic_report_id;
+    if(!reportId) {
+        el.innerHTML = '<div class="verify-result invalid"><span class="verify-icon">!</span><div>No report loaded to verify.</div></div>';
+        return;
+    }
+    el.innerHTML = '<div class="verify-result" style="background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);color:var(--positronic-cyan)"><span class="spinner"></span> Verifying evidence integrity...</div>';
+    try {
+        const result = await rpc('positronic_verifyEvidence', [reportId]);
+        if(result.valid) {
+            el.innerHTML = `<div class="verify-result valid">
+                <span class="verify-icon">&#10003;</span>
+                <div>
+                    <strong>INTEGRITY VERIFIED</strong><br>
+                    <span style="font-size:12px">Hash: <span class="hash-val">${result.current_hash ? fmtShort(escapeHtml(result.current_hash), 20) : '--'}</span></span><br>
+                    <span style="font-size:12px">Verified: ${fmtTime(result.verified_at)}</span>
+                </div>
+            </div>`;
+        } else {
+            el.innerHTML = `<div class="verify-result invalid">
+                <span class="verify-icon">&#10007;</span>
+                <div>
+                    <strong>INTEGRITY CHECK FAILED</strong><br>
+                    <span style="font-size:12px">${escapeHtml(result.error)||'Hash mismatch detected. Evidence may have been tampered with.'}</span>
+                </div>
+            </div>`;
+        }
+    } catch(e) {
+        el.innerHTML = `<div class="verify-result invalid"><span class="verify-icon">&#10007;</span><div>Verification failed: ${escapeHtml(e.message)}</div></div>`;
+    }
+};
+
+// ---- Connection Check ----
+async function checkConnection() {
+    try {
+        await rpc('eth_chainId');
+        document.getElementById('statusDot').className = 'status-dot online';
+        document.getElementById('statusDot').title = 'Node connected';
+        loadForensicStats();
+    } catch {
+        document.getElementById('statusDot').className = 'status-dot';
+        document.getElementById('statusDot').title = 'Node offline';
+    }
+}
+
+// Enter key support
+document.getElementById('queryInput').addEventListener('keydown', function(e) {
+    if(e.key === 'Enter') generate();
+});
+
+checkConnection();
+})();
+</script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(()=>{});</script>
+<script>
+// Scroll reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.stat-card, .search-section, .report-section').forEach(el => {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>

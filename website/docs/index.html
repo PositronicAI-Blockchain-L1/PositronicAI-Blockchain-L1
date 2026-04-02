@@ -1,0 +1,2935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASF API Documentation - Positronic Blockchain</title>
+    <meta name="description" content="Complete JSON-RPC API documentation for the Positronic blockchain. 259 RPC methods across eth_*, net_*, and positronic_* namespaces.">
+    <link rel="canonical" href="https://positronic-ai.network/docs/">
+    <meta property="og:title" content="ASF API Documentation - Positronic Blockchain">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Positronic">
+    <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@positronic_ai">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://rpc.positronic-ai.network https://testnet.positronic-ai.network https://*.positronic-ai.network; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/spacegrotesk-400.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/spacegrotesk-600.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/spacegrotesk-700.woff2) format('woff2')}
+    </style>
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../logo-200.webp">
+    <meta name="theme-color" content="#0080FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+/* ===== Reset & Variables ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --positronic-blue: #0080FF;
+    --positronic-cyan: #00E5FF;
+    --positronic-silver: #B0B8C0;
+    --positronic-electric: #00BFFF;
+    --positronic-dark: #0D1B2A;
+    --positronic-darker: #060D1A;
+    --positronic-accent: #0A1628;
+    --positronic-glow: #1a3a5c;
+    --positronic-highlight: #00E5FF;
+    --text-primary: #ffffff;
+    --text-secondary: #B0B8C0;
+    --text-muted: #6a7a8a;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --sidebar-width: 280px;
+    --topbar-height: 56px;
+    --code-bg: #060D1A;
+    --success: #00c853;
+    --error: #ff3d3d;
+    --warning: #ffc107;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--topbar-height) + 20px); }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--positronic-darker);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+    position: fixed; top:0; left:0; right:0;
+    height: var(--topbar-height);
+    background: rgba(10,10,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; z-index: 1000;
+}
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.topbar-brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text-primary); }
+.brand-logo { width:28px; height:28px; border-radius:6px; }
+.brand-icon {
+    width:28px; height:28px; background:var(--positronic-blue); border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; color:#fff;
+}
+.brand-text { font-family:'Space Grotesk',sans-serif; font-size:11px; color:var(--positronic-cyan); letter-spacing:1px; }
+.topbar-right { display:flex; align-items:center; gap:16px; }
+.rpc-url-display code {
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted);
+    background:rgba(255,255,255,0.05); padding:4px 10px; border-radius:4px; border:1px solid var(--card-border);
+}
+.connection-status { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; }
+.status-dot { width:8px; height:8px; border-radius:50%; background:var(--error); transition:background 0.3s; }
+.status-dot.connected { background:var(--success); box-shadow:0 0 8px rgba(0,200,83,0.5); }
+.status-dot.disconnected { background:var(--error); box-shadow:0 0 8px rgba(255,61,61,0.5); }
+.status-text { color:var(--text-secondary); font-size:11px; }
+.topbar-home-link {
+    color:var(--text-secondary); text-decoration:none; font-size:12px; font-weight:600;
+    padding:6px 14px; border-radius:6px; border:1px solid var(--card-border); transition:all 0.2s;
+}
+.topbar-home-link:hover { color:var(--positronic-cyan); border-color:var(--positronic-cyan); background:rgba(0,229,255,0.08); }
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+    display:none; flex-direction:column; justify-content:center; gap:4px;
+    width:32px; height:32px; background:none; border:1px solid var(--card-border);
+    border-radius:6px; cursor:pointer; padding:6px;
+}
+.sidebar-toggle span { display:block; width:100%; height:2px; background:var(--text-secondary); border-radius:2px; transition:all 0.3s; }
+
+/* ===== Layout ===== */
+.docs-layout { display:flex; margin-top:var(--topbar-height); min-height:calc(100vh - var(--topbar-height)); }
+
+/* ===== Sidebar ===== */
+.sidebar {
+    position:fixed; top:var(--topbar-height); left:0;
+    width:var(--sidebar-width); height:calc(100vh - var(--topbar-height));
+    background:rgba(10,10,26,0.98); border-right:1px solid var(--card-border);
+    overflow-y:auto; overflow-x:hidden; z-index:900; transition:transform 0.3s ease;
+}
+.sidebar::-webkit-scrollbar { width:4px; }
+.sidebar::-webkit-scrollbar-track { background:transparent; }
+.sidebar::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.2); }
+.sidebar-search {
+    padding:16px; border-bottom:1px solid var(--card-border);
+    position:sticky; top:0; background:rgba(10,10,26,0.98); z-index:10;
+}
+.sidebar-search input {
+    width:100%; padding:8px 12px; background:rgba(255,255,255,0.05);
+    border:1px solid var(--card-border); border-radius:6px; color:var(--text-primary);
+    font-family:'Inter',sans-serif; font-size:13px; outline:none; transition:border-color 0.2s;
+}
+.sidebar-search input::placeholder { color:var(--text-muted); }
+.sidebar-search input:focus { border-color:var(--positronic-cyan); box-shadow:0 0 0 2px rgba(0,229,255,0.1); }
+.sidebar-nav { padding:8px 0; }
+.sidebar-group { margin-bottom:4px; }
+.sidebar-group-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; font-family:'Space Grotesk',sans-serif; font-size:8px;
+    color:var(--positronic-cyan); text-transform:uppercase; letter-spacing:1px;
+    cursor:pointer; user-select:none; transition:background 0.2s;
+}
+.sidebar-group-header:hover { background:rgba(0,229,255,0.05); }
+.sidebar-group-header .group-count {
+    font-family:'Inter',sans-serif; font-size:10px; color:var(--text-muted);
+    background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:8px;
+}
+.sidebar-group-header .group-arrow { font-size:8px; transition:transform 0.2s; color:var(--text-muted); }
+.sidebar-group.collapsed .group-arrow { transform:rotate(-90deg); }
+.sidebar-group.collapsed .sidebar-group-items { display:none; }
+.sidebar-group-items { padding:2px 0; }
+.sidebar-item {
+    display:block; padding:6px 16px 6px 24px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-secondary);
+    text-decoration:none; cursor:pointer; transition:all 0.15s;
+    border-left:2px solid transparent; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.sidebar-item:hover { color:var(--text-primary); background:rgba(255,255,255,0.04); border-left-color:rgba(0,229,255,0.3); }
+.sidebar-item.active { color:var(--positronic-cyan); background:rgba(0,229,255,0.08); border-left-color:var(--positronic-cyan); font-weight:600; }
+
+/* ===== Main Content ===== */
+.docs-main { margin-left:var(--sidebar-width); flex:1; padding:32px 40px 80px; max-width:960px; min-width:0; }
+
+/* Intro */
+.docs-intro { margin-bottom:48px; padding-bottom:32px; border-bottom:1px solid var(--card-border); }
+.docs-title { font-family:'Space Grotesk',sans-serif; font-size:20px; color:var(--positronic-cyan); margin-bottom:16px; line-height:1.4; }
+.docs-subtitle { font-size:15px; color:var(--text-secondary); max-width:680px; line-height:1.7; margin-bottom:24px; }
+.docs-subtitle code {
+    font-family:'JetBrains Mono',monospace; background:rgba(0,229,255,0.1); color:var(--positronic-cyan);
+    padding:2px 6px; border-radius:4px; font-size:13px;
+}
+.docs-quick-info { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px; }
+.info-chip {
+    display:flex; align-items:center; gap:8px; background:var(--card-bg);
+    border:1px solid var(--card-border); border-radius:8px; padding:8px 14px;
+}
+.chip-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); }
+.info-chip code { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--positronic-cyan); }
+.docs-example-box { background:var(--code-bg); border:1px solid var(--card-border); border-radius:10px; overflow:hidden; }
+.docs-example-box h3 {
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:700; text-transform:uppercase;
+    letter-spacing:1px; color:var(--text-muted); padding:12px 20px;
+    background:rgba(255,255,255,0.02); border-bottom:1px solid var(--card-border);
+}
+
+/* ===== Code Blocks ===== */
+.code-block {
+    background:var(--code-bg); padding:18px 20px; overflow-x:auto;
+    font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6;
+    color:#c0c0d0; border-radius:8px; margin:0; position:relative;
+}
+.code-block::-webkit-scrollbar { height:4px; }
+.code-block::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:4px; }
+.code-keyword { color:#c792ea; }
+.code-string { color:#c3e88d; }
+.code-number { color:#f78c6c; }
+.code-property { color:#82aaff; }
+.code-boolean { color:#ff5370; }
+.code-null { color:#ff5370; }
+.code-comment { color:#546e7a; font-style:italic; }
+.code-method { color:var(--positronic-cyan); }
+
+/* Copy button */
+.copy-btn {
+    position:absolute; top:8px; right:8px; background:rgba(255,255,255,0.08);
+    border:1px solid var(--card-border); border-radius:4px; color:var(--text-muted);
+    font-size:10px; padding:4px 8px; cursor:pointer; font-family:'Inter',sans-serif;
+    transition:all 0.2s; z-index:5;
+}
+.copy-btn:hover { background:rgba(255,255,255,0.15); color:var(--text-primary); }
+.copy-btn.copied { background:rgba(0,200,83,0.2); color:var(--success); border-color:rgba(0,200,83,0.3); }
+
+/* ===== Method Group Headers ===== */
+.method-group-header { margin-top:56px; margin-bottom:24px; padding-bottom:12px; border-bottom:2px solid var(--card-border); }
+.method-group-header h2 { font-family:'Space Grotesk',sans-serif; font-size:13px; color:var(--positronic-blue); letter-spacing:1px; line-height:1.5; }
+.method-group-header p { font-size:13px; color:var(--text-muted); margin-top:6px; }
+
+/* ===== Method Cards ===== */
+.method-card {
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px;
+    margin-bottom:24px; overflow:hidden; transition:border-color 0.2s;
+    scroll-margin-top:calc(var(--topbar-height) + 16px);
+}
+.method-card:hover { border-color:rgba(0,229,255,0.2); }
+.method-card-header {
+    padding:20px 24px 16px; border-bottom:1px solid var(--card-border);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.method-name { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:var(--positronic-cyan); }
+.method-namespace-tag {
+    font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+    padding:3px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px;
+}
+.tag-eth { background:rgba(98,126,234,0.15); color:#627eea; border:1px solid rgba(98,126,234,0.25); }
+.tag-net { background:rgba(0,191,255,0.15); color:#00BFFF; border:1px solid rgba(0,191,255,0.25); }
+.tag-positronic { background:rgba(0,128,255,0.15); color:#0080FF; border:1px solid rgba(0,128,255,0.25); }
+.method-card-body { padding:20px 24px; }
+.method-description { font-size:14px; color:var(--text-secondary); margin-bottom:20px; line-height:1.6; }
+
+/* Parameters Table */
+.params-section { margin-bottom:20px; }
+.params-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:8px; }
+.params-none { font-size:13px; color:var(--text-muted); font-style:italic; padding:8px 0; }
+.params-table { width:100%; border-collapse:collapse; font-size:13px; }
+.params-table th {
+    text-align:left; font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.5px; color:var(--text-muted); padding:8px 12px;
+    border-bottom:1px solid var(--card-border); background:rgba(255,255,255,0.02);
+}
+.params-table td { padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.03); vertical-align:top; }
+.params-table tr:last-child td { border-bottom:none; }
+.param-name { font-family:'JetBrains Mono',monospace; color:var(--positronic-cyan); font-weight:600; font-size:12px; }
+.param-type { font-family:'JetBrains Mono',monospace; color:var(--positronic-glow); font-size:11px; }
+.param-required { font-size:10px; font-weight:700; padding:2px 6px; border-radius:3px; }
+.param-required.yes { background:rgba(0,128,255,0.15); color:var(--positronic-blue); }
+.param-required.no { background:rgba(255,255,255,0.05); color:var(--text-muted); }
+.param-desc { color:var(--text-secondary); font-size:12px; }
+
+/* Returns */
+.returns-section { margin-bottom:20px; }
+.returns-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:6px; }
+.returns-type { font-family:'JetBrains Mono',monospace; font-size:13px; color:#c3e88d; }
+
+/* Example Request */
+.example-section { margin-bottom:16px; }
+.example-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:8px; }
+.example-code {
+    background:var(--code-bg); border:1px solid var(--card-border); border-radius:8px;
+    padding:14px 18px; overflow-x:auto; font-family:'JetBrains Mono',monospace;
+    font-size:12px; line-height:1.5; color:#c0c0d0; position:relative;
+}
+.example-code::-webkit-scrollbar { height:3px; }
+.example-code::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:3px; }
+
+/* Try It Section */
+.tryit-section { margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border); }
+.tryit-header {
+    display:flex; align-items:center; gap:8px; margin-bottom:12px; cursor:pointer; user-select:none;
+}
+.tryit-header-label {
+    font-family:'Space Grotesk',sans-serif; font-size:8px; color:var(--positronic-blue);
+    text-transform:uppercase; letter-spacing:1px;
+}
+.tryit-header-arrow { font-size:8px; color:var(--text-muted); transition:transform 0.2s; }
+.tryit-body { display:none; }
+.tryit-body.open { display:block; }
+.tryit-header-arrow.open { transform:rotate(90deg); }
+.tryit-endpoint {
+    display:flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+.tryit-endpoint-label {
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); min-width:60px;
+}
+.tryit-endpoint-input {
+    flex:1; padding:7px 12px; background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    border-radius:6px; color:var(--text-primary); font-family:'JetBrains Mono',monospace;
+    font-size:12px; outline:none; transition:border-color 0.2s;
+}
+.tryit-endpoint-input:focus { border-color:var(--positronic-cyan); box-shadow:0 0 0 2px rgba(0,229,255,0.1); }
+.tryit-params { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+.tryit-param-row { display:flex; align-items:center; gap:10px; }
+.tryit-param-label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--positronic-cyan); min-width:120px; font-weight:600; }
+.tryit-param-input {
+    flex:1; padding:7px 12px; background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    border-radius:6px; color:var(--text-primary); font-family:'JetBrains Mono',monospace;
+    font-size:12px; outline:none; transition:border-color 0.2s;
+}
+.tryit-param-input::placeholder { color:var(--text-muted); }
+.tryit-param-input:focus { border-color:var(--positronic-cyan); box-shadow:0 0 0 2px rgba(0,229,255,0.1); }
+.tryit-actions { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.tryit-btn {
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:8px 20px;
+    border:none; border-radius:6px; cursor:pointer; transition:all 0.2s;
+    text-transform:uppercase; letter-spacing:0.5px;
+}
+.tryit-btn-send { background:var(--positronic-blue); color:#fff; }
+.tryit-btn-send:hover { background:#0066CC; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,128,255,0.3); }
+.tryit-btn-send:active { transform:translateY(0); }
+.tryit-btn-send.loading { opacity:0.7; cursor:not-allowed; }
+.tryit-btn-clear { background:rgba(255,255,255,0.06); color:var(--text-secondary); border:1px solid var(--card-border); }
+.tryit-btn-clear:hover { background:rgba(255,255,255,0.1); color:var(--text-primary); }
+.tryit-response { display:none; }
+.tryit-response.visible { display:block; }
+.tryit-response-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.tryit-response-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); }
+.tryit-response-status { font-size:11px; font-weight:700; padding:2px 8px; border-radius:4px; }
+.tryit-response-status.success { background:rgba(0,200,83,0.15); color:var(--success); }
+.tryit-response-status.error { background:rgba(255,61,61,0.15); color:var(--error); }
+.tryit-response-body {
+    background:var(--code-bg); border:1px solid var(--card-border); border-radius:8px;
+    padding:14px 18px; overflow-x:auto; font-family:'JetBrains Mono',monospace;
+    font-size:12px; line-height:1.5; color:#c0c0d0; max-height:320px; overflow-y:auto;
+    white-space:pre-wrap; word-break:break-all;
+}
+.tryit-response-body::-webkit-scrollbar { width:4px; height:4px; }
+.tryit-response-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:4px; }
+
+/* ===== Sidebar Overlay (Mobile) ===== */
+.sidebar-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:899; }
+.sidebar-overlay.visible { display:block; }
+
+/* ===== Responsive ===== */
+@media (max-width:900px) {
+    .sidebar-toggle { display:flex; }
+    .sidebar { transform:translateX(-100%); box-shadow:4px 0 24px rgba(0,0,0,0.4); }
+    .sidebar.open { transform:translateX(0); }
+    .docs-main { margin-left:0; padding:24px 20px 60px; }
+    .rpc-url-display { display:none; }
+    .docs-title { font-size:14px; }
+    .docs-quick-info { flex-direction:column; }
+    .method-card-header { flex-direction:column; }
+    .params-table { font-size:11px; }
+    .params-table th, .params-table td { padding:6px 8px; }
+    .tryit-param-row { flex-direction:column; align-items:flex-start; }
+    .tryit-param-label { min-width:auto; }
+    .tryit-param-input { width:100%; }
+    .brand-text { font-size:9px; }
+    /* Tables scroll on mobile */
+    table, .scope-table, .comparison-table { display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table th, table td { min-width:80px; font-size:13px; }
+}
+        @media(max-width:768px){body{overflow-x:hidden}*{max-width:100vw;box-sizing:border-box}h1,h2,h3{word-break:break-word}pre,code{overflow-x:auto;max-width:100%;white-space:pre-wrap;font-size:12px}table{display:block;overflow-x:auto;max-width:100%}.container,.content{padding:10px!important;max-width:100%!important}img{max-width:100%;height:auto}}
+@media (max-width:600px) {
+    .topbar { padding:0 12px; }
+    .topbar-home-link { display:none; }
+    .topbar-right { gap:10px; }
+    .status-text { display:none; }
+    .docs-main { padding:16px 14px 60px; }
+    .method-card-body { padding:16px; }
+    .method-card-header { padding:14px 16px 12px; }
+    .method-name { font-size:13px; }
+    .docs-title { font-size:12px; }
+    .example-code, .tryit-response-body { font-size:10px; padding:10px 12px; }
+    /* Keep sidebar hidden on small screens (inherits translateX(-100%) from 768px) */
+    .sidebar { width:280px; }
+    .docs-main { margin-left:0 !important; padding:12px 10px 60px !important; }
+    /* Mobile text & overflow fixes */
+    body { overflow-x:hidden; }
+    *, *::before, *::after { box-sizing:border-box; }
+    h1, h2, h3, h4 { word-break:break-word; font-size:16px !important; }
+    h1 { font-size:20px !important; }
+    p, li, td, th, span, div, label { overflow-wrap:break-word; word-wrap:break-word; }
+    pre, code, .code-block, .example-code { overflow-x:auto; max-width:calc(100vw - 28px); white-space:pre-wrap; word-break:break-all; font-size:11px; }
+    img { max-width:100%; height:auto; }
+    .container, .content, main, article, section, .docs-intro, .method-card { max-width:100% !important; padding-left:10px !important; padding-right:10px !important; }
+    .docs-intro h1 { font-size:20px !important; line-height:1.3; }
+    .docs-intro p { font-size:13px !important; }
+    .method-card { margin:10px 0 !important; }
+    .method-name { font-size:12px !important; word-break:break-all; }
+    .params-table { display:block; overflow-x:auto; font-size:10px !important; }
+    .params-table th, .params-table td { padding:4px 6px !important; white-space:nowrap; }
+    .tryit-panel { padding:10px !important; }
+    .tryit-response-body { max-height:200px; font-size:10px !important; }
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.method-card { animation:fadeIn 0.3s ease forwards; }
+
+/* ===== Selection ===== */
+::selection { background:rgba(0,229,255,0.3); color:#fff; }
+
+/* ===== Focus (a11y) ===== */
+*:focus-visible { outline:2px solid var(--positronic-cyan); outline-offset:2px; }
+
+/* Scroll reveal animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="../index.html" class="topbar-brand">
+                <img src="../logo-200.webp" alt="ASF" class="brand-logo">
+                <span class="brand-text">ASF API Docs</span>
+            </a>
+        </div>
+        <div class="topbar-right">
+            <div class="rpc-url-display">
+                <code id="rpcUrlDisplay">https://rpc.positronic-ai.network</code>
+            </div>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot disconnected" id="statusDot"></span>
+                <span class="status-text" id="statusText">Disconnected</span>
+            </div>
+            <a href="../critics/index.html" class="topbar-home-link" style="color:#00E5FF;">FAQ</a>
+            <a href="../index.html" class="topbar-home-link">Home</a>
+        </div>
+    </header>
+
+    <!-- Layout Wrapper -->
+    <div class="docs-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-search">
+                <input type="text" id="methodSearch" placeholder="Search 259 methods..." autocomplete="off">
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- Populated by JS -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="docs-main" id="docsMain">
+            <!-- Hero / Intro -->
+            <section class="docs-intro">
+                <h1 class="docs-title">JSON-RPC API Reference</h1>
+                <p class="docs-subtitle">
+                    The Positronic blockchain exposes a JSON-RPC 2.0 interface on port <code>8545</code>.
+                    All Ethereum-compatible methods work alongside custom <code>positronic_*</code> endpoints for
+                    AI scoring, wallet registry, governance, play-to-earn, NFTs, DePIN, hash commitment privacy, Game Bridge, and more.
+                </p>
+                <div class="docs-quick-info">
+                    <div class="info-chip">
+                        <span class="chip-label">Endpoint</span>
+                        <code>https://rpc.positronic-ai.network</code>
+                    </div>
+                    <div class="info-chip">
+                        <span class="chip-label">Chain ID</span>
+                        <code id="chainIdDisplay">420420 (0x66a44)</code>
+                    </div>
+                    <div class="info-chip">
+                        <span class="chip-label">Protocol</span>
+                        <code>JSON-RPC 2.0</code>
+                    </div>
+                    <div class="info-chip">
+                        <span class="chip-label">Methods</span>
+                        <code>242 total</code>
+                    </div>
+                </div>
+                <div class="docs-example-box">
+                    <h3>Quick Example</h3>
+<pre class="code-block"><code><span class="code-keyword">curl</span> -X POST https://rpc.positronic-ai.network \
+  -H <span class="code-string">"Content-Type: application/json"</span> \
+  -d <span class="code-string">'{
+    "jsonrpc": "2.0",
+    "method": "eth_chainId",
+    "params": [],
+    "id": 1
+  }'</span></code></pre>
+                </div>
+            </section>
+
+            <!-- Method Cards Container -->
+            <div id="methodCards">
+                <!-- Populated by JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="/config.js"></script>
+    <script>
+/* ===================================================================
+   Positronic - API Documentation (inline)
+   JSON-RPC 2.0 interactive documentation - 259 methods
+   =================================================================== */
+
+// ---------- RPC Client ----------
+const rpc = {
+    url: 'https://rpc.positronic-ai.network',
+    id: 1,
+    async call(method, params = []) {
+        const res = await fetch(this.url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', method, params, id: this.id++ })
+        });
+        return await res.json();
+    }
+};
+
+// Update displayed RPC URL from config
+(function() {
+    var el = document.getElementById('rpcUrlDisplay');
+    if (el) el.textContent = rpc.url;
+})();
+
+// ---------- All 259 Method Definitions ----------
+const METHOD_GROUPS = [
+    {
+        name: 'Ethereum Compatible',
+        key: 'eth',
+        description: 'Standard Ethereum JSON-RPC methods for EVM compatibility.',
+        methods: [
+            {
+                method: 'eth_chainId',
+                description: 'Returns the chain ID of the current network.',
+                params: [],
+                returns: 'Hex string - the chain ID (e.g. "0x66a44" = 420420)',
+                example: { result: '0x66a44' }
+            },
+            {
+                method: 'eth_blockNumber',
+                description: 'Returns the number of the most recent block.',
+                params: [],
+                returns: 'Hex string - the current block height',
+                example: { result: '0x1A4' }
+            },
+            {
+                method: 'eth_getBlockByNumber',
+                description: 'Returns information about a block by block number.',
+                params: [
+                    { name: 'blockNumber', type: 'string', required: true, description: 'Hex-encoded block number or "latest"' },
+                    { name: 'fullTx', type: 'boolean', required: true, description: 'If true, returns full transaction objects; if false, only hashes' }
+                ],
+                returns: 'Block object with header fields, transactions, and hash',
+                example: null,
+                defaultParams: ['"latest"', 'false']
+            },
+            {
+                method: 'eth_getBlockByHash',
+                description: 'Returns information about a block by its hash.',
+                params: [
+                    { name: 'hash', type: 'string', required: true, description: 'The 32-byte block hash' },
+                    { name: 'fullTx', type: 'boolean', required: true, description: 'If true, returns full transaction objects' }
+                ],
+                returns: 'Block object or null if not found',
+                example: null,
+                defaultParams: ['"0x..."', 'false']
+            },
+            {
+                method: 'eth_getTransactionByHash',
+                description: 'Returns the information about a transaction by its hash.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The 32-byte transaction hash' }
+                ],
+                returns: 'Transaction object or null if not found',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'eth_getTransactionReceipt',
+                description: 'Returns the receipt of a transaction by transaction hash. Includes logs and status.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The 32-byte transaction hash' }
+                ],
+                returns: 'Receipt object with status, gasUsed, logs, blockNumber',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'eth_getBalance',
+                description: 'Returns the balance of the account at the given address.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The 20-byte account address' },
+                    { name: 'blockNumber', type: 'string', required: false, description: 'Block number or "latest" (default: "latest")' }
+                ],
+                returns: 'Hex string - balance in base units (Posis)',
+                example: null,
+                defaultParams: ['"0x..."', '"latest"']
+            },
+            {
+                method: 'eth_getTransactionCount',
+                description: 'Returns the number of transactions sent from an address (nonce).',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The 20-byte account address' },
+                    { name: 'blockNumber', type: 'string', required: false, description: 'Block number or "latest" (default: "latest")' }
+                ],
+                returns: 'Hex string - number of transactions (nonce)',
+                example: null,
+                defaultParams: ['"0x..."', '"latest"']
+            },
+            {
+                method: 'eth_getCode',
+                description: 'Returns the bytecode at a given contract address.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The 20-byte contract address' },
+                    { name: 'blockNumber', type: 'string', required: false, description: 'Block number or "latest" (default: "latest")' }
+                ],
+                returns: 'Hex string - the bytecode at the address',
+                example: null,
+                defaultParams: ['"0x..."', '"latest"']
+            },
+            {
+                method: 'eth_sendRawTransaction',
+                description: 'Submits a pre-signed transaction for broadcast to the network.',
+                params: [
+                    { name: 'signedTx', type: 'string', required: true, description: 'The signed transaction data as a hex string' }
+                ],
+                returns: 'String - the 32-byte transaction hash',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'eth_estimateGas',
+                description: 'Generates and returns an estimate of the gas needed for a transaction.',
+                params: [
+                    { name: 'callParams', type: 'object', required: true, description: 'Transaction call object (from, to, value, data, etc.)' }
+                ],
+                returns: 'Hex string - estimated gas amount',
+                example: null,
+                defaultParams: ['{"to":"0x...","data":"0x..."}']
+            },
+            {
+                method: 'eth_gasPrice',
+                description: 'Returns the current gas price in base units.',
+                params: [],
+                returns: 'Hex string - current gas price',
+                example: { result: '0x3B9ACA00' }
+            },
+            {
+                method: 'eth_call',
+                description: 'Executes a new message call immediately without creating a transaction on the blockchain.',
+                params: [
+                    { name: 'callParams', type: 'object', required: true, description: 'Transaction call object (to, data, from, value, etc.)' },
+                    { name: 'blockNumber', type: 'string', required: false, description: 'Block number or "latest"' }
+                ],
+                returns: 'Hex string - the return value of the executed call',
+                example: null,
+                defaultParams: ['{"to":"0x...","data":"0x..."}', '"latest"']
+            }
+        ]
+    },
+    {
+        name: 'Network',
+        key: 'net',
+        description: 'Network identification methods.',
+        methods: [
+            {
+                method: 'net_version',
+                description: 'Returns the current network ID.',
+                params: [],
+                returns: 'String - the current network ID (e.g. "420420")',
+                example: { result: '420420' }
+            }
+        ]
+    },
+    {
+        name: 'Positronic Core',
+        key: 'positronic-core',
+        description: 'Core chain info, AI scoring, quarantine pool, and network health.',
+        methods: [
+            {
+                method: 'positronic_getAIScore',
+                description: 'Returns the AI validation score for a specific transaction.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The 32-byte transaction hash to score' }
+                ],
+                returns: 'Object - {tx_hash, ai_score, status, model_version}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getAIStats',
+                description: 'Returns aggregate AI validation statistics across all models.',
+                params: [],
+                returns: 'Object - AI statistics (total scored, accuracy, model breakdown)',
+                example: null
+            },
+            {
+                method: 'positronic_getQuarantinePool',
+                description: 'Returns the current state of the quarantine pool where suspicious transactions are held.',
+                params: [],
+                returns: 'Object - quarantine pool stats (pending, released, rejected counts)',
+                example: null
+            },
+            {
+                method: 'positronic_nodeInfo',
+                description: 'Returns comprehensive node information including height, chain state, AI status, quarantine pool, governance, and subsystem details.',
+                params: [],
+                returns: 'Object - {height, chain_id, head_hash, state, ai, quarantine, node_ranking, game, governance, wallet_registry, immune_system, ai_ranks}',
+                example: null
+            },
+            {
+                method: 'positronic_getNetworkHealth',
+                description: 'Returns a summary health report for the network.',
+                params: [],
+                returns: 'Object - health report with status indicators',
+                example: null
+            },
+            {
+                method: 'positronic_formatDenomination',
+                description: 'Formats a raw value into a human-readable denomination string.',
+                params: [
+                    { name: 'value', type: 'string', required: true, description: 'Raw numeric value to format' },
+                    { name: 'denomination', type: 'string', required: true, description: 'Target denomination (e.g. "ASF", "Posi", "Spark")' }
+                ],
+                returns: 'String - formatted denomination string',
+                example: null,
+                defaultParams: ['"1000000000000000000"', '"ASF"']
+            }
+        ]
+    },
+    {
+        name: 'Wallet Registry',
+        key: 'wallet-registry',
+        description: 'On-chain wallet identity, trust scores, and registration status.',
+        methods: [
+            {
+                method: 'positronic_getWalletInfo',
+                description: 'Returns detailed information about a registered wallet including trust score and activity.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The 20-byte wallet address' }
+                ],
+                returns: 'Object - {status, verified, trust_score, total_volume, transaction_count}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getWalletStats',
+                description: 'Returns aggregate statistics from the wallet registry.',
+                params: [],
+                returns: 'Object - wallet registry statistics (total registered, verified count, etc.)',
+                example: null
+            },
+            {
+                method: 'positronic_isWalletRegistered',
+                description: 'Checks whether a wallet address is registered on-chain.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The 20-byte wallet address to check' }
+                ],
+                returns: 'Boolean - true if registered, false otherwise',
+                example: null,
+                defaultParams: ['"0x..."']
+            }
+        ]
+    },
+    {
+        name: 'AI Rank System',
+        key: 'ai-rank',
+        description: 'AI validator ranking system with accuracy tracking and reward multipliers.',
+        methods: [
+            {
+                method: 'positronic_getAIRank',
+                description: 'Returns the AI rank details for a specific validator address.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The validator address' }
+                ],
+                returns: 'Object - {rank_name, accuracy, total_scored, uptime_hours, reward_multiplier}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getAIRankStats',
+                description: 'Returns aggregate AI rank system statistics.',
+                params: [],
+                returns: 'Object - {total_validators, rank_distribution}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Node Ranking',
+        key: 'node-ranking',
+        description: 'Node performance ranking, leaderboards, and uptime tracking.',
+        methods: [
+            {
+                method: 'positronic_getNodeRank',
+                description: 'Returns the ranking details of a specific node.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The node address' }
+                ],
+                returns: 'Object - {rank, rank_name, uptime_percentage, blocks_validated, reward_multiplier}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getNodeLeaderboard',
+                description: 'Returns the top-ranked nodes on the network.',
+                params: [
+                    { name: 'limit', type: 'number', required: false, description: 'Number of nodes to return (default: 50)' }
+                ],
+                returns: 'Array - sorted list of node objects with rank info',
+                example: null,
+                defaultParams: ['50']
+            },
+            {
+                method: 'positronic_getNodeStats',
+                description: 'Returns aggregate node ranking statistics.',
+                params: [],
+                returns: 'Object - {total_nodes, rank_distribution}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Neural Immune System',
+        key: 'immune',
+        description: 'AI-powered threat detection and network protection.',
+        methods: [
+            {
+                method: 'positronic_getImmuneStatus',
+                description: 'Returns the current status of the neural immune system.',
+                params: [],
+                returns: 'Object - {alert_level, total_threats, blocked_addresses, threat_types}',
+                example: null
+            },
+            {
+                method: 'positronic_getRecentThreats',
+                description: 'Returns a list of recently detected threats.',
+                params: [
+                    { name: 'limit', type: 'number', required: false, description: 'Number of threats to return (default: 50)' }
+                ],
+                returns: 'Array - recent threat objects with type, severity, timestamp',
+                example: null,
+                defaultParams: ['50']
+            }
+        ]
+    },
+    {
+        name: 'Token Governance',
+        key: 'governance',
+        description: 'On-chain governance proposals, voting, and token deployment.',
+        methods: [
+            {
+                method: 'positronic_getGovernanceStats',
+                description: 'Returns aggregate governance statistics.',
+                params: [],
+                returns: 'Object - {total_proposals, total_deployed, council_members}',
+                example: null
+            },
+            {
+                method: 'positronic_getPendingProposals',
+                description: 'Returns all currently pending governance proposals.',
+                params: [],
+                returns: 'Array - pending proposal objects with details and vote counts',
+                example: null
+            },
+            {
+                method: 'positronic_getProposal',
+                description: 'Returns detailed information about a specific proposal.',
+                params: [
+                    { name: 'proposalId', type: 'string', required: true, description: 'The unique proposal identifier' }
+                ],
+                returns: 'Object - full proposal details including votes and status',
+                example: null,
+                defaultParams: ['"prop_001"']
+            }
+        ]
+    },
+    {
+        name: 'Forensic Reporting',
+        key: 'forensic',
+        description: 'Blockchain forensic analysis and incident reporting.',
+        methods: [
+            {
+                method: 'positronic_getForensicStats',
+                description: 'Returns aggregate forensic analysis statistics.',
+                params: [],
+                returns: 'Object - forensic statistics (reports filed, resolved, pending)',
+                example: null
+            },
+            {
+                method: 'positronic_getForensicReport',
+                description: 'Returns a specific forensic report by its ID.',
+                params: [
+                    { name: 'reportId', type: 'string', required: true, description: 'The unique report identifier' }
+                ],
+                returns: 'Object - report details including findings and status',
+                example: null,
+                defaultParams: ['"report_001"']
+            }
+        ]
+    },
+    {
+        name: 'Play-to-Earn',
+        key: 'play-to-earn',
+        description: 'Gaming system with player profiles, leaderboards, and reward distribution.',
+        methods: [
+            {
+                method: 'positronic_getGameStats',
+                description: 'Returns aggregate play-to-earn game statistics.',
+                params: [],
+                returns: 'Object - {total_players, total_games_played, total_distributed}',
+                example: null
+            },
+            {
+                method: 'positronic_getPlayerProfile',
+                description: 'Returns the game profile for a specific player address.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The player wallet address' }
+                ],
+                returns: 'Object - player profile with score, games played, earnings',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getGameLeaderboard',
+                description: 'Returns the top players by score.',
+                params: [
+                    { name: 'limit', type: 'number', required: false, description: 'Number of players to return (default: 50)' }
+                ],
+                returns: 'Array - sorted list of player objects',
+                example: null,
+                defaultParams: ['50']
+            },
+            {
+                method: 'positronic_submitGameResult',
+                description: 'Submits a game result for reward evaluation by the AI scoring system.',
+                params: [
+                    { name: 'resultObject', type: 'object', required: true, description: 'Game result with player address, score, game ID, and proof' }
+                ],
+                returns: 'Object - {reward, reason}',
+                example: null,
+                defaultParams: ['{"player":"0x...","score":1000,"game_id":"run_001"}']
+            }
+        ]
+    },
+    {
+        name: 'Play-to-Mine',
+        key: 'play-to-mine',
+        description: 'Promotion from player to validator through gameplay achievements.',
+        methods: [
+            {
+                method: 'positronic_getPromotionStatus',
+                description: 'Checks whether a player is eligible for promotion to validator.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The player wallet address' }
+                ],
+                returns: 'Object - promotion eligibility details and requirements',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_optInAutoPromotion',
+                description: 'Opts a player into automatic promotion to validator when eligible.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The player wallet address' },
+                    { name: 'pubkeyHex', type: 'string', required: true, description: 'The validator public key in hex format' }
+                ],
+                returns: 'Object - opt-in confirmation result',
+                example: null,
+                defaultParams: ['"0x..."', '"0x04..."']
+            },
+            {
+                method: 'positronic_getPlayToMineStats',
+                description: 'Returns aggregate play-to-mine statistics.',
+                params: [],
+                returns: 'Object - play-to-mine statistics (promotions, active miners, etc.)',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Network Health',
+        key: 'network-health',
+        description: 'Detailed network health monitoring and diagnostics.',
+        methods: [
+            {
+                method: 'positronic_getHealthReport',
+                description: 'Returns a detailed health report including subsystem statuses, peer info, and performance metrics.',
+                params: [],
+                returns: 'Object - comprehensive health report with all subsystem statuses',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'SPV / Light Client',
+        key: 'spv',
+        description: 'Merkle proof generation and verification for light clients.',
+        methods: [
+            {
+                method: 'positronic_getMerkleProof',
+                description: 'Generates a Merkle proof for a given transaction, allowing SPV verification.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The 32-byte transaction hash' }
+                ],
+                returns: 'Object - Merkle proof with root, path, and sibling hashes',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_verifyMerkleProof',
+                description: 'Verifies a Merkle proof against the chain state.',
+                params: [
+                    { name: 'proofDict', type: 'object', required: true, description: 'The Merkle proof object to verify' }
+                ],
+                returns: 'Object - {valid: boolean, error: string|null}',
+                example: null,
+                defaultParams: ['{"root":"0x...","tx_hash":"0x...","proof":[],"index":0}']
+            }
+        ]
+    },
+    {
+        name: 'Checkpoints',
+        key: 'checkpoints',
+        description: 'Chain checkpoint management for fast sync and state verification.',
+        methods: [
+            {
+                method: 'positronic_getCheckpoint',
+                description: 'Returns the checkpoint data at a specific block height.',
+                params: [
+                    { name: 'height', type: 'number', required: true, description: 'The block height of the checkpoint' }
+                ],
+                returns: 'Object - checkpoint data with hash, state root, and validator set',
+                example: null,
+                defaultParams: ['0']
+            },
+            {
+                method: 'positronic_getLatestCheckpoint',
+                description: 'Returns the most recent checkpoint.',
+                params: [],
+                returns: 'Object - latest checkpoint data',
+                example: null
+            },
+            {
+                method: 'positronic_getCheckpointStats',
+                description: 'Returns aggregate checkpoint statistics.',
+                params: [],
+                returns: 'Object - checkpoint stats (total, frequency, last height)',
+                example: null
+            },
+            {
+                method: 'positronic_getStateSnapshot',
+                description: 'Export compressed state snapshot at a given height for fast node sync.',
+                params: [
+                    { name: 'height', type: 'number', required: false, description: 'Block height (defaults to latest)' }
+                ],
+                returns: 'Object - { height, snapshot (hex), size_bytes, accounts_count }',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getCheckpoints',
+                description: 'Returns list of available checkpoints ordered by height descending.',
+                params: [],
+                returns: 'Array - list of checkpoint objects with height, block_hash, state_root, created_at, finalized',
+                example: null
+            },
+            {
+                method: 'positronic_verifyStateRoot',
+                description: 'Verify a state root against a stored checkpoint at the given height.',
+                params: [
+                    { name: 'height', type: 'number', required: true, description: 'Block height of checkpoint' },
+                    { name: 'state_root', type: 'string', required: true, description: 'Hex-encoded state root to verify' }
+                ],
+                returns: 'Object - { verified, height, stored_root, provided_root }',
+                example: null,
+                defaultParams: ['0', '0000000000000000']
+            }
+        ]
+    },
+    {
+        name: 'Multisig',
+        key: 'multisig',
+        description: 'Multi-signature wallet management and statistics.',
+        methods: [
+            {
+                method: 'positronic_getMultisigWallet',
+                description: 'Returns details of a multisig wallet including signers and threshold.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The multisig wallet address' }
+                ],
+                returns: 'Object - multisig details (signers, threshold, pending txs)',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getMultisigStats',
+                description: 'Returns aggregate multisig wallet statistics.',
+                params: [],
+                returns: 'Object - multisig stats (total wallets, total value locked)',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Faucet',
+        key: 'faucet',
+        description: 'Testnet faucet — 50 ASF per claim, one-time per IP address, forever.',
+        methods: [
+            {
+                method: 'positronic_faucetDrip',
+                description: 'Claims 50 ASF from the faucet. One claim per IP address, forever. Returns 32 ASF for staking + 18 ASF for testing.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The recipient wallet address' }
+                ],
+                returns: 'Object - {success, tx_hash, amount_sma, recipient}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getFaucetStats',
+                description: 'Returns faucet statistics including total claims, unique recipients, and remaining balance.',
+                params: [],
+                returns: 'Object - {faucet_address, gift_amount_sma, daily_sent, daily_limit, total_gifts, unique_recipients}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Court Evidence',
+        key: 'court-evidence',
+        description: 'Court-admissible blockchain evidence generation and verification.',
+        methods: [
+            {
+                method: 'positronic_generateCourtReport',
+                description: 'Generates a court-admissible evidence report for a transaction or address.',
+                params: [
+                    { name: 'target', type: 'string', required: true, description: 'Transaction hash or address to report on' },
+                    { name: 'type', type: 'string', required: true, description: 'Report type: "transaction" or "address"' }
+                ],
+                returns: 'Object - court report with evidence chain, timestamps, and digital signatures',
+                example: null,
+                defaultParams: ['"0x..."', '"transaction"']
+            },
+            {
+                method: 'positronic_getEvidencePackage',
+                description: 'Retrieves a previously generated evidence package by its ID.',
+                params: [
+                    { name: 'evidenceId', type: 'string', required: true, description: 'The unique evidence package identifier' }
+                ],
+                returns: 'Object - complete evidence package with metadata and proofs',
+                example: null,
+                defaultParams: ['"ev_001"']
+            },
+            {
+                method: 'positronic_verifyEvidence',
+                description: 'Verifies the integrity and authenticity of an evidence package.',
+                params: [
+                    { name: 'evidenceId', type: 'string', required: true, description: 'The evidence package ID to verify' }
+                ],
+                returns: 'Object - {valid: boolean, integrity_hash, verification_timestamp}',
+                example: null,
+                defaultParams: ['"ev_001"']
+            }
+        ]
+    },
+    {
+        name: 'TRUST System',
+        key: 'trust',
+        description: 'Transparent Reputation and Unified Scoring for Trust.',
+        methods: [
+            {
+                method: 'positronic_getTrustScore',
+                description: 'Returns the TRUST score for a specific address.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The wallet address to query' }
+                ],
+                returns: 'Object - {score, level, factors, last_updated}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getTrustProfile',
+                description: 'Returns the full TRUST profile with history and breakdown.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The wallet address' }
+                ],
+                returns: 'Object - detailed trust profile with factor breakdown and history',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getTrustLeaderboard',
+                description: 'Returns the top addresses by TRUST score.',
+                params: [
+                    { name: 'limit', type: 'number', required: false, description: 'Number of entries to return (default: 50)' }
+                ],
+                returns: 'Array - sorted list of trust entries',
+                example: null,
+                defaultParams: ['50']
+            },
+            {
+                method: 'positronic_getTrustStats',
+                description: 'Returns aggregate TRUST system statistics.',
+                params: [],
+                returns: 'Object - {total_scored, average_score, distribution}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'PRC-20 Tokens',
+        key: 'prc20',
+        description: 'Fungible token standard for the Positronic blockchain (similar to ERC-20).',
+        methods: [
+            {
+                method: 'positronic_createToken',
+                description: 'Creates a new PRC-20 fungible token with the specified parameters.',
+                params: [
+                    { name: 'tokenParams', type: 'object', required: true, description: 'Token creation params: {name, symbol, total_supply, decimals, creator}' }
+                ],
+                returns: 'Object - {token_address, tx_hash, name, symbol}',
+                example: null,
+                defaultParams: ['{"name":"MyCoin","symbol":"MYC","total_supply":"1000000","decimals":18,"creator":"0x..."}']
+            },
+            {
+                method: 'positronic_getTokenInfo',
+                description: 'Returns metadata and supply information for an PRC-20 token.',
+                params: [
+                    { name: 'tokenAddress', type: 'string', required: true, description: 'The token contract address' }
+                ],
+                returns: 'Object - {name, symbol, decimals, total_supply, holders}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getTokenBalance',
+                description: 'Returns the PRC-20 token balance for an address.',
+                params: [
+                    { name: 'tokenAddress', type: 'string', required: true, description: 'The token contract address' },
+                    { name: 'ownerAddress', type: 'string', required: true, description: 'The wallet address to check' }
+                ],
+                returns: 'String - token balance',
+                example: null,
+                defaultParams: ['"0x..."', '"0x..."']
+            },
+            {
+                method: 'positronic_tokenMint',
+                description: 'Mint additional PRC-20 tokens. Only the token owner/creator can call this method.',
+                params: [
+                    { name: 'mintParams', type: 'object', required: true, description: '{token_id, to, amount} — token_id: token contract address, to: recipient address, amount: tokens to mint' }
+                ],
+                returns: 'Object - {token_id, symbol, minted, to, new_total_supply}',
+                example: null,
+                defaultParams: ['{"token_id":"0x...","to":"0x...","amount":"1000"}']
+            },
+            {
+                method: 'positronic_listTokens',
+                description: 'Returns a list of all deployed PRC-20 tokens.',
+                params: [],
+                returns: 'Array - list of token objects with address, name, symbol',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'PRC-721 NFTs',
+        key: 'prc721',
+        description: 'Non-fungible token standard for the Positronic blockchain (similar to ERC-721).',
+        methods: [
+            {
+                method: 'positronic_createNFTCollection',
+                description: 'Creates a new PRC-721 NFT collection.',
+                params: [
+                    { name: 'collectionParams', type: 'object', required: true, description: 'Collection params: {name, symbol, creator, max_supply}' }
+                ],
+                returns: 'Object - {collection_address, tx_hash, name, symbol}',
+                example: null,
+                defaultParams: ['{"name":"Positronic Heroes","symbol":"HERO","creator":"0x...","max_supply":10000}']
+            },
+            {
+                method: 'positronic_getNFTCollection',
+                description: 'Returns metadata for an NFT collection.',
+                params: [
+                    { name: 'collectionAddress', type: 'string', required: true, description: 'The collection contract address' }
+                ],
+                returns: 'Object - {name, symbol, total_minted, max_supply, creator}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getNFTMetadata',
+                description: 'Returns the metadata for a specific NFT token.',
+                params: [
+                    { name: 'collectionAddress', type: 'string', required: true, description: 'The collection contract address' },
+                    { name: 'tokenId', type: 'string', required: true, description: 'The NFT token ID' }
+                ],
+                returns: 'Object - {token_id, owner, metadata, image_uri}',
+                example: null,
+                defaultParams: ['"0x..."', '"1"']
+            },
+            {
+                method: 'positronic_getNFTsOfOwner',
+                description: 'Returns all NFTs owned by an address within a collection.',
+                params: [
+                    { name: 'collectionAddress', type: 'string', required: true, description: 'The collection contract address' },
+                    { name: 'ownerAddress', type: 'string', required: true, description: 'The owner wallet address' }
+                ],
+                returns: 'Array - list of token IDs owned',
+                example: null,
+                defaultParams: ['"0x..."', '"0x..."']
+            },
+            {
+                method: 'positronic_mintNFT',
+                description: 'Mint a new NFT in an existing PRC-721 collection. The caller must be the collection creator or an authorized minter.',
+                params: [
+                    { name: 'mintParams', type: 'object', required: true, description: '{collection_id, to, name?, description?, image_uri?, attributes?, dynamic?} — collection_id: collection address, to: recipient, dynamic: true for mutable metadata' }
+                ],
+                returns: 'Object - {collection_id, token_id, owner, name, total_supply}',
+                example: null,
+                defaultParams: ['{"collection_id":"0x...","to":"0x...","name":"Hero #1","description":"A legendary hero","image_uri":"ipfs://...","attributes":[{"trait_type":"Power","value":"Fire"}],"dynamic":false}']
+            },
+            {
+                method: 'positronic_listCollections',
+                description: 'Returns a list of all deployed PRC-721 NFT collections.',
+                params: [],
+                returns: 'Array - list of collection objects',
+                example: null
+            },
+            {
+                method: 'positronic_getTokenRegistryStats',
+                description: 'Returns aggregate statistics for the token registry (PRC-20 and PRC-721).',
+                params: [],
+                returns: 'Object - {total_prc20, total_prc721, total_nfts_minted}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Gasless Transactions',
+        key: 'gasless',
+        description: 'Paymaster-sponsored gasless transaction support.',
+        methods: [
+            {
+                method: 'positronic_registerPaymaster',
+                description: 'Registers a new paymaster that sponsors gas fees for users.',
+                params: [
+                    { name: 'paymasterParams', type: 'object', required: true, description: 'Paymaster config: {owner, deposit, allowed_methods}' }
+                ],
+                returns: 'Object - {paymaster_address, tx_hash}',
+                example: null,
+                defaultParams: ['{"owner":"0x...","deposit":"100","allowed_methods":["*"]}']
+            },
+            {
+                method: 'positronic_getPaymasterInfo',
+                description: 'Returns details about a registered paymaster.',
+                params: [
+                    { name: 'paymasterAddress', type: 'string', required: true, description: 'The paymaster contract address' }
+                ],
+                returns: 'Object - {owner, balance, total_sponsored, allowed_methods}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getPaymasterStats',
+                description: 'Returns aggregate paymaster statistics.',
+                params: [],
+                returns: 'Object - {total_paymasters, total_sponsored_txs, total_gas_sponsored}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Smart Wallet',
+        key: 'smart-wallet',
+        description: 'Account-abstraction smart wallets with social recovery and session keys.',
+        methods: [
+            {
+                method: 'positronic_createSmartWallet',
+                description: 'Deploys a new smart wallet with the specified configuration.',
+                params: [
+                    { name: 'walletParams', type: 'object', required: true, description: 'Wallet config: {owner, guardians, threshold}' }
+                ],
+                returns: 'Object - {wallet_address, tx_hash, owner}',
+                example: null,
+                defaultParams: ['{"owner":"0x...","guardians":["0x..."],"threshold":1}']
+            },
+            {
+                method: 'positronic_getSmartWallet',
+                description: 'Returns details about a deployed smart wallet.',
+                params: [
+                    { name: 'walletAddress', type: 'string', required: true, description: 'The smart wallet address' }
+                ],
+                returns: 'Object - {owner, guardians, threshold, balance, nonce}',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getSmartWalletStats',
+                description: 'Returns aggregate smart wallet statistics.',
+                params: [],
+                returns: 'Object - {total_wallets, total_guardians, total_recoveries}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'On-Chain Games',
+        key: 'on-chain-games',
+        description: 'On-chain game sessions with verifiable state and Play-to-Mine rewards.',
+        methods: [
+            {
+                method: 'positronic_startOnChainGame',
+                description: 'Start a new on-chain game session for a player.',
+                params: [
+                    { name: 'player', type: 'string', required: true, description: 'Player address (hex)' }
+                ],
+                returns: 'Object - {game_id, player, status}',
+                example: null,
+                defaultParams: ['"0x0000000000000000000000000000000000000000"']
+            },
+            {
+                method: 'positronic_getOnChainGameState',
+                description: 'Get the current state of an on-chain game for a player.',
+                params: [
+                    { name: 'player', type: 'string', required: true, description: 'Player address (hex)' }
+                ],
+                returns: 'Object - {player, game_state, score, round}',
+                example: null,
+                defaultParams: ['"0x0000000000000000000000000000000000000000"']
+            },
+            {
+                method: 'positronic_getOnChainGameStats',
+                description: 'Get aggregate on-chain game statistics.',
+                params: [],
+                returns: 'Object - {total_games, active_games, completed_games, total_players}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'AI Agents',
+        key: 'ai-agents',
+        description: 'Autonomous AI agent registration and management on-chain.',
+        methods: [
+            {
+                method: 'positronic_registerAgent',
+                description: 'Registers a new autonomous AI agent on the blockchain.',
+                params: [
+                    { name: 'agentParams', type: 'object', required: true, description: 'Agent config: {owner, name, capabilities, model}' }
+                ],
+                returns: 'Object - {agent_id, tx_hash, name}',
+                example: null,
+                defaultParams: ['{"owner":"0x...","name":"TradingBot","capabilities":["trade","analyze"],"model":"gpt-4"}']
+            },
+            {
+                method: 'positronic_getAgentInfo',
+                description: 'Returns details about a registered AI agent.',
+                params: [
+                    { name: 'agentId', type: 'string', required: true, description: 'The unique agent identifier' }
+                ],
+                returns: 'Object - {agent_id, owner, name, capabilities, actions_count, reputation}',
+                example: null,
+                defaultParams: ['"agent_001"']
+            },
+            {
+                method: 'positronic_getAgentsByOwner',
+                description: 'Returns all AI agents owned by a specific address.',
+                params: [
+                    { name: 'ownerAddress', type: 'string', required: true, description: 'The owner wallet address' }
+                ],
+                returns: 'Array - list of agent objects owned by the address',
+                example: null,
+                defaultParams: ['"0x..."']
+            },
+            {
+                method: 'positronic_getAgentStats',
+                description: 'Returns aggregate AI agent statistics.',
+                params: [],
+                returns: 'Object - {total_agents, active_agents, total_actions}',
+                example: null
+            },
+            {
+                method: 'positronic_agentExecuteAction',
+                description: 'Execute an AI agent action on-chain.',
+                params: [
+                    { name: 'agentId', type: 'string', required: true, description: 'The unique agent identifier' },
+                    { name: 'actionType', type: 'string', required: true, description: 'The type of action to execute (e.g. "trade", "transfer", "analyze")' },
+                    { name: 'actionParams', type: 'object', required: true, description: 'Action-specific parameters' }
+                ],
+                returns: 'Object - {action_id, tx_hash, result, gas_used}',
+                example: null,
+                defaultParams: ['"agent_001"', '"trade"', '{"pair":"ASF/USDT","amount":"100"}']
+            },
+            {
+                method: 'positronic_agentSetLimits',
+                description: 'Set spending and action limits for an AI agent.',
+                params: [
+                    { name: 'agentId', type: 'string', required: true, description: 'The unique agent identifier' },
+                    { name: 'limits', type: 'object', required: true, description: 'Limit config: {max_spend_per_tx, max_daily_spend, max_actions_per_hour}' }
+                ],
+                returns: 'Object - {agent_id, limits, tx_hash}',
+                example: null,
+                defaultParams: ['"agent_001"', '{"max_spend_per_tx":"1000","max_daily_spend":"10000","max_actions_per_hour":60}']
+            },
+            {
+                method: 'positronic_agentGetActivity',
+                description: 'Get recent activity log for an AI agent.',
+                params: [
+                    { name: 'agentId', type: 'string', required: true, description: 'The unique agent identifier' },
+                    { name: 'limit', type: 'number', required: false, description: 'Number of activity entries to return (default: 50)' }
+                ],
+                returns: 'Array - [{action_id, action_type, timestamp, result, gas_used}]',
+                example: null,
+                defaultParams: ['"agent_001"', '50']
+            }
+        ]
+    },
+    {
+        name: 'Hash Commitment Privacy',
+        key: 'zk-privacy',
+        description: 'Hash commitment-based privacy features and statistics.',
+        methods: [
+            {
+                method: 'positronic_getZKStats',
+                description: 'Returns hash commitment privacy system statistics.',
+                params: [],
+                returns: 'Object - {total_proofs, shielded_txs, pool_balance}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Cross-Chain Bridge',
+        key: 'cross-chain',
+        description: 'Cross-chain bridging and anchor point management.',
+        methods: [
+            {
+                method: 'positronic_getBridgeStats',
+                description: 'Returns cross-chain bridge statistics.',
+                params: [],
+                returns: 'Object - {total_bridges, total_volume, supported_chains}',
+                example: null
+            },
+            {
+                method: 'positronic_getAnchor',
+                description: 'Returns the anchor point data for a specific chain.',
+                params: [
+                    { name: 'chainId', type: 'string', required: true, description: 'The target chain ID' }
+                ],
+                returns: 'Object - {chain_id, anchor_block, anchor_hash, last_sync}',
+                example: null,
+                defaultParams: ['"1"']
+            },
+            {
+                method: 'positronic_bridgeLock',
+                description: 'Lock tokens for cross-chain transfer via the Lock/Mint bridge.',
+                params: [
+                    { name: 'sender', type: 'string', required: true, description: 'Sender address (hex)' },
+                    { name: 'amount', type: 'string', required: true, description: 'Amount of tokens to lock' },
+                    { name: 'targetChain', type: 'string', required: true, description: 'The target chain identifier (e.g. "ethereum", "polygon")' },
+                    { name: 'recipientAddress', type: 'string', required: true, description: 'Recipient address on the target chain' }
+                ],
+                returns: 'Object - {lock_id, tx_hash, amount, target_chain, status}',
+                example: null,
+                defaultParams: ['"0x0000000000000000000000000000000000000000"', '"1000"', '"ethereum"', '"0x..."']
+            },
+            {
+                method: 'positronic_bridgeConfirmLock',
+                description: 'Confirm a bridge lock transaction with relayer attestation.',
+                params: [
+                    { name: 'lockId', type: 'string', required: true, description: 'The lock transaction identifier' },
+                    { name: 'relayer', type: 'string', required: true, description: 'Relayer address (hex) confirming the lock' }
+                ],
+                returns: 'Object - {lock_id, confirmed: boolean, confirmations}',
+                example: null,
+                defaultParams: ['"lock_001"', '"0x0000000000000000000000000000000000000000"']
+            },
+            {
+                method: 'positronic_bridgeMint',
+                description: 'Mint wrapped tokens on target chain after lock confirmation.',
+                params: [
+                    { name: 'lockId', type: 'string', required: true, description: 'The confirmed lock transaction identifier' },
+                    { name: 'proof', type: 'object', required: true, description: 'Cross-chain proof of lock confirmation' }
+                ],
+                returns: 'Object - {mint_tx_hash, wrapped_token, amount, recipient}',
+                example: null,
+                defaultParams: ['"lock_001"', '{"merkle_proof":"0x...","block_header":"0x..."}']
+            },
+            {
+                method: 'positronic_bridgeBurn',
+                description: 'Burn wrapped tokens to initiate release on the source chain.',
+                params: [
+                    { name: 'burnTxHash', type: 'string', required: true, description: 'The burn transaction hash on the target chain' },
+                    { name: 'amount', type: 'string', required: true, description: 'Amount of wrapped tokens burned' }
+                ],
+                returns: 'Object - {burn_id, tx_hash, amount, status}',
+                example: null,
+                defaultParams: ['"0x..."', '"1000"']
+            },
+            {
+                method: 'positronic_bridgeRelease',
+                description: 'Release locked tokens on the source chain after burn proof verification.',
+                params: [
+                    { name: 'burnProof', type: 'object', required: true, description: 'Proof of burn from the target chain' }
+                ],
+                returns: 'Object - {release_tx_hash, amount, recipient, status}',
+                example: null,
+                defaultParams: ['{"burn_id":"burn_001","merkle_proof":"0x...","signatures":[]}']
+            },
+            {
+                method: 'positronic_bridgeGetStatus',
+                description: 'Get the current status of a cross-chain bridge transfer.',
+                params: [
+                    { name: 'transferId', type: 'string', required: true, description: 'The bridge transfer identifier (lock_id or burn_id)' }
+                ],
+                returns: 'Object - {transfer_id, type, status, source_chain, target_chain, amount, timestamps}',
+                example: null,
+                defaultParams: ['"lock_001"']
+            }
+        ]
+    },
+    {
+        name: 'DePIN',
+        key: 'depin',
+        description: 'Decentralized Physical Infrastructure Network device management.',
+        methods: [
+            {
+                method: 'positronic_registerDevice',
+                description: 'Registers a physical device on the DePIN network.',
+                params: [
+                    { name: 'deviceParams', type: 'object', required: true, description: 'Device config: {owner, device_type, location, metadata}' }
+                ],
+                returns: 'Object - {device_id, tx_hash, device_type}',
+                example: null,
+                defaultParams: ['{"owner":"0x...","device_type":"sensor","location":"US","metadata":{}}']
+            },
+            {
+                method: 'positronic_getDeviceInfo',
+                description: 'Returns details about a registered DePIN device.',
+                params: [
+                    { name: 'deviceId', type: 'string', required: true, description: 'The unique device identifier' }
+                ],
+                returns: 'Object - {device_id, owner, device_type, status, uptime, rewards_earned}',
+                example: null,
+                defaultParams: ['"device_001"']
+            },
+            {
+                method: 'positronic_getDePINStats',
+                description: 'Returns aggregate DePIN network statistics.',
+                params: [],
+                returns: 'Object - {total_devices, active_devices, total_rewards}',
+                example: null
+            },
+            {
+                method: 'positronic_getDeviceScore',
+                description: 'Get the trust and performance score for a DePIN device.',
+                params: [
+                    { name: 'deviceId', type: 'string', required: true, description: 'The unique device identifier' }
+                ],
+                returns: 'Object - {device_id, trust_score, uptime_score, performance_score, composite_score}',
+                example: null,
+                defaultParams: ['"device_001"']
+            },
+            {
+                method: 'positronic_getRewardEstimate',
+                description: 'Estimate pending rewards for a DePIN device based on current epoch performance.',
+                params: [
+                    { name: 'deviceId', type: 'string', required: true, description: 'The unique device identifier' }
+                ],
+                returns: 'Object - {device_id, estimated_reward, epoch, uptime_factor, performance_factor}',
+                example: null,
+                defaultParams: ['"device_001"']
+            },
+            {
+                method: 'positronic_claimDeviceRewards',
+                description: 'Claim accumulated DePIN device rewards.',
+                params: [
+                    { name: 'deviceId', type: 'string', required: true, description: 'The unique device identifier' },
+                    { name: 'signature', type: 'string', required: true, description: 'Owner signature authorizing the claim' }
+                ],
+                returns: 'Object - {tx_hash, amount_claimed, device_id}',
+                example: null,
+                defaultParams: ['"device_001"', '"0x..."']
+            }
+        ]
+    },
+    {
+        name: 'Post-Quantum',
+        key: 'post-quantum',
+        description: 'Post-quantum cryptography readiness and key management.',
+        methods: [
+            {
+                method: 'positronic_getPQStats',
+                description: 'Returns post-quantum cryptography system statistics.',
+                params: [],
+                returns: 'Object - {total_pq_keys, algorithm, migration_status}',
+                example: null
+            },
+            {
+                method: 'positronic_hasPQKey',
+                description: 'Checks whether an address has registered a post-quantum key.',
+                params: [
+                    { name: 'address', type: 'string', required: true, description: 'The wallet address to check' }
+                ],
+                returns: 'Boolean - true if a PQ key is registered',
+                example: null,
+                defaultParams: ['"0x..."']
+            }
+        ]
+    },
+    {
+        name: 'DID (Identity)',
+        key: 'did',
+        description: 'Decentralized Identity (DID) creation and management.',
+        methods: [
+            {
+                method: 'positronic_createIdentity',
+                description: 'Creates a new decentralized identity (DID) document.',
+                params: [
+                    { name: 'identityParams', type: 'object', required: true, description: 'DID config: {owner, public_key, service_endpoints}' }
+                ],
+                returns: 'Object - {did, tx_hash, document}',
+                example: null,
+                defaultParams: ['{"owner":"0x...","public_key":"0x...","service_endpoints":[]}']
+            },
+            {
+                method: 'positronic_getIdentity',
+                description: 'Resolves a DID and returns the identity document.',
+                params: [
+                    { name: 'did', type: 'string', required: true, description: 'The DID string (e.g. "did:asf:0x...")' }
+                ],
+                returns: 'Object - DID document with public keys and service endpoints',
+                example: null,
+                defaultParams: ['"did:asf:0x..."']
+            },
+            {
+                method: 'positronic_getDIDStats',
+                description: 'Returns aggregate DID system statistics.',
+                params: [],
+                returns: 'Object - {total_dids, active_dids, total_verifications}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Game Bridge (External Games)',
+        key: 'game-bridge',
+        description: 'Connect any external game to the Positronic blockchain. Register games, manage play sessions, and mine tokens with AI anti-cheat validation.',
+        methods: [
+            {
+                method: 'positronic_registerGame',
+                description: 'Registers a new external game on the Positronic blockchain. Returns a game_id and API key. The game enters a review queue (AI + council) before activation.',
+                params: [
+                    { name: 'gameParams', type: 'object', required: true, description: '{developer, name, game_type, description?, daily_cap?}. game_type: PLUGIN | SERVER_ORACLE | LAUNCHER | SDK_INTEGRATED' }
+                ],
+                returns: 'Object - {game_id, status, api_key, message}',
+                example: null,
+                defaultParams: ['{"developer":"0x0101...","name":"My Game","game_type":"SDK_INTEGRATED","description":"An awesome game"}']
+            },
+            {
+                method: 'positronic_getGameInfo',
+                description: 'Returns detailed information about a registered game including status, trust score, and emission stats.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier (e.g. "GAME-abc123")' }
+                ],
+                returns: 'Object - Full game details: name, status, trust_score, total_sessions, total_emitted, reward_multiplier',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            },
+            {
+                method: 'positronic_listRegisteredGames',
+                description: 'Lists all active registered games, or all games if include_all is true.',
+                params: [
+                    { name: 'options', type: 'object', required: false, description: 'Optional: {include_all: true} to show inactive/pending games too' }
+                ],
+                returns: 'Array - List of game info objects',
+                example: null,
+                defaultParams: ['{"include_all": false}']
+            },
+            {
+                method: 'positronic_getGameBridgeStats',
+                description: 'Returns combined statistics from the game registry, mining rate controller, and session validator.',
+                params: [],
+                returns: 'Object - {registry: {...}, mining: {...}, validator: {...}}',
+                example: null
+            },
+            {
+                method: 'positronic_startGameSession',
+                description: 'Starts a new play-to-mine session for a player in a registered game. Checks player and game daily caps before allowing the session.',
+                params: [
+                    { name: 'sessionParams', type: 'object', required: true, description: '{api_key, player, proof_type?}. proof_type: SERVER_SIGNED | PLUGIN_VERIFIED | LAUNCHER_TRACKED (default)' }
+                ],
+                returns: 'Object - {session_id, game_id, status} or {error}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","player":"0xaa...","proof_type":"LAUNCHER_TRACKED"}']
+            },
+            {
+                method: 'positronic_addGameEvent',
+                description: 'Adds a gameplay event to an active session. Events are analyzed by the AI anti-cheat system during validation.',
+                params: [
+                    { name: 'eventParams', type: 'object', required: true, description: '{session_id, event_type, timestamp?, data?}. event_type: kill_enemy, collect_item, complete_level, etc.' }
+                ],
+                returns: 'Object - {success: boolean}',
+                example: null,
+                defaultParams: ['{"session_id":"SES-...","event_type":"kill_enemy","data":{"enemy":"drone","score":100}}']
+            },
+            {
+                method: 'positronic_submitGameSession',
+                description: 'Submits a completed session for AI anti-cheat validation and reward calculation. The AI analyzes timing patterns, score consistency, and cross-game activity.',
+                params: [
+                    { name: 'submissionParams', type: 'object', required: true, description: '{api_key, session_id, metrics, proof_signature?, proof_public_key?}. metrics: {score, ...}' }
+                ],
+                returns: 'Object - {session_id, status, ai_cheat_score, reward, validation_notes}. status: ACCEPTED | REDUCED | REJECTED',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","session_id":"SES-...","metrics":{"score":5000}}']
+            },
+            {
+                method: 'positronic_getSessionStatus',
+                description: 'Returns the current status and details of a game session including AI cheat score and reward.',
+                params: [
+                    { name: 'sessionId', type: 'string', required: true, description: 'The session identifier (e.g. "SES-abc123")' }
+                ],
+                returns: 'Object - Full session details: status, ai_cheat_score, reward, duration, events count',
+                example: null,
+                defaultParams: ['"SES-abc123"']
+            },
+            {
+                method: 'positronic_getPlayerGameHistory',
+                description: 'Returns a player\'s session history across registered games.',
+                params: [
+                    { name: 'playerAddress', type: 'string', required: true, description: 'The player wallet address (hex, without 0x prefix)' },
+                    { name: 'limit', type: 'number', required: false, description: 'Max results to return (default: 20)' }
+                ],
+                returns: 'Array - List of session summary objects with status, reward, and timestamps',
+                example: null,
+                defaultParams: ['"aabbcc..."', '20']
+            },
+            {
+                method: 'positronic_getGameMiningRate',
+                description: 'Returns the current mining rate information for a specific game, including daily caps and remaining emission.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier' }
+                ],
+                returns: 'Object - {game_id, reward_multiplier, daily_emission_cap, daily_emitted, daily_remaining, trust_score, scarcity_factor}',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            },
+            {
+                method: 'positronic_getGameEmission',
+                description: 'Returns emission statistics for a specific game including total tokens emitted and player counts.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier' }
+                ],
+                returns: 'Object - {game_id, total_emitted, total_sessions, active_players, total_players, cheat_detections}',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            },
+            {
+                method: 'positronic_getGlobalPlayMineStats',
+                description: 'Returns global play-to-mine statistics across all registered external games.',
+                params: [],
+                returns: 'Object - {total_external_emitted, remaining_supply, supply_exhausted, scarcity_factor, active_players_today, total_games}',
+                example: null
+            },
+            {
+                method: 'positronic_generateGameAPIKey',
+                description: 'Regenerates the API key for a registered game. Only the original developer can call this. The old key is immediately invalidated.',
+                params: [
+                    { name: 'keyParams', type: 'object', required: true, description: '{game_id, developer} — developer must match the original registrant' }
+                ],
+                returns: 'Object - {api_key, message} or {error}',
+                example: null,
+                defaultParams: ['{"game_id":"GAME-abc123","developer":"0x0101..."}']
+            },
+            {
+                method: 'positronic_testGameSession',
+                description: 'Runs a test session through the full AI validation pipeline without emitting real rewards. Use this during SDK integration and testing.',
+                params: [
+                    { name: 'testParams', type: 'object', required: true, description: '{api_key, duration, score, events_count, proof_type?}' }
+                ],
+                returns: 'Object - {test: true, session_id, status, ai_cheat_score, hypothetical_reward, validation_notes, message}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","duration":600,"score":5000,"events_count":30}']
+            },
+            {
+                method: 'positronic_getGameSDKConfig',
+                description: 'Returns the SDK configuration for a game, including supported event types, proof types, session duration limits, and current scarcity factor.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier' }
+                ],
+                returns: 'Object - {game_id, name, game_type, status, reward_multiplier, player_daily_cap, daily_emission_cap, proof_types, event_types, session_max_duration, session_min_duration, scarcity_factor}',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            }
+        ]
+    },
+    {
+        name: 'Game Token Bridge',
+        key: 'game-token-bridge',
+        description: 'Game Token Bridge allows registered games to create custom PRC-20 tokens and PRC-721 NFT collections, mint items to players, and distribute token rewards — all tied to the game\'s API key.',
+        methods: [
+            {
+                method: 'positronic_gameCreateToken',
+                description: 'Creates a custom PRC-20 token for a registered game. The token is linked to the game and can be distributed as in-game rewards.',
+                params: [
+                    { name: 'tokenParams', type: 'object', required: true, description: '{api_key, name, symbol, decimals?, initial_supply?} — api_key: game API key, decimals defaults to 18' }
+                ],
+                returns: 'Object - {token_id, name, symbol, game_id}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","name":"Gold Coins","symbol":"GOLD","decimals":18,"initial_supply":"1000000"}']
+            },
+            {
+                method: 'positronic_gameCreateCollection',
+                description: 'Creates a PRC-721 NFT collection for a registered game. Used for in-game items, skins, achievements, etc.',
+                params: [
+                    { name: 'collectionParams', type: 'object', required: true, description: '{api_key, name, symbol, max_supply?} — api_key: game API key, max_supply: optional cap on total items' }
+                ],
+                returns: 'Object - {collection_id, name, symbol, game_id}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","name":"Legendary Weapons","symbol":"LWPN","max_supply":10000}']
+            },
+            {
+                method: 'positronic_gameMintItem',
+                description: 'Mints a new NFT item to a player within a game\'s collection. Supports dynamic metadata for mutable in-game items.',
+                params: [
+                    { name: 'mintParams', type: 'object', required: true, description: '{api_key, collection_id, to, name?, description?, image_uri?, attributes?, dynamic?} — dynamic: true for mutable metadata items' }
+                ],
+                returns: 'Object - {collection_id, token_id, owner, item_name, game_id}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","collection_id":"0x...","to":"0x...","name":"Fire Sword","description":"A legendary blade","image_uri":"ipfs://...","attributes":[{"trait_type":"Damage","value":"150"}],"dynamic":true}']
+            },
+            {
+                method: 'positronic_gameDistributeReward',
+                description: 'Distributes a game\'s custom PRC-20 token to a player as a reward. The token must have been created by the same game.',
+                params: [
+                    { name: 'rewardParams', type: 'object', required: true, description: '{api_key, token_id, to, amount} — api_key: game API key, token_id: game token address, to: player address' }
+                ],
+                returns: 'Object - {token_id, symbol, to, amount, new_balance, game_id}',
+                example: null,
+                defaultParams: ['{"api_key":"gk_...","token_id":"0x...","to":"0x...","amount":"500"}']
+            },
+            {
+                method: 'positronic_getGameTokens',
+                description: 'Returns all custom PRC-20 tokens created by a specific game.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier' }
+                ],
+                returns: 'Array - [{token_id, name, symbol, total_supply, holders, game_id}]',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            },
+            {
+                method: 'positronic_getGameCollections',
+                description: 'Returns all PRC-721 NFT collections created by a specific game.',
+                params: [
+                    { name: 'gameId', type: 'string', required: true, description: 'The unique game identifier' }
+                ],
+                returns: 'Array - [{collection_id, name, symbol, total_minted, max_supply, game_id}]',
+                example: null,
+                defaultParams: ['"GAME-abc123"']
+            },
+            {
+                method: 'positronic_getGameTokenBridgeStats',
+                description: 'Returns aggregate statistics for the Game Token Bridge including total games with custom tokens, total game tokens created, and NFT collections.',
+                params: [],
+                returns: 'Object - {games_with_tokens, total_game_tokens, total_game_collections, total_game_nfts_minted, total_game_token_distributions}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Telegram Mini App',
+        key: 'telegram',
+        description: 'Telegram Mini App integration for play-to-mine. Auto-wallet creation, user mapping, and bot registration for Telegram game developers.',
+        methods: [
+            {
+                method: 'positronic_telegramAuth',
+                description: 'Authenticate a Telegram user and get or create a blockchain wallet. If the user is new, a wallet is automatically generated. No setup needed for players.',
+                params: [
+                    { name: 'telegram_id', type: 'integer', required: true, description: 'Telegram user ID' },
+                    { name: 'username', type: 'string', required: false, description: 'Telegram username' },
+                    { name: 'first_name', type: 'string', required: false, description: 'User first name' }
+                ],
+                returns: 'Object - {success, wallet_address, is_new, telegram_id}',
+                example: { result: { success: true, wallet_address: '0x1a2b3c...', is_new: true, telegram_id: 12345678 } },
+                defaultParams: ['12345678', '"player1"', '"John"']
+            },
+            {
+                method: 'positronic_telegramGetWallet',
+                description: 'Get wallet information for a Telegram user including total sessions played and total ASF earned.',
+                params: [
+                    { name: 'telegram_id', type: 'integer', required: true, description: 'Telegram user ID' }
+                ],
+                returns: 'Object - {telegram_id, username, first_name, wallet_address, linked_at, total_sessions, total_earned}',
+                example: null,
+                defaultParams: ['12345678']
+            },
+            {
+                method: 'positronic_telegramGetStats',
+                description: 'Returns Telegram bridge statistics including total registered users, bots, and wallet mappings.',
+                params: [],
+                returns: 'Object - {total_users, total_bots, total_wallets}',
+                example: { result: { total_users: 0, total_bots: 0, total_wallets: 0 } },
+                defaultParams: []
+            },
+            {
+                method: 'positronic_telegramRegisterBot',
+                description: 'Register a Telegram bot token hash for a game. Admin-only. The game developer provides SHA-256 hash of their bot token (never the raw token).',
+                params: [
+                    { name: 'game_id', type: 'string', required: true, description: 'Registered game ID' },
+                    { name: 'bot_token_hash', type: 'string', required: true, description: 'SHA-256 hash of the Telegram bot token (64 hex chars)' }
+                ],
+                returns: 'Object - {success, game_id}',
+                example: { result: { success: true, game_id: 'GAME-123' } },
+                defaultParams: ['"GAME-123"', '"a1b2c3d4e5f6..."']
+            }
+        ]
+    },
+    {
+        name: 'Security Hardening',
+        key: 'security',
+        description: 'Phase 15 security hardening: game heartbeat, emergency pause, and security statistics.',
+        methods: [
+            {
+                method: 'positronic_gameHeartbeat',
+                description: 'Game server sends a heartbeat to prove liveness. Games without heartbeats beyond the grace period (2 hours) are automatically suspended.',
+                params: [
+                    { name: 'data', type: 'object', required: true, description: '{game_id, api_key} - Game ID and API key for authentication' }
+                ],
+                returns: 'Object - {success: boolean, game_id: string}',
+                example: { result: { success: true, game_id: 'GAME-123' } },
+                defaultParams: ['{"game_id":"GAME-123","api_key":"gk_..."}']
+            },
+            {
+                method: 'positronic_emergencyPauseGame',
+                description: 'Emergency pause a single game without affecting other active games. Suspended games stop mining until manually reactivated.',
+                params: [
+                    { name: 'data', type: 'object', required: true, description: '{game_id} - Game ID to pause' }
+                ],
+                returns: 'Object - {success: boolean, game_id: string}',
+                example: { result: { success: true, game_id: 'GAME-123' } },
+                defaultParams: ['{"game_id":"GAME-123"}']
+            },
+            {
+                method: 'positronic_getGameSecurityStats',
+                description: 'Returns comprehensive security statistics including game registry stats, active API rate limits, AI kill-switch status (graduated 4-level system), and overall AI validation metrics.',
+                params: [],
+                returns: 'Object - {registry, active_rate_limits, kill_switch: {level, fp_rate, ...}, ai_stats}',
+                example: null,
+                defaultParams: []
+            }
+        ]
+    },
+    {
+        key: 'god-chain',
+        title: 'GOD CHAIN (Phase 17)',
+        description: 'Phase 17 GOD CHAIN methods: EIP-1559 gas oracle, transaction lane stats, compact block relay, network partition detection, peer scoring, HD wallet, revert reason decoding, and address history.',
+        methods: [
+            {
+                method: 'positronic_getGasOracle',
+                description: 'Returns the current EIP-1559 gas oracle state including base fee, priority fee suggestions (low/medium/high), and target gas utilization.',
+                params: [],
+                returns: 'Object - {base_fee, priority_fee_low, priority_fee_medium, priority_fee_high, target_utilization}',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getFeeHistory',
+                description: 'Returns fee history for the last N blocks, including base fees, gas used ratios, and priority fees.',
+                params: ['block_count (integer) - Number of blocks to return (max 256)'],
+                returns: 'Object - {base_fees[], gas_used_ratios[], priority_fees[], block_range}',
+                example: null,
+                defaultParams: ['10']
+            },
+            {
+                method: 'positronic_getTxLaneStats',
+                description: 'Returns the current transaction lane distribution showing how many transactions are in each priority lane (SYSTEM, FAST, STANDARD, HEAVY).',
+                params: [],
+                returns: 'Object - {system, fast, standard, heavy, total, lane_ordering_active}',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getCompactBlockStats',
+                description: 'Returns compact block relay statistics including reconstruction success rate, bandwidth savings, and mempool hit rates.',
+                params: [],
+                returns: 'Object - {mempool_available, reconstruction_attempts, success_rate, bandwidth_savings}',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getPartitionStatus',
+                description: 'Returns the network partition detection status including current health state, signal evaluations, and recent partition events.',
+                params: [],
+                returns: 'Object - {state, is_healthy, last_block_age_seconds, peer_count, signals, recent_events}',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getPeerScores',
+                description: 'Returns multi-dimensional scoring breakdown for all connected peers (latency, reliability, bandwidth, chain sync, behavior).',
+                params: [],
+                returns: 'Array - [{peer_id, scores: {latency, reliability, bandwidth, chain_sync, behavior}, composite}]',
+                example: null,
+                defaultParams: []
+            },
+            {
+                method: 'positronic_getRevertReason',
+                description: 'Decodes revert data from a failed transaction into a human-readable error message. Supports Error(string), Panic(uint256), and custom error selectors.',
+                params: ['revert_data (hex string) - The revert data to decode'],
+                returns: 'Object - {reason, type, raw_data}',
+                example: null,
+                defaultParams: ['"0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001a496e73756666696369656e7420617661696c61626c652066756e6473000000"']
+            },
+            {
+                method: 'positronic_hdCreateWallet',
+                description: 'Creates a new hierarchical deterministic (HD) wallet with a BIP-39 mnemonic seed phrase. Derives the first account address automatically.',
+                params: ['word_count (integer, optional) - 12 or 24 words (default: 24)'],
+                returns: 'Object - {mnemonic, address, public_key, derivation_path}',
+                example: null,
+                defaultParams: ['24']
+            },
+            {
+                method: 'positronic_hdDeriveAddress',
+                description: 'Derives a new address from an existing HD wallet mnemonic at the specified account and index path.',
+                params: ['mnemonic (string) - The seed phrase', 'account (integer) - Account index', 'index (integer) - Address index'],
+                returns: 'Object - {address, public_key, derivation_path}',
+                example: null,
+                defaultParams: ['"abandon abandon abandon ..."', '0', '0']
+            },
+            {
+                method: 'positronic_getAddressHistory',
+                description: 'Returns the transaction history for a specific address, including sent/received transactions with type, value, gas, AI score, and timestamps.',
+                params: ['address (hex string) - The address to query', 'limit (integer, optional) - Max entries (default: 50)', 'offset (integer, optional) - Pagination offset'],
+                returns: 'Array - [{tx_hash, type, direction, counterparty, value, gas_used, status, ai_score, block_height}]',
+                example: null,
+                defaultParams: ['"0x742d35Cc6634C0532925a3b844Bc9e7595f2bD25"', '10', '0']
+            }
+        ]
+    },
+    {
+        name: 'Audit Fixes (Phase 18)',
+        key: 'audit-fixes',
+        description: 'Phase 18 audit fix methods: AI validation metrics and API versioning.',
+        methods: [
+            {
+                method: 'positronic_getAIMetrics',
+                description: 'Get detailed AI validation metrics including accuracy, false positive rate, model version, and validation throughput.',
+                params: [],
+                returns: 'Object - {accuracy, false_positive_rate, model_version, validations_per_second, total_validations}',
+                example: null
+            },
+            {
+                method: 'positronic_apiVersion',
+                description: 'Get API version information including protocol version, node version, and supported features.',
+                params: [],
+                returns: 'Object - {api_version, protocol_version, node_version, supported_features}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'AI Explainability (Phase 21)',
+        key: 'ai-explainability',
+        description: 'Phase 21 AI explainability: human-readable explanations for AI validation decisions.',
+        methods: [
+            {
+                method: 'positronic_explainValidation',
+                description: 'Get a human-readable AI explanation for a transaction validation decision, including feature contributions and confidence scores.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The transaction hash to explain' }
+                ],
+                returns: 'Object - {tx_hash, decision, confidence, explanation, feature_contributions, model_version}',
+                example: null,
+                defaultParams: ['"0x..."']
+            }
+        ]
+    },
+    {
+        name: 'Immune Appeal System',
+        key: 'immune-appeal',
+        description: 'Appeal system for quarantined transactions, enabling governance-based dispute resolution.',
+        methods: [
+            {
+                method: 'positronic_requestImmuneAppeal',
+                description: 'Request an appeal for a quarantined transaction by depositing a bond.',
+                params: [
+                    { name: 'txHash', type: 'string', required: true, description: 'The quarantined transaction hash' },
+                    { name: 'deposit', type: 'string', required: true, description: 'Appeal bond deposit amount' },
+                    { name: 'reason', type: 'string', required: true, description: 'Reason for the appeal' }
+                ],
+                returns: 'Object - {appeal_id, tx_hash, deposit, status, created_at}',
+                example: null,
+                defaultParams: ['"0x..."', '"100"', '"False positive - legitimate transfer"']
+            },
+            {
+                method: 'positronic_resolveImmuneAppeal',
+                description: 'Resolve a pending appeal via governance vote.',
+                params: [
+                    { name: 'appealId', type: 'string', required: true, description: 'The unique appeal identifier' },
+                    { name: 'vote', type: 'string', required: true, description: 'Vote decision: "approve" or "reject"' }
+                ],
+                returns: 'Object - {appeal_id, resolution, voter, tx_hash}',
+                example: null,
+                defaultParams: ['"appeal_001"', '"approve"']
+            },
+            {
+                method: 'positronic_getImmuneAppeal',
+                description: 'Get details of a specific immune appeal.',
+                params: [
+                    { name: 'appealId', type: 'string', required: true, description: 'The unique appeal identifier' }
+                ],
+                returns: 'Object - {appeal_id, tx_hash, appellant, deposit, reason, status, votes, created_at}',
+                example: null,
+                defaultParams: ['"appeal_001"']
+            },
+            {
+                method: 'positronic_listImmuneAppeals',
+                description: 'List immune appeals filtered by status.',
+                params: [
+                    { name: 'status', type: 'string', required: false, description: 'Filter by status: "pending", "approved", "rejected" (default: "pending")' },
+                    { name: 'limit', type: 'number', required: false, description: 'Number of appeals to return (default: 50)' }
+                ],
+                returns: 'Array - [{appeal_id, tx_hash, appellant, status, created_at}]',
+                example: null,
+                defaultParams: ['"pending"', '50']
+            }
+        ]
+    },
+    {
+        name: 'Consensus v2',
+        key: 'consensus-v2',
+        description: 'Enhanced consensus methods: BFT attestation statistics and consensus state information.',
+        methods: [
+            {
+                method: 'positronic_getAttestationStats',
+                description: 'Get BFT attestation statistics including participation rate, finality time, and validator attestation counts.',
+                params: [],
+                returns: 'Object - {total_attestations, participation_rate, avg_finality_seconds, active_validators, epoch}',
+                example: null
+            },
+            {
+                method: 'positronic_getConsensusInfo',
+                description: 'Get current consensus state including round, step, proposer, and committee information.',
+                params: [],
+                returns: 'Object - {round, step, proposer, committee_size, block_height, finalized_height, consensus_type}',
+                example: null
+            }
+        ]
+    },
+    {
+        name: 'Admin / Treasury Management',
+        key: 'admin-treasury',
+        description: 'Treasury management and admin operations. Admin methods require JWT authentication.',
+        methods: [
+            {
+                method: 'positronic_getTreasuryBalances',
+                description: 'Get all treasury balances including development fund, ecosystem fund, and staking rewards pool.',
+                params: [],
+                returns: 'Object - {development_fund, ecosystem_fund, staking_rewards, burn_address, total}',
+                example: null
+            },
+            {
+                method: 'positronic_getTeamVestingStatus',
+                description: 'Get team token vesting schedule status including unlocked, locked, and next unlock date. 3-year cliff, then 8-year linear vesting (1/96 per month).',
+                params: [],
+                returns: 'Object - {total_allocated, unlocked, locked, next_unlock_date, vesting_period_months: 96, vesting_schedule}',
+                example: null
+            },
+            {
+                method: 'positronic_getSecurityVestingStatus',
+                description: 'Get security fund vesting schedule status. 8-year vesting with DAO-governed release for bug bounties and emergency response.',
+                params: [],
+                returns: 'Object - {total_allocated, unlocked, locked, next_unlock_date, vesting_period_months: 96, purpose}',
+                example: null
+            },
+            {
+                method: 'positronic_getFullVestingStatus',
+                description: 'Get combined vesting status for all vesting allocations (team + security fund).',
+                params: [],
+                returns: 'Object - {team: {total_allocated, unlocked, locked}, security: {total_allocated, unlocked, locked}, combined_locked, combined_unlocked}',
+                example: null
+            },
+            {
+                method: 'positronic_adminTransfer',
+                description: 'Execute an admin treasury transfer. (Requires admin JWT)',
+                params: [
+                    { name: 'to', type: 'string', required: true, description: 'Recipient address' },
+                    { name: 'amount', type: 'string', required: true, description: 'Transfer amount' },
+                    { name: 'reason', type: 'string', required: true, description: 'Reason for the transfer (logged on-chain)' }
+                ],
+                returns: 'Object - {tx_hash, from, to, amount, reason}',
+                example: null,
+                defaultParams: ['"0x..."', '"5000"', '"Ecosystem grant Q1 2026"']
+            },
+            {
+                method: 'positronic_adminGetPeers',
+                description: 'List all connected peers with their status. (Requires admin JWT)',
+                params: [],
+                returns: 'Array - [{peer_id, address, version, latency_ms, connected_since, block_height}]',
+                example: null
+            },
+            {
+                method: 'positronic_adminBanPeer',
+                description: 'Ban a peer by ID with a reason. (Requires admin JWT)',
+                params: [
+                    { name: 'peerId', type: 'string', required: true, description: 'The peer identifier to ban' },
+                    { name: 'reason', type: 'string', required: true, description: 'Reason for the ban' }
+                ],
+                returns: 'Object - {peer_id, banned: boolean, reason}',
+                example: null,
+                defaultParams: ['"peer_abc123"', '"Malicious block propagation"']
+            },
+            {
+                method: 'positronic_adminGetValidators',
+                description: 'List the current validator set with detailed status. (Requires admin JWT)',
+                params: [],
+                returns: 'Array - [{address, stake, rank, uptime, blocks_produced, last_active}]',
+                example: null
+            },
+            {
+                method: 'positronic_requestAdminAccess',
+                description: 'Request an admin JWT token by providing a valid API key.',
+                params: [
+                    { name: 'apiKey', type: 'string', required: true, description: 'The admin API key' }
+                ],
+                returns: 'Object - {token, expires_at, permissions}',
+                example: null,
+                defaultParams: ['"ak_..."']
+            },
+            {
+                method: 'positronic_getTreasuryTransactions',
+                description: 'Get treasury transaction history with pagination.',
+                params: [
+                    { name: 'limit', type: 'number', required: false, description: 'Number of transactions to return (default: 50)' },
+                    { name: 'offset', type: 'number', required: false, description: 'Pagination offset (default: 0)' }
+                ],
+                returns: 'Array - [{tx_hash, type, from, to, amount, reason, timestamp}]',
+                example: null,
+                defaultParams: ['50', '0']
+            }
+        ]
+    },
+    {
+        name: 'Governance Write Operations',
+        key: 'governance-write',
+        description: 'On-chain governance proposal creation, voting, and execution.',
+        methods: [
+            {
+                method: 'positronic_createGovernanceProposal',
+                description: 'Create a new governance proposal for community voting.',
+                params: [
+                    { name: 'title', type: 'string', required: true, description: 'Proposal title' },
+                    { name: 'description', type: 'string', required: true, description: 'Detailed proposal description' },
+                    { name: 'type', type: 'string', required: true, description: 'Proposal type: "parameter_change", "treasury_spend", "protocol_upgrade", "text"' },
+                    { name: 'params', type: 'object', required: false, description: 'Type-specific parameters (e.g. {param: "block_size", value: "2MB"} for parameter_change)' }
+                ],
+                returns: 'Object - {proposal_id, tx_hash, title, type, voting_start, voting_end}',
+                example: null,
+                defaultParams: ['"Increase block size"', '"Proposal to increase max block size to 2MB"', '"parameter_change"', '{"param":"block_size","value":"2MB"}']
+            },
+            {
+                method: 'positronic_voteGovernanceProposal',
+                description: 'Cast a vote on an active governance proposal.',
+                params: [
+                    { name: 'proposalId', type: 'string', required: true, description: 'The unique proposal identifier' },
+                    { name: 'vote', type: 'string', required: true, description: 'Vote value: "yes", "no", or "abstain"' },
+                    { name: 'voterAddress', type: 'string', required: true, description: 'The voter wallet address' }
+                ],
+                returns: 'Object - {proposal_id, voter, vote, tx_hash, voting_power}',
+                example: null,
+                defaultParams: ['"prop_001"', '"yes"', '"0x..."']
+            },
+            {
+                method: 'positronic_executeGovernanceProposal',
+                description: 'Execute an approved governance proposal after the voting period ends.',
+                params: [
+                    { name: 'proposalId', type: 'string', required: true, description: 'The unique proposal identifier' }
+                ],
+                returns: 'Object - {proposal_id, executed: boolean, tx_hash, result}',
+                example: null,
+                defaultParams: ['"prop_001"']
+            }
+        ]
+    },
+    {
+        name: 'Emergency Control System',
+        key: 'emergency-control',
+        description: 'Emergency blockchain operations and protocol upgrade scheduling. Admin methods require JWT authentication.',
+        methods: [
+            {
+                method: 'positronic_emergencyPause',
+                description: 'Pause the blockchain, halting new block production. (Requires admin JWT)',
+                params: [
+                    { name: 'reason', type: 'string', required: true, description: 'Reason for the emergency pause' }
+                ],
+                returns: 'Object - {paused: boolean, reason, timestamp, admin}',
+                example: null,
+                defaultParams: ['"Critical vulnerability detected"']
+            },
+            {
+                method: 'positronic_emergencyResume',
+                description: 'Resume the blockchain after an emergency pause. (Requires admin JWT)',
+                params: [],
+                returns: 'Object - {resumed: boolean, downtime_seconds, admin}',
+                example: null
+            },
+            {
+                method: 'positronic_emergencyHalt',
+                description: 'Emergency halt all blockchain operations immediately. (Requires admin JWT)',
+                params: [
+                    { name: 'reason', type: 'string', required: true, description: 'Reason for the emergency halt' }
+                ],
+                returns: 'Object - {halted: boolean, reason, timestamp, admin}',
+                example: null,
+                defaultParams: ['"Active exploit in progress"']
+            },
+            {
+                method: 'positronic_emergencyStatus',
+                description: 'Get the current emergency system status including pause state and recent events.',
+                params: [],
+                returns: 'Object - {is_paused, is_halted, last_event, uptime_seconds, recent_events}',
+                example: null
+            },
+            {
+                method: 'positronic_upgradeSchedule',
+                description: 'Schedule a protocol upgrade at a specific block height. (Requires admin JWT)',
+                params: [
+                    { name: 'height', type: 'number', required: true, description: 'Block height at which the upgrade activates' },
+                    { name: 'version', type: 'string', required: true, description: 'Target protocol version (e.g. "0.4.0")' }
+                ],
+                returns: 'Object - {scheduled: boolean, height, version, estimated_time}',
+                example: null,
+                defaultParams: ['100000', '"0.4.0"']
+            },
+            {
+                method: 'positronic_upgradeStatus',
+                description: 'Get the status of any scheduled protocol upgrades.',
+                params: [],
+                returns: 'Object - {pending_upgrade: boolean, version, activation_height, current_height, blocks_remaining}',
+                example: null
+            }
+        ]
+    },
+    {
+        category: 'AI Agent Marketplace (Phase 29)',
+        methods: [
+            { method: 'positronic_mktRegisterAgent', description: 'Register a new AI agent on the marketplace. Requires 50 ASF fee.', params: [{ name: 'owner', type: 'string', required: true, description: 'Agent owner address (hex)' }, { name: 'name', type: 'string', required: true, description: 'Agent name' }, { name: 'category', type: 'string', required: true, description: 'Agent category (ANALYSIS, AUDIT, GOVERNANCE, CREATIVE, DATA, SECURITY)' }], returns: 'Object - {agent_id, owner, name, category, status}', example: null, defaultParams: ['"0x01...01"', '"MarketAnalyzer"', '"ANALYSIS"'] },
+            { method: 'positronic_mktGetAgent', description: 'Get agent metadata by ID.', params: [{ name: 'agent_id', type: 'string', required: true, description: 'Agent ID' }], returns: 'Object - {agent_id, name, category, quality_score, tasks_completed}', example: null, defaultParams: ['"AGT-..."'] },
+            { method: 'positronic_mktListAgents', description: 'List agents by category or rating.', params: [{ name: 'category', type: 'string', required: false, description: 'Filter by category' }], returns: 'Array - [{agent_id, name, category, quality_score}]', example: null },
+            { method: 'positronic_mktSubmitTask', description: 'Submit a task to an agent with ASF payment.', params: [{ name: 'agent_id', type: 'string', required: true, description: 'Target agent ID' }, { name: 'requester', type: 'string', required: true, description: 'Requester address' }, { name: 'input_data', type: 'string', required: true, description: 'Task input data' }], returns: 'Object - {task_id, agent_id, status}', example: null, defaultParams: ['"AGT-..."', '"0x02...02"', '"Analyze token metrics"'] },
+            { method: 'positronic_mktGetTask', description: 'Get task result and status.', params: [{ name: 'task_id', type: 'string', required: true, description: 'Task ID' }], returns: 'Object - {task_id, status, result, ai_score}', example: null, defaultParams: ['"TASK-..."'] },
+            { method: 'positronic_mktExecuteTask', description: 'Execute a pending task (agent-side).', params: [{ name: 'task_id', type: 'string', required: true, description: 'Task ID' }, { name: 'agent_id', type: 'string', required: true, description: 'Agent ID' }], returns: 'Object - {task_id, status, result, reward}', example: null, defaultParams: ['"TASK-..."', '"AGT-..."'] },
+            { method: 'positronic_mktRateAgent', description: 'Rate an agent\'s output quality.', params: [{ name: 'agent_id', type: 'string', required: true, description: 'Agent ID' }, { name: 'score', type: 'number', required: true, description: 'Rating 1-10000 (basis points)' }], returns: 'Object - {agent_id, new_quality_score}', example: null, defaultParams: ['"AGT-..."', '8500'] },
+            { method: 'positronic_mktApproveAgent', description: 'Council approves an agent for marketplace listing.', params: [{ name: 'agent_id', type: 'string', required: true, description: 'Agent ID' }, { name: 'voter', type: 'string', required: true, description: 'Council member ID' }], returns: 'Object - {agent_id, approved, votes}', example: null, defaultParams: ['"AGT-..."', '"council_member_1"'] },
+            { method: 'positronic_mktGetAgentStats', description: 'Get agent performance stats.', params: [{ name: 'agent_id', type: 'string', required: true, description: 'Agent ID' }], returns: 'Object - {tasks_completed, avg_score, total_earned}', example: null, defaultParams: ['"AGT-..."'] },
+            { method: 'positronic_mktGetLeaderboard', description: 'Top agents by quality score.', params: [{ name: 'limit', type: 'number', required: false, description: 'Number of results (default 10)' }], returns: 'Array - [{agent_id, name, quality_score}]', example: null },
+            { method: 'positronic_mktGetStats', description: 'Overall marketplace stats.', params: [], returns: 'Object - {total_agents, total_tasks, total_volume}', example: null }
+        ]
+    },
+    {
+        category: 'RWA Tokenization (Phase 30)',
+        methods: [
+            { method: 'positronic_registerRWA', description: 'Register a new real-world asset token (PRC-3643). Requires 200 ASF fee.', params: [{ name: 'name', type: 'string', required: true, description: 'Token name' }, { name: 'symbol', type: 'string', required: true, description: 'Token symbol' }, { name: 'total_supply', type: 'number', required: true, description: 'Total supply in base units' }, { name: 'asset_type', type: 'number', required: true, description: 'Asset type (0=REAL_ESTATE, 1=EQUITY, 2=COMMODITY, 3=BOND, 4=ART)' }], returns: 'Object - {token_id, name, symbol, status}', example: null, defaultParams: ['"Manhattan Tower"', '"MNHT"', '1000000', '0'] },
+            { method: 'positronic_getRWAInfo', description: 'Get RWA token metadata.', params: [{ name: 'token_id', type: 'string', required: true, description: 'RWA token ID' }], returns: 'Object - {token_id, name, symbol, asset_type, status, total_supply}', example: null, defaultParams: ['"RWA-..."'] },
+            { method: 'positronic_listRWAs', description: 'List all registered RWA tokens.', params: [], returns: 'Array - [{token_id, name, symbol, status}]', example: null },
+            { method: 'positronic_transferRWA', description: 'Transfer RWA tokens with compliance check.', params: [{ name: 'token_id', type: 'string', required: true, description: 'Token ID' }, { name: 'from', type: 'string', required: true, description: 'Sender address (hex)' }, { name: 'to', type: 'string', required: true, description: 'Recipient address (hex)' }, { name: 'amount', type: 'number', required: true, description: 'Amount in base units' }], returns: 'Object - {success, tx_hash}', example: null, defaultParams: ['"RWA-..."', '"0x01...01"', '"0x02...02"', '1000'] },
+            { method: 'positronic_checkCompliance', description: 'Check if a transfer is compliant (KYC, jurisdiction, limits).', params: [{ name: 'token_id', type: 'string', required: true, description: 'Token ID' }, { name: 'from', type: 'string', required: true, description: 'Sender address' }, { name: 'to', type: 'string', required: true, description: 'Recipient address' }], returns: 'Object - {compliant, reason}', example: null, defaultParams: ['"RWA-..."', '"0x01...01"', '"0x02...02"'] },
+            { method: 'positronic_addKYCCredential', description: 'Add KYC verification to a DID.', params: [{ name: 'address', type: 'string', required: true, description: 'Address (hex)' }, { name: 'kyc_level', type: 'number', required: true, description: 'KYC level (1-3)' }, { name: 'jurisdiction', type: 'string', required: true, description: 'Jurisdiction code (e.g. "US")' }], returns: 'Object - {address, kyc_level, verified}', example: null, defaultParams: ['"0x01...01"', '2', '"US"'] },
+            { method: 'positronic_distributeDividend', description: 'Trigger dividend distribution to token holders.', params: [{ name: 'token_id', type: 'string', required: true, description: 'Token ID' }, { name: 'amount', type: 'number', required: true, description: 'Total dividend amount in base units' }, { name: 'issuer', type: 'string', required: true, description: 'Issuer address (hex)' }], returns: 'Object - {dividend_id, holder_count, total_amount}', example: null, defaultParams: ['"RWA-..."', '10000', '"0x01...01"'] },
+            { method: 'positronic_getDividendHistory', description: 'Get dividend payment history for a token.', params: [{ name: 'token_id', type: 'string', required: true, description: 'Token ID' }], returns: 'Array - [{dividend_id, total_amount, holder_count, distributed_at}]', example: null, defaultParams: ['"RWA-..."'] },
+            { method: 'positronic_getRWAHolders', description: 'List token holders with their balances.', params: [{ name: 'token_id', type: 'string', required: true, description: 'Token ID' }], returns: 'Array - [{address, balance, percentage}]', example: null, defaultParams: ['"RWA-..."'] },
+            { method: 'positronic_getRWAStats', description: 'Overall RWA marketplace stats.', params: [], returns: 'Object - {total_tokens, active_tokens, total_valuation, total_dividends}', example: null }
+        ]
+    },
+    {
+        category: 'ZKML - Zero-Knowledge Machine Learning (Phase 31)',
+        methods: [
+            { method: 'positronic_getZKMLProof', description: 'Generate a ZK proof that an AI score was computed correctly. Returns proof without revealing model weights.', params: [{ name: 'features', type: 'array', required: true, description: 'Feature vector (list of floats) for scoring' }], returns: 'Object - {model_commitment, input_hash, output_score, proof_format, valid_format}', example: null, defaultParams: ['[0.5, 0.3, 0.7, 0.1, 0.9, 0.4, 0.6, 0.2]'] },
+            { method: 'positronic_verifyZKMLProof', description: 'Verify a ZKML proof against the current model commitment.', params: [{ name: 'proof', type: 'object', required: true, description: 'Proof object from getZKMLProof' }], returns: 'Object - {valid, reason, model_commitment_match}', example: null },
+            { method: 'positronic_getZKMLStats', description: 'ZKML system stats (proof generation times, verification rate).', params: [], returns: 'Object - {prover: {proofs_generated, avg_generation_ms}, verifier: {total_verified, accepted, rejected}}', example: null },
+            { method: 'positronic_getZKMLConfig', description: 'Current ZKML configuration (feature flag, timeouts, proof format).', params: [], returns: 'Object - {enabled, proof_timeout_ms, verification_gas, proof_format, circuit}', example: null },
+            { method: 'positronic_getModelCommitment', description: 'Get the model hash commitment (Merkle root of quantized weights) without revealing the weights.', params: [], returns: 'Object - {commitment, circuit_depth, input_dim}', example: null }
+        ]
+    }
+];
+
+// ---------- Helpers ----------
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function syntaxHighlightJSON(json) {
+    if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
+    return json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"(\s*:)?)/g, (match) => {
+            let cls = 'code-string';
+            if (/:\s*$/.test(match)) cls = 'code-property';
+            return '<span class="' + cls + '">' + match + '</span>';
+        })
+        .replace(/\b(true|false)\b/g, '<span class="code-boolean">$&</span>')
+        .replace(/\bnull\b/g, '<span class="code-null">$&</span>')
+        .replace(/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g, '<span class="code-number">$&</span>');
+}
+
+function methodId(name) {
+    return 'method-' + name.replace(/_/g, '-');
+}
+
+function getNamespaceTag(method) {
+    if (method.startsWith('eth_')) return '<span class="method-namespace-tag tag-eth">ETH</span>';
+    if (method.startsWith('net_')) return '<span class="method-namespace-tag tag-net">NET</span>';
+    return '<span class="method-namespace-tag tag-positronic">PRC</span>';
+}
+
+function buildExampleRequestPretty(m) {
+    var params = m.params.length === 0 ? '[]' : '[\n' + m.params.map(function(p) {
+        var example = (m.defaultParams && m.defaultParams[m.params.indexOf(p)]) || '"<' + p.name + '>"';
+        return '    ' + example;
+    }).join(',\n') + '\n  ]';
+
+    return '{\n  "jsonrpc": "2.0",\n  "method": "' + m.method + '",\n  "params": ' + params + ',\n  "id": 1\n}';
+}
+
+// ---------- Copy to Clipboard ----------
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    }).catch(function() {
+        // Fallback
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+// ---------- Build Sidebar ----------
+function buildSidebar() {
+    var nav = document.getElementById('sidebarNav');
+    var html = '';
+
+    METHOD_GROUPS.forEach(function(group, gi) {
+        html += '<div class="sidebar-group" data-group="' + gi + '">';
+        html += '<div class="sidebar-group-header" onclick="toggleGroup(' + gi + ')">';
+        html += '<span>' + escapeHtml(group.name) + '</span>';
+        html += '<span style="display:flex;align-items:center;gap:6px;">';
+        html += '<span class="group-count">' + group.methods.length + '</span>';
+        html += '<span class="group-arrow">&#9660;</span>';
+        html += '</span></div>';
+        html += '<div class="sidebar-group-items">';
+        group.methods.forEach(function(m) {
+            html += '<a class="sidebar-item" data-method="' + m.method + '" onclick="scrollToMethod(\'' + m.method + '\')">' + m.method + '</a>';
+        });
+        html += '</div></div>';
+    });
+
+    nav.innerHTML = html;
+}
+
+function toggleGroup(index) {
+    var group = document.querySelector('.sidebar-group[data-group="' + index + '"]');
+    if (group) group.classList.toggle('collapsed');
+}
+
+function scrollToMethod(method) {
+    var el = document.getElementById(methodId(method));
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeSidebar();
+    }
+}
+
+// ---------- Build Method Cards ----------
+function buildMethodCards() {
+    var container = document.getElementById('methodCards');
+    var html = '';
+
+    METHOD_GROUPS.forEach(function(group) {
+        html += '<div class="method-group-header" id="group-' + group.key + '">';
+        html += '<h2>' + escapeHtml(group.name) + '</h2>';
+        html += '<p>' + escapeHtml(group.description) + '</p>';
+        html += '</div>';
+
+        group.methods.forEach(function(m) {
+            html += buildMethodCard(m);
+        });
+    });
+
+    container.innerHTML = html;
+}
+
+function buildMethodCard(m) {
+    var id = methodId(m.method);
+    var tag = getNamespaceTag(m.method);
+    var exampleReq = buildExampleRequestPretty(m);
+
+    // Parameters
+    var paramsHtml = '';
+    if (m.params.length === 0) {
+        paramsHtml = '<p class="params-none">This method takes no parameters.</p>';
+    } else {
+        paramsHtml = '<table class="params-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>';
+        m.params.forEach(function(p) {
+            var reqCls = p.required ? 'yes' : 'no';
+            var reqText = p.required ? 'Yes' : 'No';
+            paramsHtml += '<tr><td><span class="param-name">' + escapeHtml(p.name) + '</span></td>';
+            paramsHtml += '<td><span class="param-type">' + escapeHtml(p.type) + '</span></td>';
+            paramsHtml += '<td><span class="param-required ' + reqCls + '">' + reqText + '</span></td>';
+            paramsHtml += '<td><span class="param-desc">' + escapeHtml(p.description) + '</span></td></tr>';
+        });
+        paramsHtml += '</tbody></table>';
+    }
+
+    // Try-it param inputs
+    var tryitParamsHtml = '';
+    if (m.params.length > 0) {
+        tryitParamsHtml = '<div class="tryit-params">';
+        m.params.forEach(function(p, i) {
+            var defaultVal = (m.defaultParams && m.defaultParams[i]) || '';
+            tryitParamsHtml += '<div class="tryit-param-row">';
+            tryitParamsHtml += '<label class="tryit-param-label">' + escapeHtml(p.name) + '</label>';
+            tryitParamsHtml += '<input class="tryit-param-input" data-param="' + i + '" data-type="' + p.type + '" placeholder="' + escapeHtml(p.type) + ' - ' + escapeHtml(p.description) + '" value="' + escapeHtml(defaultVal) + '">';
+            tryitParamsHtml += '</div>';
+        });
+        tryitParamsHtml += '</div>';
+    }
+
+    return '<div class="method-card" id="' + id + '" data-method="' + m.method + '">' +
+        '<div class="method-card-header">' +
+            '<span class="method-name">' + escapeHtml(m.method) + '</span>' +
+            tag +
+        '</div>' +
+        '<div class="method-card-body">' +
+            '<p class="method-description">' + escapeHtml(m.description) + '</p>' +
+            '<div class="params-section">' +
+                '<div class="params-label">Parameters</div>' +
+                paramsHtml +
+            '</div>' +
+            '<div class="returns-section">' +
+                '<div class="returns-label">Returns</div>' +
+                '<div class="returns-type">' + escapeHtml(m.returns) + '</div>' +
+            '</div>' +
+            '<div class="example-section">' +
+                '<div class="example-label">Example Request</div>' +
+                '<pre class="example-code"><button class="copy-btn" onclick="copyToClipboard(this.parentElement.querySelector(\'code\').textContent, this)">Copy</button><code>' + syntaxHighlightJSON(exampleReq) + '</code></pre>' +
+            '</div>' +
+            '<div class="tryit-section" data-method="' + m.method + '">' +
+                '<div class="tryit-header" onclick="toggleTryIt(this)">' +
+                    '<span class="tryit-header-arrow">&#9654;</span>' +
+                    '<span class="tryit-header-label">Try It</span>' +
+                '</div>' +
+                '<div class="tryit-body">' +
+                    ((['positronic_emergencyPause','positronic_emergencyHalt','positronic_emergencyResume','positronic_adminTransfer','positronic_adminBanPeer','positronic_upgradeSchedule'].indexOf(m.method) >= 0) ?
+                        '<div style="background:rgba(255,61,61,0.1);border:1px solid rgba(255,61,61,0.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#ff6b6b"><strong>&#x26A0; Admin-only:</strong> This method requires JWT authentication and is restricted to node operators. Unauthorized calls will be rejected.</div>' : '') +
+                    ((['positronic_hdCreateWallet','positronic_generateGameAPIKey','positronic_registerGame'].indexOf(m.method) >= 0) ?
+                        '<div style="background:rgba(255,184,0,0.1);border:1px solid rgba(255,184,0,0.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#ffc107"><strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Sensitive:</strong> This method returns secret data (keys/mnemonics). Never call from a public browser. Treat any displayed secrets as potentially compromised.</div>' : '') +
+                    '<div class="tryit-endpoint">' +
+                        '<span class="tryit-endpoint-label">RPC URL</span>' +
+                        '<span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--text-primary)">' + rpc.url + '</span>' +
+                    '</div>' +
+                    tryitParamsHtml +
+                    '<div class="tryit-actions">' +
+                        '<button class="tryit-btn tryit-btn-send" onclick="tryItSend(\'' + m.method + '\', this)">Send Request</button>' +
+                        '<button class="tryit-btn tryit-btn-clear" onclick="tryItClear(\'' + m.method + '\')">Clear</button>' +
+                    '</div>' +
+                    '<div class="tryit-response" id="response-' + m.method + '">' +
+                        '<div class="tryit-response-header">' +
+                            '<span class="tryit-response-label">Response</span>' +
+                            '<span class="tryit-response-status" id="status-' + m.method + '"></span>' +
+                        '</div>' +
+                        '<pre class="tryit-response-body" id="body-' + m.method + '"></pre>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+    '</div>';
+}
+
+// ---------- Toggle Try It Panel ----------
+function toggleTryIt(header) {
+    var body = header.nextElementSibling;
+    var arrow = header.querySelector('.tryit-header-arrow');
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+}
+
+// ---------- Try It Send ----------
+async function tryItSend(method, btn) {
+    if (btn.classList.contains('loading')) return;
+
+    var section = btn.closest('.tryit-body');
+    var inputs = section.querySelectorAll('.tryit-param-input');
+    var responseEl = document.getElementById('response-' + method);
+    var statusEl = document.getElementById('status-' + method);
+    var bodyEl = document.getElementById('body-' + method);
+
+    var endpoint = rpc.url;
+
+    // Parse params
+    var params = [];
+    inputs.forEach(function(input) {
+        var val = input.value.trim();
+        if (!val) { params.push(null); return; }
+        try { params.push(JSON.parse(val)); }
+        catch (e) { params.push(val); }
+    });
+
+    // Send
+    btn.classList.add('loading');
+    btn.textContent = 'Sending...';
+    responseEl.classList.add('visible');
+    bodyEl.textContent = 'Loading...';
+    statusEl.textContent = '';
+    statusEl.className = 'tryit-response-status';
+
+    try {
+        var res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', method: method, params: params.filter(function(p) { return p !== null; }), id: 1 })
+        });
+        var result = await res.json();
+
+        btn.classList.remove('loading');
+        btn.textContent = 'Send Request';
+
+        if (result.error) {
+            statusEl.textContent = 'Error';
+            statusEl.classList.add('error');
+        } else {
+            statusEl.textContent = 'Success';
+            statusEl.classList.add('success');
+        }
+        bodyEl.textContent = JSON.stringify(result, null, 2);
+    } catch (err) {
+        btn.classList.remove('loading');
+        btn.textContent = 'Send Request';
+        statusEl.textContent = 'Error';
+        statusEl.classList.add('error');
+        bodyEl.textContent = 'Connection failed: ' + err.message + '\n\nMake sure the ASF node is running on ' + endpoint;
+    }
+}
+
+function tryItClear(method) {
+    var responseEl = document.getElementById('response-' + method);
+    var bodyEl = document.getElementById('body-' + method);
+    var statusEl = document.getElementById('status-' + method);
+    responseEl.classList.remove('visible');
+    bodyEl.textContent = '';
+    statusEl.textContent = '';
+    statusEl.className = 'tryit-response-status';
+}
+
+// ---------- Scroll Spy ----------
+function setupScrollSpy() {
+    var cards = document.querySelectorAll('.method-card');
+    var sidebarItems = document.querySelectorAll('.sidebar-item');
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var method = entry.target.dataset.method;
+                sidebarItems.forEach(function(item) {
+                    item.classList.toggle('active', item.dataset.method === method);
+                });
+            }
+        });
+    }, { root: null, rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+
+    cards.forEach(function(card) { observer.observe(card); });
+}
+
+// ---------- Search ----------
+function setupSearch() {
+    var input = document.getElementById('methodSearch');
+    input.addEventListener('input', function(e) {
+        var query = e.target.value.toLowerCase().trim();
+        var sidebarItems = document.querySelectorAll('.sidebar-item');
+        var groups = document.querySelectorAll('.sidebar-group');
+
+        if (!query) {
+            sidebarItems.forEach(function(item) { item.style.display = ''; });
+            groups.forEach(function(g) { g.style.display = ''; g.classList.remove('collapsed'); });
+            document.querySelectorAll('.method-card').forEach(function(c) { c.style.display = ''; });
+            document.querySelectorAll('.method-group-header').forEach(function(h) { h.style.display = ''; });
+            return;
+        }
+
+        // Filter sidebar
+        groups.forEach(function(g) {
+            var hasVisible = false;
+            g.querySelectorAll('.sidebar-item').forEach(function(item) {
+                var match = item.dataset.method.toLowerCase().includes(query);
+                item.style.display = match ? '' : 'none';
+                if (match) hasVisible = true;
+            });
+            g.style.display = hasVisible ? '' : 'none';
+            if (hasVisible) g.classList.remove('collapsed');
+        });
+
+        // Filter cards
+        document.querySelectorAll('.method-card').forEach(function(card) {
+            var match = card.dataset.method.toLowerCase().includes(query);
+            card.style.display = match ? '' : 'none';
+        });
+
+        // Filter group headers
+        document.querySelectorAll('.method-group-header').forEach(function(h) {
+            var groupKey = h.id.replace('group-', '');
+            var group = METHOD_GROUPS.find(function(g) { return g.key === groupKey; });
+            if (group) {
+                var anyMatch = group.methods.some(function(m) { return m.method.toLowerCase().includes(query); });
+                h.style.display = anyMatch ? '' : 'none';
+            }
+        });
+    });
+}
+
+// ---------- Sidebar Mobile Toggle ----------
+function setupSidebarToggle() {
+    var toggle = document.getElementById('sidebarToggle');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    toggle.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+    });
+    overlay.addEventListener('click', closeSidebar);
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('visible');
+}
+
+// ---------- Connection Status ----------
+async function checkConnection() {
+    var dot = document.getElementById('statusDot');
+    var text = document.getElementById('statusText');
+    try {
+        var res = await rpc.call('eth_chainId');
+        if (res.result) {
+            dot.className = 'status-dot connected';
+            var chainId = parseInt(res.result, 16);
+            text.textContent = 'Chain ' + chainId;
+            document.getElementById('chainIdDisplay').textContent = chainId + ' (' + res.result + ')';
+        } else {
+            dot.className = 'status-dot disconnected';
+            text.textContent = 'Error';
+        }
+    } catch (e) {
+        dot.className = 'status-dot disconnected';
+        text.textContent = 'Disconnected';
+    }
+}
+
+// ---------- Count total methods ----------
+function countMethods() {
+    var total = 0;
+    METHOD_GROUPS.forEach(function(g) { total += g.methods.length; });
+    return total;
+}
+
+// ---------- Initialize ----------
+document.addEventListener('DOMContentLoaded', function() {
+    buildSidebar();
+    buildMethodCards();
+    setupScrollSpy();
+    setupSearch();
+    setupSidebarToggle();
+    checkConnection();
+
+    // Re-check connection every 30 seconds
+    setInterval(checkConnection, 30000);
+
+    // Handle hash navigation
+    if (window.location.hash) {
+        var method = window.location.hash.replace('#', '').replace('method-', '').replace(/-/g, '_');
+        setTimeout(function() { scrollToMethod(method); }, 300);
+    }
+});
+    </script>
+<link rel="stylesheet" href="/assistant.css">
+<script src="/assistant-data.js"></script>
+<script src="/assistant.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js').catch(function(){});</script>
+<script>
+// Scroll reveal animation
+var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.method-group, .docs-title').forEach(function(el) {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+});
+</script>
+</body>
+</html>
