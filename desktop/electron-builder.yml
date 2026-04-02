@@ -1,0 +1,66 @@
+appId: network.positronic-ai.node
+productName: Positronic Node
+copyright: Copyright © 2025 Positronic AI
+
+directories:
+  output: release
+  buildResources: build
+
+asar: false
+
+files:
+  - main/**/*
+  - renderer/dist/**/*
+  - build/icons/**/*
+  - package.json
+
+extraResources:
+  - from: ../node_entry.dist
+    to: node_entry.dist
+    filter:
+      - "**/*"
+
+# ─── Windows ──────────────────────────────────────────────────────────────────
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icons/icon.ico
+  artifactName: Positronic-Node-${version}-Setup.exe
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Positronic Node
+  installerIcon: build/icons/icon.ico
+  uninstallerIcon: build/icons/icon.ico
+  installerSidebar: build/icons/installer_header_right.bmp
+  uninstallerSidebar: build/icons/installer_header_right.bmp
+
+# ─── macOS ────────────────────────────────────────────────────────────────────
+mac:
+  target:
+    - target: zip
+      arch: [arm64]
+    - target: zip
+      arch: [x64]
+  icon: build/icons/icon.icns
+  artifactName: Positronic-Node-${version}-mac-${arch}.${ext}
+  category: public.app-category.finance
+
+# ─── Linux ────────────────────────────────────────────────────────────────────
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+  icon: build/icons/icon.png
+  artifactName: Positronic-Node-${version}.AppImage
+  category: Finance
+
+# ─── Auto-update distribution ─────────────────────────────────────────────────
+publish:
+  provider: generic
+  url: https://dl.positronic-ai.network/releases/desktop/
+  channel: latest

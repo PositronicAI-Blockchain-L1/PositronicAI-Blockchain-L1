@@ -1,0 +1,458 @@
+name: Build Desktop Apps
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Platforms to build (comma-separated: windows,macos,linux)'
+        required: false
+        default: 'windows,macos,linux'
+
+permissions:
+  contents: write
+
+env:
+  APP_VERSION: "0.3.1"
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "20"
+
+jobs:
+  # ── macOS Build ──────────────────────────────────────────────
+  build-macos:
+    runs-on: macos-14
+    if: >-
+      github.event_name == 'push' ||
+      contains(github.event.inputs.platforms, 'macos')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/pip
+          key: macos-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: macos-pip-
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build PositronicNode (PyInstaller)
+        run: |
+          python -m PyInstaller build/node_entry.spec --noconfirm
+          echo "── PyInstaller output ──"
+          ls -lh build/node_entry.dist/PositronicNode/ || ls -lh dist/PositronicNode/
+
+      - name: Copy node_entry.dist for Electron
+        run: |
+          # PyInstaller outputs to dist/PositronicNode/ by default
+          if [ -d "dist/PositronicNode" ]; then
+            rm -rf node_entry.dist
+            cp -R dist/PositronicNode node_entry.dist
+          elif [ -d "build/node_entry.dist/PositronicNode" ]; then
+            rm -rf node_entry.dist
+            cp -R build/node_entry.dist/PositronicNode node_entry.dist
+          fi
+          echo "── node_entry.dist contents ──"
+          ls -lh node_entry.dist/
+          test -f node_entry.dist/PositronicNode || { echo "ERROR: PositronicNode binary not found"; exit 1; }
+
+      - name: Generate macOS icon (.icns)
+        run: |
+          mkdir -p desktop/build/icons
+          ICON_SRC="desktop/build/icons/icon.png"
+          if [ ! -f "$ICON_SRC" ]; then
+            echo "ERROR: icon.png not found at $ICON_SRC"
+            exit 1
+          fi
+          ICONSET_DIR=$(mktemp -d)/Positronic.iconset
+          mkdir -p "$ICONSET_DIR"
+          for SIZE in 16 32 64 128 256 512; do
+            sips -z $SIZE $SIZE "$ICON_SRC" --out "$ICONSET_DIR/icon_${SIZE}x${SIZE}.png" > /dev/null 2>&1
+            DOUBLE=$((SIZE * 2))
+            if [ $DOUBLE -le 1024 ]; then
+              sips -z $DOUBLE $DOUBLE "$ICON_SRC" --out "$ICONSET_DIR/icon_${SIZE}x${SIZE}@2x.png" > /dev/null 2>&1
+            fi
+          done
+          sips -z 1024 1024 "$ICON_SRC" --out "$ICONSET_DIR/icon_512x512@2x.png" > /dev/null 2>&1
+          iconutil -c icns "$ICONSET_DIR" -o desktop/build/icons/icon.icns
+          echo "✓ Generated icon.icns ($(du -h desktop/build/icons/icon.icns | awk '{print $1}'))"
+
+      - name: Install Electron dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build Electron zip (macOS)
+        working-directory: desktop
+        run: npm run build:mac
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Compute SHA-512
+        run: |
+          cd desktop/release
+          echo "── Release files ──"
+          ls -lh
+          for f in Positronic-Node-*.zip; do
+            if [ -f "$f" ]; then
+              shasum -a 512 "$f" | tee "${f}.sha512"
+              echo "✓ $f — $(du -h "$f" | awk '{print $1}')"
+            fi
+          done
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: positronic-macos
+          path: |
+            desktop/release/Positronic-Node-*.zip
+            desktop/release/Positronic-Node-*.zip.sha512
+            desktop/release/Positronic-Node-*.zip.blockmap
+            desktop/release/latest-mac.yml
+          retention-days: 30
+
+  # ── Linux Build ──────────────────────────────────────────────
+  build-linux:
+    runs-on: ubuntu-22.04
+    if: >-
+      github.event_name == 'push' ||
+      contains(github.event.inputs.platforms, 'linux')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk libfuse2
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: linux-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: linux-pip-
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build PositronicNode (PyInstaller)
+        run: |
+          python -m PyInstaller build/node_entry.spec --noconfirm
+          echo "── PyInstaller output ──"
+          ls -lh dist/PositronicNode/ || ls -lh build/node_entry.dist/PositronicNode/
+
+      - name: Copy node_entry.dist for Electron
+        run: |
+          if [ -d "dist/PositronicNode" ]; then
+            rm -rf node_entry.dist
+            cp -R dist/PositronicNode node_entry.dist
+          elif [ -d "build/node_entry.dist/PositronicNode" ]; then
+            rm -rf node_entry.dist
+            cp -R build/node_entry.dist/PositronicNode node_entry.dist
+          fi
+          echo "── node_entry.dist contents ──"
+          ls -lh node_entry.dist/
+          test -f node_entry.dist/PositronicNode || { echo "ERROR: PositronicNode binary not found"; exit 1; }
+
+      - name: Install Electron dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build Electron AppImage (Linux)
+        working-directory: desktop
+        run: npm run build:linux
+
+      - name: Compute SHA-512
+        run: |
+          cd desktop/release
+          APPIMAGE_FILE=$(ls Positronic-Node-*.AppImage 2>/dev/null | head -1)
+          if [ -z "$APPIMAGE_FILE" ]; then
+            echo "ERROR: No AppImage file found"
+            ls -la
+            exit 1
+          fi
+          sha512sum "$APPIMAGE_FILE" | tee "${APPIMAGE_FILE}.sha512"
+          echo "✓ $APPIMAGE_FILE — $(du -h "$APPIMAGE_FILE" | awk '{print $1}')"
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: positronic-linux
+          path: |
+            desktop/release/Positronic-Node-*.AppImage
+            desktop/release/Positronic-Node-*.AppImage.sha512
+            desktop/release/latest-linux.yml
+          retention-days: 30
+
+  # ── Windows Build ────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    if: >-
+      github.event_name == 'push' ||
+      contains(github.event.inputs.platforms, 'windows')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: windows-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: windows-pip-
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build PositronicNode (PyInstaller)
+        run: |
+          python -m PyInstaller build/node_entry.spec --noconfirm
+          echo "── PyInstaller output ──"
+          dir dist\PositronicNode\
+
+      - name: Copy node_entry.dist for Electron
+        shell: bash
+        run: |
+          rm -rf node_entry.dist
+          cp -R dist/PositronicNode node_entry.dist
+          echo "── node_entry.dist contents ──"
+          ls -lh node_entry.dist/
+          test -f node_entry.dist/PositronicNode.exe || { echo "ERROR: PositronicNode.exe not found"; exit 1; }
+
+      - name: Install Electron dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build Electron installer (Windows)
+        working-directory: desktop
+        run: npm run build:win
+
+      - name: Compute SHA-512
+        shell: bash
+        run: |
+          cd desktop/release
+          EXE_FILE=$(ls Positronic-Node-*-Setup.exe 2>/dev/null | head -1)
+          if [ -z "$EXE_FILE" ]; then
+            echo "ERROR: No Setup.exe found"
+            ls -la
+            exit 1
+          fi
+          sha512sum "$EXE_FILE" | tee "${EXE_FILE}.sha512"
+          echo "✓ $EXE_FILE — $(du -h "$EXE_FILE" | awk '{print $1}')"
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: positronic-windows
+          path: |
+            desktop/release/Positronic-Node-*-Setup.exe
+            desktop/release/Positronic-Node-*-Setup.exe.sha512
+            desktop/release/Positronic-Node-*-Setup.exe.blockmap
+            desktop/release/latest.yml
+          retention-days: 30
+
+  # ── Upload to R2 + Update Website ──────────────────────────
+  publish:
+    needs: [build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: always() && (needs.build-macos.result == 'success' || needs.build-linux.result == 'success')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f -ls
+
+      - name: Upload macOS to R2
+        if: needs.build-macos.result == 'success'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          for ZIP in $(find artifacts/positronic-macos -name "*.zip" ! -name "*.sha512"); do
+            BASENAME=$(basename "$ZIP")
+            echo "Uploading $BASENAME to R2..."
+            wrangler r2 object put "positronic-downloads/releases/desktop/$BASENAME" \
+              --file "$ZIP" --content-type "application/zip"
+          done
+          echo "✓ macOS zip(s) uploaded"
+
+      - name: Upload Linux to R2
+        if: needs.build-linux.result == 'success'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          APPIMAGE=$(find artifacts/positronic-linux -name "*.AppImage" ! -name "*.sha512" | head -1)
+          if [ -n "$APPIMAGE" ]; then
+            echo "Uploading $APPIMAGE to R2..."
+            wrangler r2 object put positronic-downloads/releases/desktop/Positronic-Node-${{ env.APP_VERSION }}.AppImage \
+              --file "$APPIMAGE" --content-type "application/octet-stream"
+            wrangler r2 object put positronic-downloads/releases/desktop/Positronic-Node-latest.AppImage \
+              --file "$APPIMAGE" --content-type "application/octet-stream"
+            echo "✓ Linux AppImage uploaded"
+          fi
+
+      - name: Upload auto-update manifest (latest.yml)
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          # Upload latest.yml files for electron-updater auto-update
+          for YML in $(find artifacts -name "latest*.yml" 2>/dev/null); do
+            BASENAME=$(basename "$YML")
+            echo "Uploading $BASENAME to R2..."
+            wrangler r2 object put "positronic-downloads/releases/desktop/$BASENAME" \
+              --file "$YML" --content-type "text/yaml"
+          done
+          # Upload blockmap files for delta updates
+          for BM in $(find artifacts -name "*.blockmap" 2>/dev/null); do
+            BASENAME=$(basename "$BM")
+            echo "Uploading $BASENAME to R2..."
+            wrangler r2 object put "positronic-downloads/releases/desktop/$BASENAME" \
+              --file "$BM" --content-type "application/octet-stream"
+          done
+          echo "✓ Auto-update manifests uploaded"
+
+      - name: Update website download page
+        run: |
+          # Read checksums from artifacts
+          MAC_SHA=""
+          LINUX_SHA=""
+
+          MAC_SHA_FILE=$(find artifacts/positronic-macos -name "*.sha512" 2>/dev/null | head -1)
+          if [ -n "$MAC_SHA_FILE" ]; then
+            MAC_SHA=$(awk '{print $1}' "$MAC_SHA_FILE")
+            echo "macOS SHA-512: $MAC_SHA"
+          fi
+
+          LINUX_SHA_FILE=$(find artifacts/positronic-linux -name "*.sha512" 2>/dev/null | head -1)
+          if [ -n "$LINUX_SHA_FILE" ]; then
+            LINUX_SHA=$(awk '{print $1}' "$LINUX_SHA_FILE")
+            echo "Linux SHA-512: $LINUX_SHA"
+          fi
+
+          DL="website/download/index.html"
+
+          # Update macOS download URL
+          if [ -n "$MAC_SHA" ]; then
+            sed -i 's|https://dl.positronic-ai.network/Positronic-v0.3.0-macos|https://dl.positronic-ai.network/releases/desktop/Positronic-Node-${{ env.APP_VERSION }}.dmg|g' "$DL"
+            sed -i "s|<span id=\"checksumMac\" style=\"word-break:break-all;\">.*</span>|<span id=\"checksumMac\" style=\"word-break:break-all;\">${MAC_SHA}</span>|g" "$DL"
+            # Update size (will be approximate)
+            MAC_SIZE=$(find artifacts/positronic-macos -name "*.dmg" ! -name "*.sha512" -exec du -m {} \; | awk '{print $1}')
+            if [ -n "$MAC_SIZE" ]; then
+              sed -i "s|~38 MB \&bull; .dmg|~${MAC_SIZE} MB \&bull; .dmg|g" "$DL"
+            fi
+          fi
+
+          # Update Linux download URL
+          if [ -n "$LINUX_SHA" ]; then
+            sed -i 's|https://dl.positronic-ai.network/Positronic-v0.3.0-linux|https://dl.positronic-ai.network/releases/desktop/Positronic-Node-${{ env.APP_VERSION }}.AppImage|g' "$DL"
+            sed -i "s|<span id=\"checksumLinux\" style=\"word-break:break-all;\">.*</span>|<span id=\"checksumLinux\" style=\"word-break:break-all;\">${LINUX_SHA}</span>|g" "$DL"
+            # Update size and format
+            LINUX_SIZE=$(find artifacts/positronic-linux -name "*.AppImage" ! -name "*.sha512" -exec du -m {} \; | awk '{print $1}')
+            if [ -n "$LINUX_SIZE" ]; then
+              sed -i "s|~48 MB \&bull; .tar.gz|~${LINUX_SIZE} MB \&bull; .AppImage|g" "$DL"
+            fi
+          fi
+
+          echo "── Updated download page ──"
+          grep -n "positronic-ai.network" "$DL" | head -10
+          grep -n "checksumMac\|checksumLinux" "$DL"
+
+      - name: Deploy website to Cloudflare Pages
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          npx wrangler pages deploy website \
+            --project-name positronic-ai \
+            --commit-dirty=true \
+            --commit-message "v${{ env.APP_VERSION }}: macOS + Linux builds published"
+
+  # ── Create GitHub Release ────────────────────────────────────
+  release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: List artifacts
+        run: find release-artifacts -type f -ls
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          generate_release_notes: true
+          files: |
+            release-artifacts/**/*-Setup.exe
+            release-artifacts/**/*.exe.sha512
+            release-artifacts/**/*.dmg
+            release-artifacts/**/*.dmg.sha512
+            release-artifacts/**/*.AppImage
+            release-artifacts/**/*.AppImage.sha512
