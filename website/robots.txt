@@ -28,6 +28,36 @@ Allow: /
 User-agent: Amazonbot
 Allow: /
 
+User-agent: YouBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
 # LLMs.txt — AI-readable project information
 # https://positronic-ai.network/llms.txt
 # https://positronic-ai.network/llms-full.txt

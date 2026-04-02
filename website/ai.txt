@@ -1,0 +1,16 @@
+# ai.txt - AI Crawler Information
+# https://positronic-ai.network/ai.txt
+
+Name: Positronic
+Type: Layer-1 Blockchain
+Token: ASF
+Chain-ID: 420420
+Description: Open-source Layer-1 blockchain with AI-validated consensus (Proof of Neural Consensus). 4 independent neural models validate every transaction before finality. Post-quantum cryptography, gasless transactions, play-to-mine economics. Zero pre-mine.
+URL: https://positronic-ai.network
+AI-Readable-Info: https://positronic-ai.network/llms.txt
+AI-Readable-Full: https://positronic-ai.network/llms-full.txt
+Whitepaper: https://positronic-ai.network/whitepaper
+Documentation: https://positronic-ai.network/docs/
+GitHub: https://github.com/PositronicAI-Blockchain-L1
+Contact: https://github.com/PositronicAI-Blockchain-L1/community/issues
+Preferences: Allow AI training, Allow AI summarization, Allow AI citation

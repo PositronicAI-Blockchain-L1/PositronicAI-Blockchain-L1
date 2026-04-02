@@ -8,7 +8,21 @@
     <meta name="description" content="Positronic (ASF): Next-generation Layer-1 blockchain with AI-validated transactions, post-quantum security, gasless transactions, and play-to-mine economics. 7,799 tests, 249 modules, 12s blocks.">
     <meta name="keywords" content="positronic, ASF, blockchain, AI, layer-1, post-quantum, play-to-mine, DPoS, proof of neural consensus, cryptocurrency, open source">
     <meta name="author" content="Positronic">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="https://positronic-ai.network/">
+    <!-- Dublin Core (academic/AI crawlers) -->
+    <meta name="DC.title" content="Positronic - AI-Validated Layer-1 Blockchain">
+    <meta name="DC.creator" content="Positronic">
+    <meta name="DC.subject" content="blockchain, AI consensus, Layer-1, post-quantum cryptography, cryptocurrency">
+    <meta name="DC.description" content="Open-source Layer-1 blockchain with Proof of Neural Consensus. 4 AI models validate every transaction.">
+    <meta name="DC.type" content="Software">
+    <meta name="DC.format" content="text/html">
+    <meta name="DC.language" content="en">
+    <!-- Web3 / DApp browser -->
+    <meta name="dapp-name" content="Positronic">
+    <meta name="ethereum:chain-id" content="420420">
+    <meta name="web3:chain-id" content="420420">
+    <meta name="application-name" content="Positronic">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://positronic-ai.network/">
@@ -17,13 +31,18 @@
     <meta property="og:image" content="https://positronic-ai.network/logo-400.webp">
     <meta property="og:image:width" content="400">
     <meta property="og:image:height" content="400">
+    <meta property="og:image:type" content="image/webp">
+    <meta property="og:image:alt" content="Positronic blockchain logo - AI-validated Layer-1">
     <meta property="og:site_name" content="Positronic">
+    <meta property="og:locale" content="en_US">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@positronic_ai">
+    <meta name="twitter:creator" content="@positronic_ai">
     <meta name="twitter:title" content="Positronic — Next-Gen AI-Validated Layer-1 Blockchain">
     <meta name="twitter:description" content="The first blockchain where 4 AI models validate every transaction. 7,799 tests, 249 modules, zero pre-mine.">
     <meta name="twitter:image" content="https://positronic-ai.network/logo-400.webp">
+    <meta name="twitter:image:alt" content="Positronic blockchain logo - AI-validated Layer-1">
     <!-- JSON-LD Structured Data: Organization -->
     <script type="application/ld+json">
     {
@@ -45,23 +64,71 @@
         "@type": "ContactPoint",
         "contactType": "technical support",
         "url": "https://github.com/PositronicAI-Blockchain-L1/community/issues"
-      }
+      },
+      "knowsAbout": ["blockchain", "artificial intelligence", "post-quantum cryptography", "consensus mechanisms", "cryptocurrency", "decentralized applications"],
+      "slogan": "AI-Validated Consensus for the Post-Quantum Era"
     }
     </script>
-    <!-- JSON-LD Structured Data: WebSite -->
+    <!-- JSON-LD: WebSite + SearchAction -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Positronic",
-      "alternateName": "Positronic AI Blockchain",
+      "alternateName": ["Positronic AI Blockchain", "ASF Blockchain", "Positronic ASF"],
       "url": "https://positronic-ai.network",
       "description": "Official website for the Positronic Layer-1 blockchain with AI-validated consensus, post-quantum cryptography, and desktop node applications.",
       "publisher": {
         "@type": "Organization",
         "name": "Positronic",
         "url": "https://positronic-ai.network"
-      }
+      },
+      "inLanguage": "en"
+    }
+    </script>
+    <!-- JSON-LD: ASF Token as Product -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "ASF Token",
+      "description": "Native cryptocurrency of the Positronic Layer-1 blockchain. Used for staking, governance, transaction fees, and play-to-mine rewards. Zero pre-mine.",
+      "brand": {"@type": "Brand", "name": "Positronic"},
+      "category": "Cryptocurrency",
+      "url": "https://positronic-ai.network",
+      "image": "https://positronic-ai.network/logo-400.webp",
+      "additionalProperty": [
+        {"@type": "PropertyValue", "name": "Chain ID", "value": "420420"},
+        {"@type": "PropertyValue", "name": "Block Time", "value": "12 seconds"},
+        {"@type": "PropertyValue", "name": "Consensus", "value": "Proof of Neural Consensus (PoNC)"},
+        {"@type": "PropertyValue", "name": "Token Type", "value": "Native Layer-1 (not ERC-20)"},
+        {"@type": "PropertyValue", "name": "Cryptography", "value": "ML-DSA-44 post-quantum, AES-256-GCM"}
+      ]
+    }
+    </script>
+    <!-- JSON-LD: FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What is Positronic (ASF)?", "acceptedAnswer": {"@type": "Answer", "text": "Positronic is an open-source Layer-1 blockchain using Proof of Neural Consensus (PoNC), where 4 independent AI neural models validate every transaction. The native token is ASF with Chain ID 420420. It features post-quantum cryptography, gasless transactions, and play-to-mine economics."}},
+        {"@type": "Question", "name": "How does Proof of Neural Consensus work?", "acceptedAnswer": {"@type": "Answer", "text": "PoNC uses 4 AI models: TAD (Transaction Anomaly Detector), MSAD (Multi-Scale Anomaly Detector), SCRA (Smart Contract Risk Analyzer), and ESG (Economic Stability Guardian). Each model independently scores transactions. All 4 must approve for consensus."}},
+        {"@type": "Question", "name": "Is Positronic pre-mined?", "acceptedAnswer": {"@type": "Answer", "text": "No. Positronic has zero pre-mine. No team allocation, no VC tokens, no ICO, no IDO, no presale. All distribution is through staking rewards and mining."}},
+        {"@type": "Question", "name": "How do I run a Positronic node?", "acceptedAnswer": {"@type": "Answer", "text": "Download the Positronic Desktop Node from positronic-ai.network/download for Windows, macOS, or Linux. The app includes a full blockchain node, encrypted wallet, one-click validator mode, and AI consensus monitoring."}},
+        {"@type": "Question", "name": "Is Positronic quantum-safe?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Positronic uses ML-DSA-44 (NIST FIPS 204) post-quantum digital signatures and AES-256-GCM encryption, making it resistant to both classical and quantum computing attacks."}}
+      ]
+    }
+    </script>
+    <!-- JSON-LD: Speakable for AI/voice -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Positronic - AI-Validated Layer-1 Blockchain",
+      "url": "https://positronic-ai.network/",
+      "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h1", ".hero p"]},
+      "mainEntity": {"@type": "Organization", "name": "Positronic"}
     }
     </script>
     <!-- JSON-LD Structured Data: SoftwareApplication -->
@@ -77,7 +144,7 @@
       "applicationSubCategory": "Cryptocurrency Wallet",
       "operatingSystem": "Windows, macOS, Linux",
       "downloadUrl": "https://positronic-ai.network/download/",
-      "softwareVersion": "0.3.1",
+      "softwareVersion": "0.3.2",
       "releaseNotes": "Cross-platform desktop node with full P2P sync, validator mode, and AI consensus monitoring.",
       "author": {
         "@type": "Organization",
@@ -94,6 +161,11 @@
     </script>
     <!-- LLMs.txt reference -->
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt - AI-readable project information">
+    <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs-full.txt - Detailed AI-readable information">
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://dl.positronic-ai.network" crossorigin>
+    <link rel="dns-prefetch" href="https://dl.positronic-ai.network">
+    <link rel="dns-prefetch" href="https://github.com">
     <!-- Preload critical fonts (above-the-fold only) -->
     <link rel="preload" as="font" href="/fonts/inter-400.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/fonts/inter-700.woff2" type="font/woff2" crossorigin>

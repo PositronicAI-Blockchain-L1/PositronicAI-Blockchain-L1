@@ -1,0 +1,38 @@
+{
+  "name": "Positronic",
+  "symbol": "ASF",
+  "chainId": 420420,
+  "chainName": "Positronic",
+  "nativeToken": true,
+  "decimals": 18,
+  "blockTime": 12,
+  "consensus": "Proof of Neural Consensus (PoNC)",
+  "preMine": false,
+  "website": "https://positronic-ai.network",
+  "whitepaper": "https://positronic-ai.network/whitepaper",
+  "documentation": "https://positronic-ai.network/docs/",
+  "github": "https://github.com/PositronicAI-Blockchain-L1",
+  "explorer": "https://positronic-ai.network/explorer/",
+  "download": "https://positronic-ai.network/download/",
+  "logo": "https://positronic-ai.network/logo-400.webp",
+  "rpc": {
+    "testnet": "https://rpc.positronic-ai.network"
+  },
+  "social": {
+    "twitter": "https://x.com/positronic_ai",
+    "telegram": "https://t.me/positronic_ai",
+    "discord": "https://discord.gg/DRyKBkbahu",
+    "github": "https://github.com/PositronicAI-Blockchain-L1"
+  },
+  "features": [
+    "4 AI neural models validate every transaction",
+    "ML-DSA-44 post-quantum digital signatures",
+    "AES-256-GCM wallet encryption",
+    "Gasless transactions",
+    "Play-to-mine economics",
+    "Decentralized identity (DID)",
+    "On-chain governance",
+    "Cross-chain bridge",
+    "Desktop node apps (Windows, macOS, Linux)"
+  ]
+}
