@@ -1,0 +1,39 @@
+{
+  "_comment": "Positronic Bridge Configuration — auto-updated by deploy_bridge_contracts.py",
+  "_instructions": "Run: python scripts/deploy_bridge_contracts.py --network sepolia --privkey DEPLOYER_KEY\nOn relayer servers set env: BRIDGE_RELAYER_PRIVKEY_0=PRIVKEY (chain 0=ETH, 2=POLY, 3=BSC)",
+  "chains": {
+    "0": {
+      "name": "Ethereum Sepolia",
+      "chain_id": 11155111,
+      "rpc_url": "https://rpc.sepolia.org",
+      "contract_address": "",
+      "relayer_address": "",
+      "confirmations": 12,
+      "enabled": false,
+      "deployed_at": "",
+      "deploy_tx": ""
+    },
+    "2": {
+      "name": "Polygon Mumbai",
+      "chain_id": 80001,
+      "rpc_url": "https://rpc-mumbai.maticvigil.com",
+      "contract_address": "",
+      "relayer_address": "",
+      "confirmations": 5,
+      "enabled": false,
+      "deployed_at": "",
+      "deploy_tx": ""
+    },
+    "3": {
+      "name": "BSC Testnet",
+      "chain_id": 97,
+      "rpc_url": "https://data-seed-prebsc-1-s1.binance.org:8545",
+      "contract_address": "",
+      "relayer_address": "",
+      "confirmations": 5,
+      "enabled": false,
+      "deployed_at": "",
+      "deploy_tx": ""
+    }
+  }
+}

@@ -1,0 +1,4 @@
+# Positronic Node — Python dependencies
+aiohttp>=3.9,<4
+cryptography>=42,<47
+numpy>=1.26,<3

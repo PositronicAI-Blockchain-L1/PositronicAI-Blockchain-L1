@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.eggs/
+/dist/
+build/node_entry/
+build/work*/
+build/app_entry/
+build/buildPositronic/
+build/dist/
+build/temp*/
+build/lib*/
+build/positronic/
+build/ci-artifacts*/
+build/Positronic-v*
+*.bak
+*.spec.bak
+venv/
+.venv/
+
+# Positronic data
+*.db
+*.log
+*.key
+data/
+agent_data.db
+game_data.db
+rwa_data.db
+tokens.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node
+node_modules/
+
+# Electron build output
+desktop/release/
+# desktop/renderer/dist/ is committed (pre-built, needed for CI)
+node_entry.dist/
+app_entry.dist/
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Temp/test
+.hypothesis/
+.playwright-mcp/
+.wrangler/
+test_data*/
+hard_stress*
+*.tar.gz
+
+# Secrets
+*.key
+admin.key
+"Founder Private Key.txt"
+
+# Local scripts
+deploy_patch*.py
+analyze_complete.py
+panel_test.py
+run.bat
+
+# Go port (separate repo)
+positronic-go/
+
+# Build artifacts (local only)
+build-artifacts/
+ci-artifacts*/
+
+# Docs (generated)
+docs/
+
+# Claude
+.claude/
+desktop/.claude/

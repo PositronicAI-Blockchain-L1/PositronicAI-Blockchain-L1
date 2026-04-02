@@ -53,15 +53,25 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Build native C extension (optional)
+        run: |
+          cd positronic/crypto
+          if [ -f _native.c ]; then
+            python -c "
+          from distutils.core import setup, Extension
+          ext = Extension('positronic.crypto._native', sources=['_native.c'])
+          setup(name='positronic_native', ext_modules=[ext], script_args=['build_ext', '--inplace'])
+          " && echo '✓ Native C extension built' || echo '⚠ C extension build failed (using pure Python fallback)'
+          fi
+
       - name: Build PositronicNode (PyInstaller)
         run: |
           python -m PyInstaller build/node_entry.spec --noconfirm
           echo "── PyInstaller output ──"
-          ls -lh build/node_entry.dist/PositronicNode/ || ls -lh dist/PositronicNode/
+          ls -lh dist/PositronicNode/ || ls -lh build/node_entry.dist/PositronicNode/
 
       - name: Copy node_entry.dist for Electron
         run: |
-          # PyInstaller outputs to dist/PositronicNode/ by default
           if [ -d "dist/PositronicNode" ]; then
             rm -rf node_entry.dist
             cp -R dist/PositronicNode node_entry.dist
@@ -96,11 +106,11 @@ jobs:
 
       - name: Install Electron dependencies
         working-directory: desktop
-        run: npm ci
+        run: npm install
 
       - name: Build Electron zip (macOS)
         working-directory: desktop
-        run: npm run build:mac
+        run: npx electron-builder --mac
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
@@ -166,6 +176,17 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Build native C extension (optional)
+        run: |
+          cd positronic/crypto
+          if [ -f _native.c ]; then
+            python -c "
+          from distutils.core import setup, Extension
+          ext = Extension('positronic.crypto._native', sources=['_native.c'])
+          setup(name='positronic_native', ext_modules=[ext], script_args=['build_ext', '--inplace'])
+          " && echo '✓ Native C extension built' || echo '⚠ C extension build failed (using pure Python fallback)'
+          fi
+
       - name: Build PositronicNode (PyInstaller)
         run: |
           python -m PyInstaller build/node_entry.spec --noconfirm
@@ -187,11 +208,11 @@ jobs:
 
       - name: Install Electron dependencies
         working-directory: desktop
-        run: npm ci
+        run: npm install
 
       - name: Build Electron AppImage (Linux)
         working-directory: desktop
-        run: npm run build:linux
+        run: npx electron-builder --linux
 
       - name: Compute SHA-512
         run: |
@@ -266,7 +287,7 @@ jobs:
 
       - name: Install Electron dependencies
         working-directory: desktop
-        run: npm ci
+        run: npm install
 
       - name: Build Electron installer (Windows)
         working-directory: desktop

@@ -44,8 +44,6 @@ mac:
   target:
     - target: zip
       arch: [arm64]
-    - target: zip
-      arch: [x64]
   icon: build/icons/icon.icns
   artifactName: Positronic-Node-${version}-mac-${arch}.${ext}
   category: public.app-category.finance
